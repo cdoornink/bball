@@ -1,0 +1,57 @@
+{{controllers.team.myTeam}}
+{{#if controllers.team.myTeam}}
+<h2>
+  {{#link-to "team.new-game"}}
+    New Game
+  {{/link-to}}
+</h2>
+{{/if}}
+
+{{#if controllers.team.games}}
+<h2>Games</h2>
+{{#each game in controllers.team.games}}
+  {{#link-to 'game' game}}
+    {{game.awayTeam.organization}} {{game.awayTeam.mascot}}
+    at
+    {{game.homeTeam.organization}} {{game.homeTeam.mascot}}
+  {{/link-to}}
+{{/each}}
+{{/if}}
+
+{{#if controllers.team.editable}}
+<h2>New Player</h2>
+<ul class="post-publish">
+  <li>
+    {{input value=player.firstName placeholder="First Name"}}
+  </li>
+  <li>
+    {{input value=player.lastName placeholder="Last Name"}}
+  </li>
+  <li>
+    {{input value=player.number placeholder="Number"}}
+  </li>
+  <li>
+    {{input value=player.position placeholder="Position"}}
+  </li>
+  <li>
+    {{input value=player.year placeholder="Year/Class (ex. Jr)"}}
+  </li>
+  <li>
+    {{input value=player.height placeholder="Height"}}
+  </li>
+  <li>
+    <button {{action "createPlayer"}}>Add</button>
+  </li>
+</ul>
+{{/if}}
+
+<h2>Roster</h2>
+{{#each player in controllers.team.players}}
+  <li>
+    <div class="number">{{player.number}}</div>
+    <div class="name">{{player.firstName}} {{player.lastName}}</div>
+    <div class="position">{{player.position}}</div>
+    <div class="year">{{player.year}}</div>
+    <div class="height">{{player.height}}</div>
+  </li>
+{{/each}}

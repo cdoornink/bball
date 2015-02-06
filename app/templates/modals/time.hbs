@@ -1,0 +1,23 @@
+{{#modal-dialog clickOverlay="cancel"}}
+  <div class="freethrow-modal">
+    <div class="title">
+      Set Time Left ({{controllers.game.minutesLeft}})
+    </div>
+
+    <div class="clock">
+      {{input class="minutes" type="number" step="1" min="0" max="12" value=controllers.game.minutesLeft}}
+      <div class='colon'>:</div>
+      {{input class="seconds" type="number" step="1" min="0" max="59" value=controllers.game.secondsLeft}}
+    </div>
+
+    <div class="confirmation-buttons">
+      <div class="cancel">
+        <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
+      </div>
+      <div class="continue">
+        <button class="continue-button" {{action 'continue'}}>Submit</button>
+      </div>
+    </div>
+
+  </div>
+{{/modal-dialog}}

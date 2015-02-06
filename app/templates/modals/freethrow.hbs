@@ -1,0 +1,73 @@
+{{#modal-dialog clickOverlay="cancel"}}
+  <div class="freethrow-modal">
+    <div class="title">
+      Free Throws (shooting {{model.shooting}})
+      <div class="shooting">
+        <div class="subtitle">change:</div>
+        <button class="shooting-button one" {{action 'setShooting' 1}}>1</button>
+        <button class="shooting-button two" {{action 'setShooting' 2}}>2</button>
+        <button class="shooting-button three" {{action 'setShooting' 3}}>3</button>
+      </div>
+    </div>
+
+
+
+    <div class="option-row">
+      <div class="subtitle">
+        1st Free Throw
+      </div>
+      <button class="result1-button make" {{action 'setResult1' 'make'}}>Made</button>
+      <button class="result1-button miss" {{action 'setResult1' 'miss'}}>Missed</button>
+    </div>
+
+    {{#if shooting2}}
+      <div class="option-row">
+        <div class="subtitle">
+          2nd Free Throw
+        </div>
+        <button class="result2-button make" {{action 'setResult2' 'make'}}>Made</button>
+        <button class="result2-button miss" {{action 'setResult2' 'miss'}}>Missed</button>
+      </div>
+    {{/if}}
+
+    {{#if shooting3}}
+      <div class="option-row">
+        <div class="subtitle">
+          3rd Free Throw
+        </div>
+        <button class="result3-button make" {{action 'setResult3' 'make'}}>Made</button>
+        <button class="result3-button miss" {{action 'setResult3' 'miss'}}>Missed</button>
+      </div>
+    {{/if}}
+
+    <div class="confirmation-buttons">
+      <div class="cancel">
+        <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
+      </div>
+      <div class="continue">
+        <button class="continue-button" {{action 'continue'}}>Submit</button>
+      </div>
+    </div>
+
+    {{#if showReboundPrompt}}
+      <div class="option-row">
+        <div class="subtitle">
+          Rebounded
+        </div>
+        <div class="subsubtitle">Defensive</div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+        {{else}}
+          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+        {{/if}}
+        <div class="subsubtitle">Offensive</div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+        {{else}}
+          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+        {{/if}}
+      </div>
+    {{/if}}
+
+  </div>
+{{/modal-dialog}}

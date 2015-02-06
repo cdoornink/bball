@@ -1,0 +1,26 @@
+{{outlet}}
+{{email}}
+<h2>New Team</h2>
+<ul class="post-publish">
+  <li>
+    {{input value=team.organization placeholder="School/Organization"}}
+  </li>
+  <li>
+    {{input value=team.mascot placeholder="Mascot"}}
+  </li>
+  <li>
+    {{input value=team.season placeholder="Season (Ex. '14-'15)"}}
+  </li>
+    {{input type="color" value="66ff00"}}
+  <li>
+    <button {{action "createTeam"}}>Add</button>
+  </li>
+</ul>
+
+{{#each team in teams}}
+<p>
+  {{#link-to 'team' team}}
+    team: {{team.id}}: {{team.mascot}}
+  {{/link-to}}
+</p>
+{{/each}}

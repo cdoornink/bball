@@ -1,0 +1,48 @@
+.scoreboard {
+  width: 268px;
+  position: absolute;
+  top: 4px;
+  height: 62px;
+  color: white;
+  left: calc(50% - 130px);
+  z-index: 1000;
+  background: rgba(0,0,0,.5);
+  padding: 3px;
+  border: 2px solid black;
+  .clock {
+    text-align: center;
+    float: right;
+    width: 80px;
+    height: 100%;
+  }
+  .period {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .timer {
+    width: 100%;
+    font-size: 30px;
+  }
+  .scores {
+    float: left;
+    display: flex;
+    display: -webkit-flex;
+    height: 100%;
+    width: 178px;
+    line-height: 17px;
+    .period {
+      flex: 1 1;
+      -webkit-flex: 1 1;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 400;
+    }
+    .period-header {
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,.3);
+    }
+    .home-score {}
+    .away-score {}
+  }
+}

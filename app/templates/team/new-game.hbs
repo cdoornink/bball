@@ -1,0 +1,112 @@
+<h2>{{controllers.team.mascot}} vs {{selectedOpponent.mascot}}</h2>
+<h4>{{selectedPreferences.name}}</h4>
+<h2>Game info</h2>
+<ul class="game-info-form">
+  <li>
+    {{input value=game.date placeholder="Date"}}
+  </li>
+  <li>
+    {{input value=game.location placeholder="Location"}}
+  </li>
+  <li>
+    {{radio-button name="court" id="court1" selectionBinding="game.courtSelect" value="home"}}
+    <label for="gender1">Home</label>
+    {{radio-button name="court" id="court2" selectionBinding="game.courtSelect" value="away"}}
+    <label for="gender2">Away</label>
+  </li>
+  <li>
+    <button {{action "createGame"}}>Create Game</button>
+  </li>
+</ul>
+
+<h2>Preset Preferences:</h2>
+{{#each pref in defaultPreferences}}
+  <li>
+    <button class="add-pref-button" {{action 'selectPreferences' pref}}>Add Rules</button>
+    {{pref.name}}: {{pref.periods}} {{pref.periodLength}}:00 periods, {{pref.personalFouls}} personal fouls
+  </li>
+{{/each}}
+
+<h2>Create New Preferences (not separate from default yet... BUG):</h2>
+<ul>
+  <li>
+    {{input value=pref.name placeholder="Name this set of preferences"}}
+  </li>
+  <li>
+    Number of periods: {{view "select" content=periodOptions selection=selectedPeriod prompt="Periods"}}
+  </li>
+  <li>
+    Period length: {{view "select" content=periodLengthOptions selection=selectedPeriodLength prompt="Period Length"}}
+  </li>
+  <li>
+    Number of personal fouls alloted: {{view "select" content=foulOptions selection=selectedFouls prompt="Fouls"}}
+  </li>
+  <li>
+    <button {{action "createPreference"}}>Create Preferences</button>
+  </li>
+</ul>
+
+<h2>Create New Opponent:</h2>
+<ul>
+  <li>
+    {{input value=opp.organization placeholder="School/Organization"}}
+  </li>
+  <li>
+    {{input value=opp.mascot placeholder="Mascot"}}
+  </li>
+  <li>
+    {{input value=opp.season placeholder="Season (Ex. '14-'15)"}}
+  </li>
+  <li>
+    <button {{action "createOpponent"}}>Create Opponenet</button>
+  </li>
+</ul>
+
+{{#if newOpponent}}
+<h2>Add Players for {{newOpponent.mascot}}</h2>
+<ul class="post-publish">
+  <li>
+    {{input value=player.firstName placeholder="First Name"}}
+  </li>
+  <li>
+    {{input value=player.lastName placeholder="Last Name"}}
+  </li>
+  <li>
+    {{input value=player.number placeholder="Number"}}
+  </li>
+  <li>
+    {{input value=player.position placeholder="Position"}}
+  </li>
+  <li>
+    {{input value=player.year placeholder="Year/Class (ex. Jr)"}}
+  </li>
+  <li>
+    {{input value=player.height placeholder="Height"}}
+  </li>
+  <li>
+    <button {{action "createPlayer"}}>Add</button>
+  </li>
+</ul>
+
+<h2>Roster</h2>
+{{#each player in newOpponent.players}}
+  <li>
+    <div class="number">{{player.number}}</div>
+    <div class="name">{{player.firstName}} {{player.lastName}}</div>
+    <div class="position">{{player.position}}</div>
+    <div class="year">{{player.year}}</div>
+    <div class="height">{{player.height}}</div>
+  </li>
+{{/each}}
+{{/if}}
+
+
+<h2>Previous Opponents:</h2>
+{{#each team in controllers.team.opponents}}
+<p>
+  <button class="add-team-button" {{action 'selectOpponent' team}}>Add as Opponent</button>
+  {{#link-to 'team' team}}
+    team: {{team.id}}: {{team.mascot}}
+  {{/link-to}}
+</p>
+{{/each}}

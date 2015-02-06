@@ -1,0 +1,37 @@
+.app-container {
+  height: 100%;
+}
+
+.header {
+  height: 50px;
+  padding: 0px 20px;
+  width: 100%;
+  overflow: hidden;
+  background: rgba(255,255,255,.95);
+  line-height: 36px;
+  .title {
+    float: left;
+    height: 50px;
+    margin-right: 100px;
+    width: 70px;
+    background: url('/images/filled_ball.png');
+    background-size: 70px;
+    background-position-y: -10px;
+  }
+  .teams {
+    margin-top: 8px;
+    float: left;
+  }
+  .logout {
+    margin-top: 8px;
+    float: right;
+  }
+}
+.header > div {
+  display: inline-block;
+}
+.main {
+//  max-width: 1000px;
+  margin: 0px auto;
+  height: 100%;
+}

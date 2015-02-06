@@ -1,0 +1,28 @@
+{{#modal-dialog clickOverlay="cancel"}}
+  <div class="steal-modal">
+    <div class="title">
+      Steal - {{controllers.game.selectedPlayer.lastName}}
+    </div>
+
+    <div class="confirmation-buttons">
+      <div class="cancel">
+        <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
+      </div>
+      <div class="continue">
+        <button class="continue-button" {{action 'continue'}}>Submit</button>
+      </div>
+    </div>
+
+    <div class="option-row">
+      <div class="subtitle">
+        Turnover
+      </div>
+      {{#if controllers.game.leftPlayerSelected}}
+        {{modal-card-row team=controllers.game.rightOnCourt action="setTurnoverer"}}
+      {{else}}
+        {{modal-card-row team=controllers.game.leftOnCourt action="setTurnoverer"}}
+      {{/if}}
+    </div>
+
+  </div>
+{{/modal-dialog}}

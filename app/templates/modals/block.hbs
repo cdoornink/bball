@@ -1,0 +1,35 @@
+{{#modal-dialog clickOverlay="cancel"}}
+  <div class="block-modal">
+    <div class="title">
+      Blocked Shot - {{controllers.game.selectedPlayer.lastName}}
+    </div>
+
+    <div class="confirmation-buttons">
+      <div class="cancel">
+        <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
+      </div>
+      <div class="continue">
+        <button class="continue-button" {{action 'continue'}}>Submit</button>
+      </div>
+    </div>
+
+    <div class="rebounder">
+      <div class="subtitle">
+        Rebound
+      </div>
+      <div class="subsubtitle">Offensive</div>
+      {{#if controllers.game.rightPlayerSelected}}
+        {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+      {{else}}
+        {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+      {{/if}}
+      <div class="subsubtitle">Defensive</div>
+      {{#if controllers.game.rightPlayerSelected}}
+        {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+      {{else}}
+        {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+      {{/if}}
+    </div>
+
+  </div>
+{{/modal-dialog}}

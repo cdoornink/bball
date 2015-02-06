@@ -1,0 +1,98 @@
+{{#modal-dialog clickOverlay="cancel"}}
+  <div class="shot-modal">
+    <div class="title">
+      {{model.message}} - {{controllers.game.selectedPlayer.lastName}}
+    </div>
+
+    <div class="option-row five-buttons">
+      <div class="subtitle">
+        Result
+      </div>
+      <button class="result-button make" {{action 'setResult' 'make'}}>Made</button>
+      <button class="result-button miss" {{action 'setResult' 'miss'}}>Missed</button>
+      <button class="result-button block" {{action 'setResult' 'block'}}>Blocked</button>
+      <button class="result-button foul" {{action 'setResult' 'foul'}}>Fouled</button>
+      <button class="result-button and1" {{action 'setResult' 'and1'}}>And 1</button>
+    </div>
+
+    <div class="confirmation-buttons">
+      <div class="cancel">
+        <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
+      </div>
+      <div class="continue">
+        <button class="continue-button" {{action 'continue'}}>Submit</button>
+      </div>
+    </div>
+
+    {{#if model.closeShot}}
+      <div class="option-row three-buttons">
+        <div class="subtitle">
+          Shot Type
+        </div>
+        <button class="shot-type-button jumper" {{action 'setType' "jumper"}}>Jumper</button>
+        <button class="shot-type-button layup" {{action 'setType' "layup"}}>Layup</button>
+        <button class="shot-type-button dunk" {{action 'setType' "dunk"}}>Dunk</button>
+      </div>
+    {{/if}}
+
+    {{#if showAssistPrompt}}
+      <div class="option-row">
+        <div class="subtitle">
+          Assisted?
+        </div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row team=controllers.game.leftOnCourt action="setAssister"}}
+        {{else}}
+          {{modal-card-row team=controllers.game.rightOnCourt action="setAssister"}}
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{#if showBlockPrompt}}
+      <div class="option-row">
+        <div class="subtitle">
+          Blocked by
+        </div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row team=controllers.game.rightOnCourt action="setBlocker"}}
+        {{else}}
+          {{modal-card-row team=controllers.game.leftOnCourt action="setBlocker"}}
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{#if showReboundPrompt}}
+      <div class="option-row">
+        <div class="subtitle">
+          Rebound
+        </div>
+        <div class="subsubtitle">Defensive</div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+        {{else}}
+          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+        {{/if}}
+        <div class="subsubtitle">Offensive</div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+        {{else}}
+          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+        {{/if}}
+      </div>
+    {{/if}}
+
+    {{#if showFoulPrompt}}
+      <div class="option-row">
+        <div class="subtitle">
+          Fouled by
+        </div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row team=controllers.game.rightOnCourt action="setFouler"}}
+        {{else}}
+          {{modal-card-row team=controllers.game.leftOnCourt action="setFouler"}}
+        {{/if}}
+      </div>
+    {{/if}}
+
+  </div>
+{{/modal-dialog}}

@@ -1,0 +1,22 @@
+<div class="login-page">
+
+
+<div class="login-logo"></div>
+
+<form class="login-form">
+  <div class="error-message">
+    {{login.error}}
+  </div>
+  <div class="username-field">
+    {{input value=login.email placeholder="Username"}}
+  </div>
+  <div class="password-field">
+    {{input value=login.password type="password" placeholder="Password"}}
+  </div>
+  <button {{action "login"}}>Sign in</button>
+  <div class="register-link">
+    Not registered? {{#link-to "login"}}Sign up for free.{{/link-to}}
+  </div>
+</form>
+
+</div>
