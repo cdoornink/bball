@@ -10,7 +10,7 @@ initialize = (container, app) ->
     app.store = container.lookup('store:main')
     init: ->
       ref.onAuth ((authData) ->
-        console.log authData
+        # console.log authData
         unless authData
           @set "authed", false
           @set "authData", null
@@ -23,14 +23,14 @@ initialize = (container, app) ->
       ).bind(this)
 
     login: (email, password, successCallback, errorCallback) ->
-      console.log email
-      console.log "login..."
+      # console.log email
+#       console.log "login..."
       ref.authWithPassword
         email    : email
         password : password
       , (error, authData) ->
         if error
-          console.log error, "fjidso"
+          # console.log error, "fjidso"
           errorCallback(error.message)
         else
           successCallback(authData) #put this uid into localstorage to use on site load
@@ -55,7 +55,7 @@ initialize = (container, app) ->
       ref.child('users').child(userId).once 'value', (snapshot) ->
         exists = (snapshot.val() isnt null)
         userExistsCallback(userId, exists)
-        console.log "exists? ", exists
+        # console.log "exists? ", exists
 
       userExistsCallback = (userId, exists) ->
         if (exists)
@@ -71,9 +71,6 @@ initialize = (container, app) ->
 
     createUserModel: (userId) ->
       _this = this;
-      console.log 'fuck?'
-      console.log this.get('authData'), userId
-      console.log "-----------"
       app.get('store').createRecord('user',
         id: userId
         provider: @get('authData.provider')
@@ -81,7 +78,6 @@ initialize = (container, app) ->
         email: @get('authData.password.email') || @get('authData.facebook.email') || @get('authData.google.email')
         created: new Date().getTime()
       ).save().then( (user) ->
-        console.log "saved?", user
         _this.set('user', user)
       )
 

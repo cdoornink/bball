@@ -1,9 +1,8 @@
 {
   "name": "bball",
   "dependencies": {
-    "handlebars": "2.0.0",
     "jquery": "^1.11.1",
-    "ember": "#beta",
+    "ember": "1.10.0",
     "ember-data": "1.0.0-beta.12",
     "ember-resolver": "~0.1.10",
     "loader.js": "stefanpenner/loader.js#1.0.1",
@@ -13,8 +12,8 @@
     "ember-qunit": "0.1.8",
     "ember-qunit-notifications": "0.0.4",
     "qunit": "~1.15.0",
-    "firebase": "~2.0.6",
-    "emberfire": "~1.3.1",
+    "firebase": "~2.1.2",
+    "emberfire": "~1.3.2",
     "underscore": "~1.7.0",
     "spectrum": "~1.6.0"
   },

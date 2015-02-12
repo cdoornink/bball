@@ -76,7 +76,6 @@ TeamNewGameController = Ember.Controller.extend
           away = team1
         newGame.set('homeTeam', home)
         newGame.set('awayTeam', away)
-        console.log newGame
         newGame.save().then =>
           team1.save()
           team2.save()

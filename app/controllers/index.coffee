@@ -6,7 +6,6 @@ IndexController = Ember.ObjectController.extend
   actions:
     createTeam: ->
       user = @session.get('user')
-      console.log "user?", @session.get('user')
       newTeam = this.store.createRecord 'team',
         organization: this.get('team.organization')
         mascot: this.get('team.mascot')

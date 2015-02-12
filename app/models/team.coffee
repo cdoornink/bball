@@ -29,7 +29,6 @@ Team = DS.Model.extend
     myTeam = false
     @get('owners').forEach (owner) ->
       if owner.id is user.uid
-        console.log "this is my team"
         myTeam = true
     myTeam
   ).property('owners.@each')
