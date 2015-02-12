@@ -19,6 +19,37 @@ GameController = Ember.ObjectController.extend
   quarters: false
   court: {}
   statLine: {points: 0,ftm: 0,fta: 0,fgm: 0,fga: 0,threepta: 0,threeptm: 0,assists: 0,fouls: 0,steals: 0,minutes: 0,reb: 0,oreb: 0,dreb: 0,blocks: 0,turnovers: 0,plusminus: 0,scoreByPeriod:{}}
+  rightColorChanged: (->
+    return if @get('right.primaryColor') is undefined
+    $('.right-primary').css('background', @get('right.primaryColor'))
+    @addTeamColorStyle()
+    @get('right').save()
+  ).observes('right.primaryColor', 'right.secondaryColor')
+  leftColorChanged: (->
+    return if @get('left.primaryColor') is undefined
+    $('.left-primary').css('background', @get('left.primaryColor'))
+    @addTeamColorStyle()
+    @get('left').save()
+  ).observes('left.primaryColor', 'left.secondaryColor')
+  addTeamColorStyle: ->
+    if $('html > head > style').length
+      $('html > head > style').last().remove();
+    $('html > head')
+      .append("<style>
+                .right-primary, .right-team .player-card {
+                  background: #{@get('right.primaryColor')};
+                }
+                .right-secondary, .right-team .player-card {
+                  color: #{@get('right.secondaryColor')};
+                }
+                .left-primary, .left-team .player-card {
+                  background: #{@get('left.primaryColor')};
+                }
+                .left-secondary, .left-team .player-card {
+                  color: #{@get('left.secondaryColor')};
+                }
+              </style>");
+
   getStats: ->
     console.time("compile stats")
     @get('preference').then (p) =>

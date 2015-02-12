@@ -7,18 +7,29 @@
   padding: 0px 20px;
   width: 100%;
   overflow: hidden;
-  background: rgba(255,255,255,.95);
+  background: #3d424c;
+  color: #f2f2f2;
   line-height: 36px;
-  .title {
+  .logo {
+    cursor: pointer;
     float: left;
     height: 50px;
-    margin-right: 100px;
-    width: 70px;
-    background: url('/images/filled_ball.png');
+    width: 123px;
+    background: url('/images/filled_ball.png') 0 0 no-repeat;
     background-size: 70px;
     background-position-y: -10px;
+    margin-right: 100px;
+    padding-left: 75px;
+    line-height: 18px;
+    padding-top: 7px;
+    color: #f37e00;
+    font-weight: 500;
   }
-  .teams {
+  .title {
+    width: 50px;
+    margin-right: 100px;
+  }
+  .team {
     margin-top: 8px;
     float: left;
   }
@@ -34,4 +45,69 @@
 //  max-width: 1000px;
   margin: 0px auto;
   height: 100%;
+}
+
+.non-game {
+  padding: 20px 40px;
+}
+
+.create-team-form {
+  text-decoration: none;
+  margin: 5px 20px;
+  padding: 20px;
+  min-height: 100px;
+  background: #e5e5e6;
+  overflow: hidden;
+  max-width: 700px;
+  input {
+    font-size: 18px;
+    padding: 5px 10px;
+    border: none;
+    background: white;
+    width: 100%;
+    margin: 10px 0px;
+  }
+  .color-pick {
+    margin: 10px 0;
+    display: inline-block;
+    font-size: 18px;
+    color: #515861;
+    width: 100%;
+    .color-pick-title {
+      display: inline;
+    }
+  }
+  .add-button {
+    float: right;
+  }
+}
+
+button {
+  background: #bbb;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: 17px;
+  -webkit-transition: -webkit-transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
+  width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
+  width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+  &:hover  {
+    -webkit-transform: scale3d(1.05, 1.05, 1);
+    transform: scale3d(1.05, 1.05, 1);
+  }
+}
+
+button.add-button{
+  font-size: 18px;
+  height: 50px;
+  width: 100px;
+  text-align: center;
+  background: $ok;
+  color: white;
+  padding: 5px 15px;
+  &:hover  {
+    -webkit-transform: scale3d(1.1, 1.1, 1);
+    transform: scale3d(1.1, 1.1, 1);
+  }
 }

@@ -1,26 +1,43 @@
-{{outlet}}
-{{email}}
-<h2>New Team</h2>
-<ul class="post-publish">
-  <li>
-    {{input value=team.organization placeholder="School/Organization"}}
-  </li>
-  <li>
-    {{input value=team.mascot placeholder="Mascot"}}
-  </li>
-  <li>
-    {{input value=team.season placeholder="Season (Ex. '14-'15)"}}
-  </li>
-    {{input type="color" value="66ff00"}}
-  <li>
-    <button {{action "createTeam"}}>Add</button>
-  </li>
-</ul>
+<div class="home-page non-game">
 
-{{#each team in teams}}
-<p>
-  {{#link-to 'team' team}}
-    team: {{team.id}}: {{team.mascot}}
-  {{/link-to}}
-</p>
-{{/each}}
+  {{#if teams}}
+    <h2>My Teams</h2>
+    <div class="team-grid">
+      {{#each team in teams}}
+        {{#link-to 'team' team}}
+          <div class="team-name">
+            {{team.organization}} {{team.mascot}}
+          </div>
+          <div class="team-detail">
+            {{team.season}}
+          </div>
+          <div class="team-numbers">
+            {{team.gamesNum}} games
+            {{team.playersNum}} players
+          </div>
+        {{/link-to}}
+      {{/each}}
+    </div>
+  {{/if}}
+
+  <h2>Create a new team</h2>
+  <form class="create-team-form">
+    {{input value=team.organization placeholder="School/Organization"}}
+    {{input value=team.mascot placeholder="Mascot"}}
+    {{input value=team.season placeholder="Season (Ex. '14-'15)"}}
+    <div class="color-pick">
+      <div class="color-pick-title">
+        Primary Team Color:
+      </div>
+      {{spectrum-color-picker color=team.primaryColor moveFiresChange=true}}
+    </div>
+    <div class="color-pick">
+      <div class="color-pick-title">
+        Secondary Team Color:
+      </div>
+      {{spectrum-color-picker color=team.secondaryColor moveFiresChange=true}}
+    </div>
+    <button class="add-button" {{action "createTeam"}}>Add</button>
+  </form>
+
+</div>

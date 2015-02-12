@@ -1,57 +1,60 @@
-{{controllers.team.myTeam}}
+<h2 class="page-title">{{controllers.team.organization}} {{controllers.team.mascot}}</h2>
+
 {{#if controllers.team.myTeam}}
-<h2>
+<div class="new-game-button">
   {{#link-to "team.new-game"}}
-    New Game
+    <button class="add-button">New Game</button>
   {{/link-to}}
-</h2>
+</div>
 {{/if}}
 
-{{#if controllers.team.games}}
-<h2>Games</h2>
-{{#each game in controllers.team.games}}
-  {{#link-to 'game' game}}
-    {{game.awayTeam.organization}} {{game.awayTeam.mascot}}
-    at
-    {{game.homeTeam.organization}} {{game.homeTeam.mascot}}
-  {{/link-to}}
-{{/each}}
-{{/if}}
+<div class="two-col">
+  {{#if controllers.team.games}}
+  <div class="team-games">
+    <h2>Games</h2>
+    {{#each game in controllers.team.games}}
+      {{#link-to 'game' game}}
+        <div class="col date">
+          {{game.date}}
+          <div class="status">
+            {{game.status}}
+          </div>
+        </div>
+        <div class="col away-team">
+          {{game.awayTeam.organization}} {{game.awayTeam.mascot}}
+        </div>
+        <div class="col at">at</div>
+        <div class="col home-team">
+          {{game.homeTeam.organization}} {{game.homeTeam.mascot}}
+        </div>
+      {{/link-to}}
+    {{/each}}
+  </div>
+  {{/if}}
 
-{{#if controllers.team.editable}}
-<h2>New Player</h2>
-<ul class="post-publish">
-  <li>
-    {{input value=player.firstName placeholder="First Name"}}
-  </li>
-  <li>
-    {{input value=player.lastName placeholder="Last Name"}}
-  </li>
-  <li>
-    {{input value=player.number placeholder="Number"}}
-  </li>
-  <li>
-    {{input value=player.position placeholder="Position"}}
-  </li>
-  <li>
-    {{input value=player.year placeholder="Year/Class (ex. Jr)"}}
-  </li>
-  <li>
-    {{input value=player.height placeholder="Height"}}
-  </li>
-  <li>
-    <button {{action "createPlayer"}}>Add</button>
-  </li>
-</ul>
-{{/if}}
+  <div class="team-roster">
+    <h2>Roster</h2>
+    {{#each player in controllers.team.players}}
+      <div class="roster-player">
+        <div class="col number">{{player.number}}</div>
+        <div class="col name">{{player.firstName}} {{player.lastName}}</div>
+        <div class="col position">{{player.position}}</div>
+        <div class="col year">{{player.year}}</div>
+        <div class="col height">{{player.height}}</div>
+      </div>
+    {{/each}}
 
-<h2>Roster</h2>
-{{#each player in controllers.team.players}}
-  <li>
-    <div class="number">{{player.number}}</div>
-    <div class="name">{{player.firstName}} {{player.lastName}}</div>
-    <div class="position">{{player.position}}</div>
-    <div class="year">{{player.year}}</div>
-    <div class="height">{{player.height}}</div>
-  </li>
-{{/each}}
+    {{#if controllers.team.editable}}
+    <h3 class="add-item">+ Add a Player</h3>
+    <form class="add-player-form">
+      {{input class="first-field" value=player.firstName placeholder="First Name"}}
+      {{input value=player.lastName placeholder="Last Name"}}
+      {{input value=player.number placeholder="Number"}}
+      {{input value=player.position placeholder="Position"}}
+      {{input value=player.year placeholder="Year/Class (ex. Jr)"}}
+      {{input value=player.height placeholder="Height"}}
+      <button class="add-button" {{action "createPlayer"}}>Add</button>
+    </form>
+    {{/if}}
+  </div>
+</div>

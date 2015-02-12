@@ -56,15 +56,15 @@
         </div>
         <div class="subsubtitle">Defensive</div>
         {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setRebounder"}}
         {{else}}
-          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setRebounder"}}
         {{/if}}
         <div class="subsubtitle">Offensive</div>
         {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setRebounder"}}
         {{else}}
-          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setRebounder"}}
         {{/if}}
       </div>
     {{/if}}

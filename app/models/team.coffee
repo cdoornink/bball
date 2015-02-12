@@ -17,6 +17,12 @@ Team = DS.Model.extend
   homeGames: DS.hasMany('game', {async: true, inverse: 'homeTeam'})
   awayGames: DS.hasMany('game', {async: true, inverse: 'awayTeam'})
   stats: DS.hasMany('stat', {async: true, inverse: 'team'})
+  gamesNum: (->
+    @get('games.content.content').length
+  ).property('games.@each')
+  playersNum: (->
+    @get('players.content.content').length
+  ).property('players.@each')
   myTeam: (->
     owners = @get('owners.content')
     user = jQuery.parseJSON(localStorage.getItem("firebase:session::blistering-fire-5623"))

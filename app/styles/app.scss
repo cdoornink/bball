@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial';
+  font-family: 'Lato', 'Arial', sans-serif;
   background: whitesmoke;
   height: 100%;
 }
@@ -13,17 +13,54 @@ html, body {
 $ok: #0681aa;
 $cancel: #AB3007;
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input {
+  outline: none;
+  font-size: 14px;
+  padding: 5px 5px;
+  border: none;
+}
+
+input[type=radio] {
+  display: none;
+  margin: 10px;
+}
+input[type=radio] + label {
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 15px;
+  background: #e5e5e6;
+  margin: 0px 10px 0 0;
+  font-size: 14px;
+  border-radius: 3px;
+  &:hover {
+    background: #d5d5d6;
+  }
+}
+input[type=radio]:checked + label {
+  background: $ok;
+  color: white;
+}
+
+
 @font-face {
   font-family: jersey;
   src: url(/fonts/collegiateHeavyOutline.ttf);
 }
 
 @import "layout";
+@import "components/grids";
 @import "components/modal-dialog";
 @import "components/scoreboard";
 @import "components/player-card";
 
 @import "modals/shot";
+
+@import "team";
 
 @import "game";
 @import "components/stat-lines";

@@ -2,7 +2,6 @@
 
 TeamNewGameController = Ember.Controller.extend
   needs: ["team"]
-  newOpponent: null
   selectedOpponent: null
   selectedPreferences: null
   selectedPeriod: 4
@@ -27,31 +26,19 @@ TeamNewGameController = Ember.Controller.extend
         active: true
       newTeam.get('opponents').then (teams) =>
         teams.addObject(team)
-        newTeam.save().then ->
+        newTeam.save().then =>
           team.save()
-      @set('newOpponent', newTeam)
-      @set('selectedOpponent', newTeam)
-
-    createPlayer: ->
-      team = this.get('newOpponent')
-      newPlayer = this.store.createRecord('player', {
-        firstName: this.get('player.firstName'),
-        lastName: this.get('player.lastName'),
-        number: this.get('player.number'),
-        position: this.get('player.position'),
-        year: this.get('player.year'),
-        height: this.get('player.height'),
-        timestamp: new Date() })
-      team.get('players').then (players) =>
-        players.addObject(newPlayer)
-        team.save().then ->
-          newPlayer.save()
+          @send('selectOpponent', newTeam)
 
     selectOpponent: (team) ->
       @set('selectedOpponent', team)
+      $(".opponent-grid-item").removeClass('selected')
+      $(".opponent-grid-item.#{team.id}").addClass('selected')
 
     selectPreferences: (pref) ->
       @set('selectedPreferences', pref)
+      $(".preference-grid-item").removeClass('selected')
+      $(".preference-grid-item.#{pref.id}").addClass('selected')
 
     createPreference: ->
       user = @session.get('user')
@@ -77,10 +64,7 @@ TeamNewGameController = Ember.Controller.extend
         location: this.get('game.location')
         status: "created"
         period: 1
-      console.log "before"
       newGame.set('preference', prefs)
-
-      console.log "after", newGame.get('preference')
       newGame.get('teams').then (teams) =>
         teams.addObject(team1)
         teams.addObject(team2)

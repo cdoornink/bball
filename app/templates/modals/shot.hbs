@@ -41,9 +41,9 @@
           Assisted?
         </div>
         {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row team=controllers.game.leftOnCourt action="setAssister"}}
+          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setAssister"}}
         {{else}}
-          {{modal-card-row team=controllers.game.rightOnCourt action="setAssister"}}
+          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setAssister"}}
         {{/if}}
       </div>
     {{/if}}
@@ -54,9 +54,9 @@
           Blocked by
         </div>
         {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row team=controllers.game.rightOnCourt action="setBlocker"}}
+          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setBlocker"}}
         {{else}}
-          {{modal-card-row team=controllers.game.leftOnCourt action="setBlocker"}}
+          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setBlocker"}}
         {{/if}}
       </div>
     {{/if}}
@@ -68,15 +68,15 @@
         </div>
         <div class="subsubtitle">Defensive</div>
         {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setRebounder"}}
         {{else}}
-          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setRebounder"}}
         {{/if}}
         <div class="subsubtitle">Offensive</div>
         {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row team=controllers.game.leftOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setRebounder"}}
         {{else}}
-          {{modal-card-row team=controllers.game.rightOnCourt action="setRebounder"}}
+          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setRebounder"}}
         {{/if}}
       </div>
     {{/if}}
@@ -87,9 +87,9 @@
           Fouled by
         </div>
         {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row team=controllers.game.rightOnCourt action="setFouler"}}
+          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setFouler"}}
         {{else}}
-          {{modal-card-row team=controllers.game.leftOnCourt action="setFouler"}}
+          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setFouler"}}
         {{/if}}
       </div>
     {{/if}}

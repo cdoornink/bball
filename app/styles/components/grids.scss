@@ -1,0 +1,111 @@
+.team-grid {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+}
+.team-grid > a {
+  display: block;
+  min-height: 100px;
+  width: 280px;
+  text-decoration: none;
+  margin: 5px 20px;
+  padding: 10px;
+  min-height: 100px;
+  background: #e5e5e6;
+  overflow: hidden;
+  &:hover {
+    background: #d5d5d6;
+  }
+  .team-name{
+    font-size: 18px;
+    color: #515861;
+    margin-bottom: 5px;
+  }
+  .team-detail {
+    font-size: 16px;
+    color: #616871;
+    margin-bottom: 15px;
+  }
+  .team-numbers {
+    font-size: 14px;
+    color: #333;
+  }
+}
+
+.preference-grid {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  .preference-grid-item {
+    cursor: pointer;
+    width: 200px;
+    height: auto;
+    background: #d5d5d6;
+    padding: 20px;
+    margin: 5px 20px;
+    &:hover {
+      background: #c5c5c6;
+    }
+    .pref-name {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .pref {
+      margin: 5px 3px;
+    }
+    .pref-number {
+      font-weight: 600;
+    }
+  }
+  .preference-grid-item.selected {
+    background: $ok;
+    color: white;
+  }
+}
+.opponent-grid {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+}
+.opponent-grid-item {
+  cursor: pointer;
+  display: block;
+  min-height: 100px;
+  text-decoration: none;
+  margin: 5px 20px;
+  padding: 10px;
+  min-height: 100px;
+  background: #515861;
+  color: #eee;
+  overflow: hidden;
+  &:hover {
+    background: #616871;
+  }
+  a {
+    display: block;
+    font-size: 12px;
+    text-align: center;
+    padding: 5px 10px;
+    background: rgb(61, 66, 76);
+    &:hover {
+      background: $ok;
+    }
+  }
+  .opponent-name{
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  .opponent-detail {
+    font-size: 16px;
+    color: #ccc;
+    margin-bottom: 15px;
+  }
+}
+.opponent-grid-item.selected {
+  background: $ok;
+  color: white;
+}

@@ -1,0 +1,143 @@
+.team-page {
+  .page-title, .new-game-button{
+    display: inline-block;
+    margin-right: 30px;
+  }
+  .new-game-button .add-button {
+    width: 200px;
+  }
+  .two-col {
+    overflow: auto;
+  }
+  .team-games {
+    float: left;
+    width: 50%;
+    min-width: 400px;
+    padding: 0 50px 0 0;
+    a {
+      width: 100%;
+      display: flex;
+      display: -webclient-flex;
+      padding: 10px 10px;
+      text-decoration: none;
+      color: inherit;
+      &:hover {
+        background: #ddd;
+      }
+    }
+    a:nth-child(2n) {
+      background: #eee;
+      &:hover {
+        background: #ddd;
+      }
+    }
+    .col {
+      flex: 1 1;
+      -webkit-flex: 1 1;
+    }
+    .col.at {
+      flex: 0 1 50px;
+      -webkit-flex: 0 1 50px;
+    }
+    .col.date {
+      flex: 0 1 100px;
+      -webkit-flex: 0 1 100px;
+    }
+  }
+  .team-roster {
+    float: left;
+    width: 50%;
+    min-width: 400px;
+    .roster-player {
+      width: 100%;
+      display: flex;
+      display: -webclient-flex;
+      padding: 3px 10px;
+    }
+    .roster-player:nth-child(2n) {
+      background: #eee;
+    }
+    .col {
+      flex: 1 1;
+      -webkit-flex: 1 1;
+    }
+    .name {
+      flex: 1 1 190px;
+      -webkit-flex: 1 1 190px;
+    }
+  }
+  h3.add-item {
+    margin-bottom: 5px;
+    padding-bottom: 0;
+    color: green;
+  }
+  .add-player-form {
+    width: 400px;
+    display: flex;
+    display: -webclient-flex;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    padding: 0 20px 20px;
+    input {
+      outline: none;
+      font-size: 14px;
+      padding: 5px 5px;
+      border: none;
+      background: white;
+      width: 100%;
+      margin: 5px 0;
+    }
+    button {
+      margin-top: 10px;
+    }
+  }
+  .new-game-form {
+    button.add-button {
+      margin: 20px 0;
+      width: 200px;
+    }
+  }
+  .form-step {
+    padding: 0 20px 20px;
+    overflow: hidden;
+    width: 100%;
+    background: white;
+  }
+  .form-step.step-one {
+    input[type="text"] {
+      outline: none;
+      font-size: 14px;
+      padding: 5px 5px;
+      border: none;
+      width: 200px;
+      background: rgb(229, 229, 230);
+      margin: 5px 10px;
+    }
+  }
+  .form-step.step-two {
+    background: rgb(229, 229, 230);
+  }
+  .form-step.step-three {
+    background: rgb(61, 66, 76);
+    color: rgb(133, 143, 147);
+  }
+  .new-opponent {
+    width: 464px;
+    button {
+      margin-left: 10px;
+      width: 200px;
+      height: 27px;
+      background: $ok;
+      color: white;
+    }
+    input[type="text"] {
+      outline: none;
+      font-size: 14px;
+      padding: 5px 5px;
+      border: none;
+      width: 200px;
+      background: rgb(229, 229, 230);
+      margin: 5px 10px;
+    }
+  }
+}

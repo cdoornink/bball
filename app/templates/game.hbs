@@ -58,6 +58,7 @@
     </div>
   </div>
   <div class='left-team-top left-team'>
+    <div class="team-info-triangle"></div>
     <div class="team-info">
       <div class="score">
         {{left.teamStats.points}}
@@ -65,6 +66,8 @@
       <div class="next-to-score">
         <div class="possession">
           Poss <div {{bind-attr class=":possession-light leftPossession:on:off"}}></div>
+          {{spectrum-color-picker color=left.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+          {{spectrum-color-picker color=left.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
         </div>
         <div class="name">
           {{left.mascot}}
@@ -80,6 +83,8 @@
       <div class="next-to-score">
         <div class="possession">
           <div {{bind-attr class=":possession-light leftPossession:off:on"}}></div> Poss
+          {{spectrum-color-picker color=right.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+          {{spectrum-color-picker color=right.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
         </div>
         <div class="name">
           {{right.mascot}}

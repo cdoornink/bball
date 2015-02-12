@@ -6,6 +6,7 @@ TeamIndexController = Ember.Controller.extend
     this.set('player', Ember.Object.create())
   actions:
     createPlayer: ->
+      return unless this.get('player.lastName') and this.get('player.number')
       team = this.get('model')
       newPlayer = this.store.createRecord('player', {
         firstName: this.get('player.firstName'),
@@ -17,7 +18,9 @@ TeamIndexController = Ember.Controller.extend
         timestamp: new Date() })
       team.get('players').then (players) =>
         players.addObject(newPlayer)
-        team.save().then ->
+        team.save().then =>
           newPlayer.save()
+          @set('player', Ember.Object.create())
+          $('.add-player-form .first-field').focus()
 
 `export default TeamIndexController`

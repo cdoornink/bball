@@ -11,7 +11,7 @@
   z-index: 100001;
   position: fixed;
   top: 200px;
-  background-color: #fff;
+  background-color: whitesmoke;
   padding: 10px;
   margin: 0 auto;
   width: 500px;
@@ -27,21 +27,6 @@
   .modal-card-row {
     display: flex;
     display: -webkit-flex;
-  }
-  button {
-    background: #bbb;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    font-size: 17px;
-    -webkit-transition: -webkit-transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
-    width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
-    width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
-    &:hover  {
-      -webkit-transform: scale3d(1.05, 1.05, 1);
-      transform: scale3d(1.05, 1.05, 1);
-    }
   }
   button.selected {
     background: #444;
