@@ -32,5 +32,18 @@ Game = DS.Model.extend
   inProgress: (->
     @get('status') is "active"
   ).property('status')
+  completed: (->
+    @get('status') is "completed"
+  ).property('status')
+  homeWin: (->
+    s = @get('status')
+    h = @get('homeScore')
+    a = @get('awayScore')
+    if s isnt "completed"
+      w = undefined
+    else
+      w = h > a
+    return w
+  ).property('homeScore', 'status')
 
 `export default Game`

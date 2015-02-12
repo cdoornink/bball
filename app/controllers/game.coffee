@@ -186,7 +186,31 @@ GameController = Ember.ObjectController.extend
     console.count('save game')
     @get('model').save()
     @getStats()
+
+  endGame: ->
+    conf = {
+      message: "Do you want to end this game now? Stats can still be edited in the box score after the game has ended."
+      header: "Game Over?"
+      continue: =>
+        @send('submitEndGame')
+    }
+    @send('openModal', 'modals/confirmation', conf)
+
   actions:
+
+    submitEndGame: ->
+      if @get('homeTeam.id') is @get('left.id')
+        home = @get('left')
+        away = @get('right')
+      else
+        home = @get('right')
+        away = @get('left')
+      @set('homeScore', home.teamStats.points)
+      @set('awayScore', away.teamStats.points)
+      @set('status', "completed")
+      @set('timeLeft', 0)
+      @set('period', "Final")
+      @saveGame()
 
     jumpBall: (team) ->
       @set('model.possession', team)
@@ -499,10 +523,13 @@ GameController = Ember.ObjectController.extend
       period = @get('period')
       @get('preference').then (p) =>
         if period is p.get('periods')
-          debugger
-          console.log "overtime or end game (check score)"
-          @set('period', "OT")
-          @set('timeLeft', 300)
+          r = @get('right.teamStats.score')
+          l = @get('left.teamStats.score')
+          if r = l
+            @set('period', "OT")
+            @set('timeLeft', 300)
+          else
+            @endGame()
         else
           @set('period', (period + 1))
           @set('timeLeft', p.get('periodLength')*60)
