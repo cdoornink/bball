@@ -18,10 +18,10 @@ Team = DS.Model.extend
   awayGames: DS.hasMany('game', {async: true, inverse: 'awayTeam'})
   stats: DS.hasMany('stat', {async: true, inverse: 'team'})
   gamesNum: (->
-    @get('games.content.content').length
+    @get('games.content').length
   ).property('games.@each')
   playersNum: (->
-    @get('players.content.content').length
+    @get('players.content').length
   ).property('players.@each')
   myTeam: (->
     owners = @get('owners.content')
