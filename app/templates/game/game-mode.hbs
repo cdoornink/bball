@@ -114,6 +114,11 @@
       </div>
     </div>
   </div>
+  <div class="play-by-play-container">
+    {{#each play in playByPlay.recent}}
+      {{partial "game/play-by-play/play"}}
+    {{/each}}
+  </div>
   {{partial "stat-lines"}}
   {{#if notStarted}}
     <div class="jump-ball-starter">

@@ -9,6 +9,7 @@ Stat = DS.Model.extend
   clutch: DS.attr('string')
   subType: DS.attr('string')
   recipient: DS.belongsTo('player', async: true)
+  fouler: DS.belongsTo('player', async: true)
   x: DS.attr('number')
   y: DS.attr('number')
   result: DS.attr('string')

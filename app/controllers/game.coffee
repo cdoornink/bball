@@ -169,9 +169,6 @@ GameController = Ember.ObjectController.extend
     @get('court.el').append(shotDot)
 
   statByPlayer: (sbp, player, ts, side) ->
-    console.log "----------"
-    console.log @get('periodLength')
-    console.log @get('totalLength')
     ps = _.clone(@statLine)
     ps.scoreByPeriod = {}
     inGame = null
@@ -206,13 +203,10 @@ GameController = Ember.ObjectController.extend
         if t is "block" then @add1('blocks', ps, ts)
         if t is "turnover" then @add1('turnovers', ps, ts)
         if t is "subbedIn"
-          console.log "subbed in ", stat.get('period'), stat.get('timeLeft')
           inGame = ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
         if t is "subbedOut"
-          console.log "subbed out ", stat.get('period'), stat.get('timeLeft')
           totalMin += inGame - ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
           inGame = null
-          console.log "outGame", totalMin
     if inGame
       totalMin += inGame
       #will need seperate logic here for in game situations
@@ -256,11 +250,13 @@ GameController = Ember.ObjectController.extend
         play["make"] = true
       if r is "foul"
         play["shootingFoul"] = true
+        play["fouler"] = p.get('fouler')
       if r is "block"
         play["block"] = true
       if r is "and1"
         play["make"] = true
         play["and1"] = true
+        play["fouler"] = p.get('fouler')
       if sT is "freethrow"
         play["freethrow"] = true
       if sT is "freeThrow"
@@ -300,7 +296,6 @@ GameController = Ember.ObjectController.extend
         if pbp["recent"].length > 5 then pbp["recent"].pop()
 
       @set 'playByPlaySubQueue', null
-    console.log pbp["recent"][2]
     @set('playByPlay', pbp)
 
   advancedTeamStats: ->
@@ -408,6 +403,8 @@ GameController = Ember.ObjectController.extend
       s.set('team', @get('selectedPlayer.team'))
       s.set('player', @get('selectedPlayer'))
       s.set('recipient', shot.recipient)
+      if shot.fouler
+        s.set('fouler', shot.fouler)
       s.set('game', @get('model'))
       s.save().then =>
         @store.find('player', @get('selectedPlayer.id')).then (player) =>
@@ -489,9 +486,10 @@ GameController = Ember.ObjectController.extend
         shot.set('recipient', model.rebounder)
       shot.set('game', @get('model'))
       shot.save().then =>
-        @store.find('player', @get('selectedPlayer.id')).then (player) =>
-          player.save()
-        @saveGame()
+        if model.shooting is 1
+          @store.find('player', @get('selectedPlayer.id')).then (player) =>
+            player.save()
+          @saveGame()
       if model.shooting > 1
         shot2 = this.store.createRecord 'stat',
           type: "shot"
@@ -506,9 +504,10 @@ GameController = Ember.ObjectController.extend
           shot.set('recipient', model.rebounder)
         shot2.set('game', @get('model'))
         shot2.save().then =>
-          @store.find('player', @get('selectedPlayer.id')).then (player) =>
-            player.save()
-          @saveGame()
+          if model.shooting is 2
+            @store.find('player', @get('selectedPlayer.id')).then (player) =>
+              player.save()
+            @saveGame()
       if model.shooting > 2
         shot3 = this.store.createRecord 'stat',
           type: "shot"
@@ -523,9 +522,10 @@ GameController = Ember.ObjectController.extend
           shot.set('recipient', model.rebounder)
         shot3.set('game', @get('model'))
         shot3.save().then =>
-          @store.find('player', @get('selectedPlayer.id')).then (player) =>
-            player.save()
-          @saveGame()
+          if model.shooting is 3
+            @store.find('player', @get('selectedPlayer.id')).then (player) =>
+              player.save()
+            @saveGame()
       if model.rebounder
         if model.rebounder.get('team.id') is @get('selectedPlayer.team.id')
           subType = 'offensive'
@@ -558,7 +558,10 @@ GameController = Ember.ObjectController.extend
       foul.save().then =>
         @store.find('player', @get('selectedPlayer.id')).then (player) =>
           player.save()
+          if model.subType is "offensive"
+            @send('submitTurnover', model)
         @saveGame()
+
 
     reboundButton: ->
       @send('openModal', 'modals/rebound', {subType: 'defensive'})
@@ -632,29 +635,32 @@ GameController = Ember.ObjectController.extend
         timeLeft: @get('timeLeft')
       turnover.set('team', @get('selectedPlayer.team'))
       turnover.set('player', @get('selectedPlayer'))
+      if model.stealer
+        turnover.set('recipient', model.stealer)
       turnover.set('game', @get('model'))
       turnover.save().then =>
         @store.find('player', @get('selectedPlayer.id')).then (player) =>
           player.save()
+          if model.stealer
+            steal = this.store.createRecord 'stat',
+              type: "steal"
+              period: @get('period')
+              timeLeft: @get('timeLeft')
+            steal.set('team', model.stealer.get('team'))
+            steal.set('player', model.stealer)
+            steal.set('game', @get('model'))
+            steal.save().then =>
+              @store.find('player', model.stealer.get('id')).then (player) =>
+                player.save()
+              @saveGame()
         @saveGame()
-      if model.stealer
-        steal = this.store.createRecord 'stat',
-          type: "turnover"
-          period: @get('period')
-          timeLeft: @get('timeLeft')
-        steal.set('team', model.stealer.get('team'))
-        steal.set('player', model.stealer)
-        steal.set('game', @get('model'))
-        steal.save().then =>
-          @store.find('player', model.stealer.get('id')).then (player) =>
-            player.save()
-          @saveGame()
+
 
     stealButton: ->
       @send('openModal', 'modals/steal', {})
     submitSteal: (model) ->
       steal = this.store.createRecord 'stat',
-        type: "turnover"
+        type: "steal"
         period: @get('period')
         timeLeft: @get('timeLeft')
       steal.set('team', @get('selectedPlayer.team'))
@@ -663,19 +669,20 @@ GameController = Ember.ObjectController.extend
       steal.save().then =>
         @store.find('player', @get('selectedPlayer.id')).then (player) =>
           player.save()
+          if model.turnoverer
+            turnover = this.store.createRecord 'stat',
+              type: "turnover"
+              period: @get('period')
+              timeLeft: @get('timeLeft')
+            turnover.set('team', model.turnoverer.get('team'))
+            turnover.set('player', model.turnoverer)
+            turnover.set('game', @get('model'))
+            turnover.save().then =>
+              @store.find('player', model.turnoverer.get('id')).then (player) =>
+                player.save()
+              @saveGame()
         @saveGame()
-      if model.turnoverer
-        turnover = this.store.createRecord 'stat',
-          type: "turnover"
-          period: @get('period')
-          timeLeft: @get('timeLeft')
-        turnover.set('team', model.turnoverer.get('team'))
-        turnover.set('player', model.turnoverer)
-        turnover.set('game', @get('model'))
-        turnover.save().then =>
-          @store.find('player', model.turnoverer.get('id')).then (player) =>
-            player.save()
-          @saveGame()
+
 
     endPeriod: ->
       period = @get('period')
