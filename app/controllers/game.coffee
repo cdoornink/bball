@@ -51,11 +51,16 @@ GameController = Ember.ObjectController.extend
               </style>");
 
   getStats: ->
-    console.time("compile stats")
     @get('preference').then (p) =>
       if p.get('periods') is 4
         @set('quarters', true)
     @get('stats').then (stats) =>
+      console.time("compile stats")
+      console.time("compile stats w/ advanced")
+
+      if stats.length is 0 or stats.length is undefined
+        @newGameMessage()
+
       #lineups
       loc = []
       roc = []
@@ -64,6 +69,10 @@ GameController = Ember.ObjectController.extend
       lshots = []
       #stats by player
       sbp = {}
+
+      @set 'playByPlayScoreLeft', 0
+      @set 'playByPlayScoreRight', 0
+      @set "playByPlay", []
 
       @set "court.el", $(".full-court")
       @set "court.width", parseInt(@get('court.el').width())
@@ -80,6 +89,7 @@ GameController = Ember.ObjectController.extend
           sbp[stat.get('player.id')] = [stat]
         else
           sbp[stat.get('player.id')].push stat
+        @addPlayByPlay(stat)
 
       l = {}
       loc.forEach (sub) ->
@@ -109,7 +119,6 @@ GameController = Ember.ObjectController.extend
       #scoreboard
       unless @get('timeLeft')
         @set('model.timeLeft', @get('preference.periodLength') * 60)
-        @newGameMessage()
 
       #player stats
       @get('court.el').empty()
@@ -124,7 +133,10 @@ GameController = Ember.ObjectController.extend
       @get('right.players').forEach (player) =>
         @statByPlayer(sbp, player, ts, "right")
       @set('right.teamStats', ts)
-    console.timeEnd("recompileStats")
+      console.timeEnd("compile stats")
+      if @get('status', "Final")
+        @advancedTeamStats()
+        console.timeEnd("compile stats w/ advanced")
 
   add1: (stat, ps, ts, value = 1, period) ->
     ps[stat] = ps[stat] + value
@@ -161,7 +173,7 @@ GameController = Ember.ObjectController.extend
             if stat.get('result') is 'make'
               @add1('points', ps, ts, 1, stat.get('period'))
               @add1('ftm', ps, ts)
-          else if stat.get('subType') isnt 'fouled'
+          else if stat.get('result') isnt 'foul'
             @plotShot(side, stat)
             @add1('fga', ps, ts)
             if stat.get('value') is 3 then @add1('threepta', ps, ts)
@@ -181,6 +193,126 @@ GameController = Ember.ObjectController.extend
         if t is "block" then @add1('blocks', ps, ts)
         if t is "turnover" then @add1('turnovers', ps, ts)
     player.set('gameStats', ps)
+
+  playByPlay: []
+  playByPlaySubQueue: null
+  playByPlayScoreLeft: 0
+  playByPlayScoreRight: 0
+  lastTimeLeft: null
+  addPlayByPlay: (p) ->
+    pbp = @get('playByPlay')
+    t = p.get('type')
+    sT = p.get('subType')
+    r = p.get('result')
+    play = null
+    left = p.get('team.id') is @get('left.id')
+    period = p.get('period')
+    if period is 1
+      period = "first"
+    else if period is 2
+      period = "second"
+    else if period is 3
+      period = "third"
+    else if period is 4
+      period = "fourth"
+    else
+      period = "overtime"
+
+    if t is "subbedIn"
+      @set 'playByPlaySubQueue', p.get('player')
+      return
+    else if t is "subbedOut"
+      play = {left: left, sub: true, in: @get('playByPlaySubQueue'), out: p.get('player')}
+      @set 'playByPlaySubQueue', null
+    else if t is "shot"
+      play = {left: left, shot: true, player: p.get('player'), recipient: p.get('recipient')}
+      if r is "make"
+        play["make"] = true
+      if r is "foul"
+        play["shootingFoul"] = true
+      if r is "block"
+        play["block"] = true
+      if r is "and1"
+        play["make"] = true
+        play["and1"] = true
+      if sT is "freethrow"
+        play["freethrow"] = true
+      if sT is "freeThrow"
+        sT = "free throw"
+      play["shotType"] = sT
+      if p.get('value') is 3
+        play["shotType"] = "three pointer"
+      if p.get('value') and (r is 'make' or r is 'and1')
+        scoreAtMoment = @get('playByPlayScoreLeft')
+        if left
+          @set('playByPlayScoreLeft', @get('playByPlayScoreLeft') + p.get('value'))
+        else
+          @set('playByPlayScoreRight', @get('playByPlayScoreRight') + p.get('value'))
+        play["scoreAtMoment"] = "#{@get('playByPlayScoreLeft')} - #{@get('playByPlayScoreRight')}"
+        play["score#{p.get('value')}"] = true
+    else if t is "rebound"
+      offensive = p.get('subType') is "offensive"
+      play = {left: left, rebound: true, player: p.get('player'), offensive: offensive}
+    else if t is "foul" and sT isnt "shooting"
+      play = {left: left, foul: true, player: p.get('player'), foulType: sT}
+    else if t is "turnover"
+      play = {left: left, turnover: true, player: p.get('player'), recipient: p.get('recipient')}
+
+    if play
+      tL = p.get('timeLeft')
+      unless tL is @get('lastTimeLeft')
+        play["timeLeft"] = tL
+        @set("lastTimeLeft", tL)
+      if pbp[period] is undefined
+        pbp[period] = [play]
+      else
+        pbp[period].push play
+      if pbp["recent"] is undefined
+        pbp["recent"] = [play]
+      else
+        pbp["recent"].unshift play
+        if pbp["recent"].length > 5 then pbp["recent"].pop()
+
+      @set 'playByPlaySubQueue', null
+    console.log pbp["recent"][2]
+    @set('playByPlay', pbp)
+
+  advancedTeamStats: ->
+    l = @get('left.teamStats')
+    r = @get('right.teamStats')
+    # 4 factors
+    @set 'left.teamStats.efg', @efg(l.fgm, l.threeptm, l.fga)
+    @set 'right.teamStats.efg', @efg(r.fgm, r.threeptm, r.fga)
+    @set 'left.teamStats.tov', @tov(l.turnovers, l.fga, l.fta)
+    @set 'right.teamStats.tov', @tov(r.turnovers, r.fga, r.fta)
+    @set 'left.teamStats.orb', @orb(l.oreb, r.reb, r.oreb)
+    @set 'right.teamStats.orb', @orb(r.oreb, l.reb, l.oreb)
+    @set 'left.teamStats.ftp', @ftp(l.ftm, l.fga)
+    @set 'right.teamStats.ftp', @ftp(r.ftm, r.fga)
+
+    @set 'left.teamStats.poss', @poss(l, r)
+    @set 'right.teamStats.poss', @poss(r, l)
+    @set 'left.teamStats.ortg', @ortg(l)
+    @set 'right.teamStats.ortg', @ortg(r)
+
+
+
+
+  efg: (fgm, tpm, fga) ->
+    (fgm + 0.5 * tpm) / fga
+  tov: (to, fga, fta) ->
+    to / (fga + (0.44 * fta) + to)
+  orb: (orb, oppReb, oppOReb) ->
+    oppDrb = oppReb - oppOReb
+    orb / (orb + oppDrb)
+  ftp: (ft, fga) ->
+    ft / fga
+  poss: (tm, opp) ->
+    oppDrb = opp.reb - opp.oreb
+    tmDrb = tm.reb - tm.oreb
+    0.5 * ((tm.fga + 0.4 * tm.fta - 1.07 * (tm.oreb / (tm.oreb + oppDrb)) * (tm.fga - tm.fgm) + tm.turnovers) + (opp.fga + 0.4 * opp.fta - 1.07 * (opp.oreb / (opp.oreb + tmDrb)) * (opp.fga - opp.fgm) + opp.turnovers))
+  ortg: (tm) ->
+    (tm.points / tm.poss) * 100
 
   saveGame: ->
     console.count('save game')
@@ -207,7 +339,7 @@ GameController = Ember.ObjectController.extend
         away = @get('left')
       @set('homeScore', home.teamStats.points)
       @set('awayScore', away.teamStats.points)
-      @set('status', "completed")
+      @set('status', "Final")
       @set('timeLeft', 0)
       @set('period', "Final")
       @saveGame()

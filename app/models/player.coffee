@@ -10,5 +10,8 @@ Player = DS.Model.extend
   team: DS.belongsTo('team', async: true)
   games: DS.hasMany('game', async: true)
   stats: DS.hasMany('stat', {async: true, inverse: 'player'})
+  fullName: (->
+    return "#{@get('firstName')} #{@get('lastName')}"
+  ).property('firstName', 'lastName')
 
 `export default Player`

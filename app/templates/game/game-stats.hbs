@@ -1,0 +1,43 @@
+{{partial "score-by-quarter"}}
+
+left team
+<div>
+  Pace
+  {{left.teamStats.poss}}
+  EFG
+  {{left.teamStats.efg}}
+  TOV
+  {{left.teamStats.tov}}
+  ORB
+  {{left.teamStats.orb}}
+  FTP
+  {{left.teamStats.ftp}}
+  ortg
+  {{left.teamStats.ortg}}
+</div>
+
+
+right team
+<div>
+  Pace
+  {{right.teamStats.poss}}
+  EFG
+  {{right.teamStats.efg}}
+  TOV
+  {{right.teamStats.tov}}
+  ORB
+  {{right.teamStats.orb}}
+  FTP
+  {{right.teamStats.ftp}}
+  ortg
+  {{right.teamStats.ortg}}
+</div>
+
+{{#link-to "game.index" model}}
+  box score
+{{/link-to}}
+{{#link-to "game.play-by-play" model}}
+  play-by-play
+{{/link-to}}
+
+{{outlet}}

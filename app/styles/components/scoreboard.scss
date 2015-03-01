@@ -24,25 +24,25 @@
     width: 100%;
     font-size: 30px;
   }
-  .scores {
-    float: left;
-    display: flex;
-    display: -webkit-flex;
-    height: 100%;
-    width: 178px;
-    line-height: 17px;
-    .period {
-      flex: 1 1;
-      -webkit-flex: 1 1;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 400;
-    }
-    .period-header {
-      font-weight: 600;
-      border-bottom: 1px solid rgba(255,255,255,.3);
-    }
-    .home-score {}
-    .away-score {}
+}
+.scores {
+  float: left;
+  display: flex;
+  display: -webkit-flex;
+  height: 100%;
+  width: 178px;
+  line-height: 17px;
+  .period {
+    flex: 1 1;
+    -webkit-flex: 1 1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 400;
   }
+  .period-header {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,.3);
+  }
+  .home-score {}
+  .away-score {}
 }

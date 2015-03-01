@@ -1,0 +1,34 @@
+{{#each play in controllers.game.playByPlay.third}}
+  <div {{bind-attr class=":play-row play.newPeriod:period-row"}}>
+    {{#if play.newPeriod}}
+      <div class="period">
+        {{play.newPeriod}}
+      </div>
+    {{else}}
+      <div class="time">
+        {{#if play.timeLeft}}
+          {{seconds-to-time play.timeLeft}}
+        {{/if}}
+      </div>
+      <div class="left-team-container">
+        {{#if play.left}}
+          <div {{bind-attr class=":left-team play.score1:one-point play.score2:two-points play.score3:three-points"}}>
+            {{partial "game/play-by-play-play"}}
+          </div>
+        {{/if}}
+      </div>
+      <div class="score">
+        {{#if play.scoreAtMoment}}
+          {{play.scoreAtMoment}}
+        {{/if}}
+      </div>
+      <div class="right-team-container">
+        {{#unless play.left}}
+          <div {{bind-attr class=":right-team play.score1:one-point play.score2:two-points play.score3:three-points"}}>
+            {{partial "game/play-by-play-play"}}
+          </div>
+        {{/unless}}
+      </div>
+    {{/if}}
+  </div>
+{{/each}}

@@ -1,0 +1,65 @@
+.play-by-play-container {
+  font-size: 12px;
+  .play-row {
+    display: flex;
+    display: -webkit-flex;
+    padding: 3px 10px;
+  }
+  .play-row:nth-child(2n) {
+    background: #eee;
+  }
+  .play-row.period-row {
+    background: #333;
+    color: #CCC;
+    padding: 6px 10px;
+    .period {
+      margin: 0 auto;
+    }
+  }
+  .time {
+    flex: 0 0 70px;
+    -webkit-flex: 0 0 70px;
+    text-align: center;
+  }
+  .left-team-container, .right-team-container {
+    flex: 1 1;
+    -webkit-flex: 1 1;
+    .left-team, .right-team {
+      width: 100%;
+      height: 100%;
+    }
+    .left-team {
+      padding-right: 10%;
+      text-align: right;
+    }
+    .right-team {
+      padding-left: 10%;
+    }
+    .left-team.one-point {
+      border-right: 1px solid $ok;
+    }
+    .left-team.two-points {
+      border-right: 2px solid $ok;
+    }
+    .left-team.three-points {
+      border-right: 3px solid $ok;
+    }
+    .right-team.one-point {
+      border-left: 1px solid $ok;
+    }
+    .right-team.two-points {
+      border-left: 2px solid $ok;
+    }
+    .right-team.three-points {
+      border-left: 3px solid $ok;
+    }
+  }
+  .score {
+    flex: 0 0 70px;
+    -webkit-flex: 0 0 70px;
+    text-align: center;
+  }
+  .substitution-text {
+    color: #777;
+  }
+}

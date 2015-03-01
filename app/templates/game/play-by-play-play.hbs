@@ -1,0 +1,53 @@
+{{#if play.sub}}
+  <span class="substitution-text">
+    {{play.in.fullName}} enters the game for {{play.out.fullName}}
+  </span>
+{{/if}}
+
+{{#if play.shot}}
+  {{#if play.make}}
+    {{play.player.fullName}} makes {{play.shotType}}
+    {{#if play.recipient}}
+      ( {{play.recipient.fullName}} assists )
+    {{/if}}
+  {{else if play.shootingFoul}}
+    {{play.player.fullName}} fouled
+    {{#if play.recipient}}
+      by {{play.recipient.fullName}}
+    {{/if}}
+  {{else if play.block}}
+    {{play.player.fullName}} shot blocked
+    {{#if play.recipient}}
+      by {{play.recipient.fullName}}
+    {{/if}}
+  {{else}}
+    {{play.player.fullName}} misses {{play.shotType}}
+  {{/if}}
+  {{#if play.and1}}
+    ( and one
+    {{#if play.fouler}}
+      , fouled by {{play.fouler.fullName}}
+    {{/if}}
+    )
+  {{/if}}
+{{/if}}
+
+{{#if play.rebound}}
+  {{#if play.offensive}}
+    Offensive
+  {{else}}
+    Defensive
+  {{/if}}
+  rebound by {{play.player.fullName}}
+{{/if}}
+
+{{#if play.foul}}
+  {{play.player.fullName}} called for {{play.foulType}} foul
+{{/if}}
+
+{{#if play.turnover}}
+  {{play.player.fullName}} turnover
+  {{#if play.recipient}}
+    ( stolen by {{play.recipient.fullName}} )
+  {{/if}}
+{{/if}}

@@ -32,8 +32,8 @@ Game = DS.Model.extend
   inProgress: (->
     @get('status') is "active"
   ).property('status')
-  completed: (->
-    @get('status') is "completed"
+  final: (->
+    @get('status') is "Final"
   ).property('status')
   homeWin: (->
     s = @get('status')

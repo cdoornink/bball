@@ -1,0 +1,48 @@
+<div class="scores">
+  <div class="period period1">
+    <div class="period-header">
+      1
+    </div>
+    <div class="home-score">
+      {{left.teamStats.scoreByPeriod.one}}
+    </div>
+    <div class="home-score">
+      {{right.teamStats.scoreByPeriod.one}}
+    </div>
+  </div>
+  <div class="period period2">
+    <div class="period-header">
+      2
+    </div>
+    <div class="home-score">
+      {{left.teamStats.scoreByPeriod.two}}
+    </div>
+    <div class="home-score">
+      {{right.teamStats.scoreByPeriod.two}}
+    </div>
+  </div>
+  {{#if quarters}}
+    <div class="period period3">
+      <div class="period-header">
+        3
+      </div>
+      <div class="home-score">
+        {{left.teamStats.scoreByPeriod.three}}
+      </div>
+      <div class="home-score">
+        {{right.teamStats.scoreByPeriod.three}}
+      </div>
+    </div>
+    <div class="period period4">
+      <div class="period-header">
+        4
+      </div>
+      <div class="home-score">
+        {{left.teamStats.scoreByPeriod.four}}
+      </div>
+      <div class="home-score">
+        {{right.teamStats.scoreByPeriod.four}}
+      </div>
+    </div>
+  {{/if}}
+</div>
