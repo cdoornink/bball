@@ -17,6 +17,9 @@ GameController = Ember.ObjectController.extend
   leftPlayerSelected: false
   rightPlayerSelected: false
   quarters: false
+  periods: 4
+  periodLength: 720
+  totalLength: 2880
   court: {}
   statLine: {points: 0,ftm: 0,fta: 0,fgm: 0,fga: 0,threepta: 0,threeptm: 0,assists: 0,fouls: 0,steals: 0,minutes: 0,reb: 0,oreb: 0,dreb: 0,blocks: 0,turnovers: 0,plusminus: 0,scoreByPeriod:{}}
   rightColorChanged: (->
@@ -54,6 +57,11 @@ GameController = Ember.ObjectController.extend
     @get('preference').then (p) =>
       if p.get('periods') is 4
         @set('quarters', true)
+        @set('periods', 4)
+      else
+        @set('periods', 2)
+      @set('periodLength', (p.get('periodLength') * 60))
+      @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
     @get('stats').then (stats) =>
       console.time("compile stats")
       console.time("compile stats w/ advanced")
@@ -161,8 +169,13 @@ GameController = Ember.ObjectController.extend
     @get('court.el').append(shotDot)
 
   statByPlayer: (sbp, player, ts, side) ->
+    console.log "----------"
+    console.log @get('periodLength')
+    console.log @get('totalLength')
     ps = _.clone(@statLine)
     ps.scoreByPeriod = {}
+    inGame = null
+    totalMin = 0
     if sbp[player.get('id')]
       sbp[player.get('id')].forEach (stat) =>
         t = stat.get 'type'
@@ -192,6 +205,19 @@ GameController = Ember.ObjectController.extend
         if t is "steal" then @add1('steals', ps, ts)
         if t is "block" then @add1('blocks', ps, ts)
         if t is "turnover" then @add1('turnovers', ps, ts)
+        if t is "subbedIn"
+          console.log "subbed in ", stat.get('period'), stat.get('timeLeft')
+          inGame = ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
+        if t is "subbedOut"
+          console.log "subbed out ", stat.get('period'), stat.get('timeLeft')
+          totalMin += inGame - ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
+          inGame = null
+          console.log "outGame", totalMin
+    if inGame
+      totalMin += inGame
+      #will need seperate logic here for in game situations
+      #will also need completely separate logic for overtime shit
+    ps['minutes'] = totalMin
     player.set('gameStats', ps)
 
   playByPlay: []
