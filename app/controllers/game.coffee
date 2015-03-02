@@ -380,7 +380,12 @@ GameController = Ember.ObjectController.extend
         @set('leftPlayerSelected', false)
         @set('rightPlayerSelected', true)
       $('.on-court .player-card').removeClass('selected')
-      ops.el.addClass('selected')
+      if ops.el
+        ops.el.addClass('selected')
+      else
+        name = ops.player.get('lastName')
+        number = ops.player.get('number')
+        $(".on-court .player-card:contains(#{name}):contains(#{number})").addClass('selected')
 
     shot: (ops) ->
       @send('openModal', 'modals/shot', ops)
@@ -409,7 +414,6 @@ GameController = Ember.ObjectController.extend
       s.save().then =>
         @store.find('player', @get('selectedPlayer.id')).then (player) =>
           player.save()
-        @saveGame()
         if (shot.result is 'foul' or shot.result is 'and1')
           freeThrowValue = if shot.result is 'and1' then 1 else shot.value
           @send('openModal', 'modals/freethrow', {shooting: freeThrowValue})
@@ -425,7 +429,6 @@ GameController = Ember.ObjectController.extend
         assist.save().then =>
           @store.find('player', shot.assister.get('id')).then (player) =>
             player.save()
-          @saveGame()
       if blocked
         block = this.store.createRecord 'stat',
           type: "block"
@@ -438,7 +441,6 @@ GameController = Ember.ObjectController.extend
         block.save().then =>
           @store.find('player', shot.blocker.get('id')).then (player) =>
             player.save()
-          @saveGame()
       if (shot.result is 'miss' or shot.result is 'block') and shot.rebounder
         if shot.rebounder.get('team.id') is @get('selectedPlayer.team.id')
           subType = 'offensive'
@@ -453,9 +455,10 @@ GameController = Ember.ObjectController.extend
         rebound.set('player', shot.rebounder)
         rebound.set('game', @get('model'))
         rebound.save().then =>
+          @send('selectPlayer', {player:shot.rebounder})
           @store.find('player', shot.rebounder.get('id')).then (player) =>
             player.save()
-          @saveGame()
+
       if (shot.result is 'foul' or shot.result is 'and1') and shot.fouler
         foul = this.store.createRecord 'stat',
           type: "foul"
@@ -468,7 +471,8 @@ GameController = Ember.ObjectController.extend
         foul.save().then =>
           @store.find('player', shot.fouler.get('id')).then (player) =>
             player.save()
-          @saveGame()
+      @saveGame()
+      #this could be troublesome, could potentially skip saving some of the above, but it seems to work
 
     freeThrowButton: ->
       @send('openModal', 'modals/freethrow', {shooting: 2})
@@ -540,6 +544,7 @@ GameController = Ember.ObjectController.extend
         rebound.set('player', model.rebounder)
         rebound.set('game', @get('model'))
         rebound.save().then =>
+          @send('selectPlayer', {player:model.rebounder})
           @store.find('player', model.rebounder.get('id')).then (player) =>
             player.save()
           @saveGame()
@@ -607,6 +612,7 @@ GameController = Ember.ObjectController.extend
         rebound.set('player', model.rebounder)
         rebound.set('game', @get('model'))
         rebound.save().then =>
+          @send('selectPlayer', {player:model.rebounder})
           @store.find('player', model.rebounder.get('id')).then (player) =>
             player.save()
           @saveGame()
@@ -650,6 +656,7 @@ GameController = Ember.ObjectController.extend
             steal.set('player', model.stealer)
             steal.set('game', @get('model'))
             steal.save().then =>
+              @send('selectPlayer', {player:model.stealer})
               @store.find('player', model.stealer.get('id')).then (player) =>
                 player.save()
               @saveGame()
