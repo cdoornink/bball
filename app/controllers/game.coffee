@@ -59,6 +59,7 @@ GameController = Ember.ObjectController.extend
         @set('quarters', true)
         @set('periods', 4)
       else
+        @set('quarters', false)
         @set('periods', 2)
       @set('periodLength', (p.get('periodLength') * 60))
       @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
@@ -676,19 +677,21 @@ GameController = Ember.ObjectController.extend
       steal.save().then =>
         @store.find('player', @get('selectedPlayer.id')).then (player) =>
           player.save()
-          if model.turnoverer
-            turnover = this.store.createRecord 'stat',
-              type: "turnover"
-              period: @get('period')
-              timeLeft: @get('timeLeft')
-            turnover.set('team', model.turnoverer.get('team'))
-            turnover.set('player', model.turnoverer)
-            turnover.set('game', @get('model'))
-            turnover.save().then =>
-              @store.find('player', model.turnoverer.get('id')).then (player) =>
-                player.save()
-              @saveGame()
-        @saveGame()
+        if model.turnoverer
+          turnover = this.store.createRecord 'stat',
+            type: "turnover"
+            period: @get('period')
+            timeLeft: @get('timeLeft')
+          turnover.set('team', model.turnoverer.get('team'))
+          turnover.set('recipient', @get('selectedPlayer'))
+          turnover.set('player', model.turnoverer)
+          turnover.set('game', @get('model'))
+          turnover.save().then =>
+            @store.find('player', model.turnoverer.get('id')).then (player) =>
+              player.save()
+            @saveGame()
+        else
+          @saveGame()
 
 
     endPeriod: ->
@@ -714,6 +717,7 @@ GameController = Ember.ObjectController.extend
       @saveGame()
 
     substitute: (player, ops) ->
+      console.log @get('status')
       if @get('status') is "created"
         @send('submitSubstitute', player, ops)
       else
