@@ -14,8 +14,6 @@ Team = DS.Model.extend
   owners: DS.hasMany('user', {async: true, inverse: 'teams'})
   opponents: DS.hasMany('team', {async: true})
   games: DS.hasMany('game', {async: true, inverse: 'teams'})
-  homeGames: DS.hasMany('game', {async: true, inverse: 'homeTeam'})
-  awayGames: DS.hasMany('game', {async: true, inverse: 'awayTeam'})
   stats: DS.hasMany('stat', {async: true, inverse: 'team'})
   gamesNum: (->
     @get('games.content').length
