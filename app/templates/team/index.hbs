@@ -1,4 +1,9 @@
 <h2 class="page-title">{{controllers.team.organization}} {{controllers.team.mascot}}</h2>
+<div class="color-picker">
+  Team Colors:
+  {{spectrum-color-picker color=controllers.team.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+  {{spectrum-color-picker color=controllers.team.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+</div>
 
 {{#if controllers.team.myTeam}}
 <div class="new-game-button">

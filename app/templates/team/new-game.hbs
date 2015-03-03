@@ -3,7 +3,7 @@
 <form class="new-game-form">
   <div class="form-step step-one">
     <h3>Step 1: General Game Information</h3>
-    {{input value=game.date placeholder="Date"}}
+    {{date-picker date=game.date valueFormat='YYYY-MM-DD'}}
     {{! input value=game.location placeholder="Location"}}
     {{radio-button name="court" id="court1" selectionBinding="game.courtSelect" value="home"}}
     <label for="court1">Home</label>
