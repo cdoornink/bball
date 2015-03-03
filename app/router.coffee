@@ -8,7 +8,8 @@ Router.map ->
   @route 'login'
   @route 'team', {path: "team/:id"}, ->
     @route 'new-game'
-    @route 'opponent', {path: "opponent/:id"}
+    @route 'stats'
+    @route 'games'
   @route 'player'
 
   @route 'game', {path: "game/:id"}, ->
@@ -19,5 +20,6 @@ Router.map ->
       @route '3'
       @route '4'
       @route 'ot'
+
 
 `export default Router;`

@@ -1,4 +1,7 @@
-.team-page {
+.team-page-header {
+  background: white;
+  padding: 0 20px;
+  border-bottom: 1px solid #eee;
   .page-title, .new-game-button{
     display: inline-block;
     margin-right: 30px;
@@ -10,14 +13,12 @@
   .new-game-button .add-button {
     width: 200px;
   }
-  .two-col {
-    overflow: auto;
-  }
+}
+.team-page {
   .team-games {
     float: left;
-    width: 50%;
+    width: 100%;
     min-width: 400px;
-    padding: 0 50px 0 0;
     a {
       width: 100%;
       display: flex;
@@ -50,7 +51,7 @@
   }
   .team-roster {
     float: left;
-    width: 50%;
+    width: 100%;
     min-width: 400px;
     .roster-player {
       width: 100%;

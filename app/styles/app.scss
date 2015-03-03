@@ -55,15 +55,16 @@ input[type=radio]:checked + label {
 @import "layout";
 @import "components/grids";
 @import "components/modal-dialog";
-@import "components/scoreboard";
 @import "components/player-card";
 @import "components/play-by-play";
+@import "components/scoreboard";
+@import "components/stat-lines";
+@import "components/tabs";
 
 @import "modals/shot";
 
 @import "team";
 
 @import "game";
-@import "components/stat-lines";
 
 @import "login";

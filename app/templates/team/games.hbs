@@ -1,0 +1,19 @@
+<div class="team-games">
+  {{#each game in controllers.team.games}}
+    {{#link-to 'game' game}}
+      <div class="col date">
+        {{game.date}}
+        <div class="status">
+          {{game.status}}
+        </div>
+      </div>
+      <div class="col away-team">
+        {{game.awayTeam.organization}} {{game.awayTeam.mascot}}
+      </div>
+      <div class="col at">at</div>
+      <div class="col home-team">
+        {{game.homeTeam.organization}} {{game.homeTeam.mascot}}
+      </div>
+    {{/link-to}}
+  {{/each}}
+</div>
