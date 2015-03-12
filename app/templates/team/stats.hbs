@@ -1,1 +1,61 @@
-{{outlet}}
+
+{{model}}
+<div class='stat-lines'>
+  <div class="top-row">
+    <div class="col player-number">#</div>
+    <div class="col player-name">player</div>
+    <div class="col min">min</div>
+    <div class="col points">pts</div>
+    <div class="col totreb">reb</div>
+    <div class="col assist">ast</div>
+    <div class="col fg">fgm-a</div>
+    <div class="col threept">3pm-a</div>
+    <div class="col ft">ftm-a</div>
+    <div class="col offreb">oreb</div>
+    <div class="col defreb">dreb</div>
+    <div class="col steal">stl</div>
+    <div class="col block">blk</div>
+    <div class="col to">to</div>
+    <div class="col foul">pf</div>
+    <div class="col plusminus">+/-</div>
+  </div>
+
+  {{#each player in model.players}}
+    <div class="player-row">
+      <div class="col player-number">{{player.number}}</div>
+      <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
+      <div class="col min">{{seconds-to-time player.gameStats.minutes}}</div>
+      <div class="col points">{{player.gameStats.points}}</div>
+      <div class="col totreb">{{player.gameStats.reb}}</div>
+      <div class="col assist">{{player.gameStats.assists}}</div>
+      <div class="col fg">{{player.gameStats.fgm}}/{{player.gameStats.fga}}</div>
+      <div class="col threept">{{player.gameStats.threeptm}}/{{player.gameStats.threepta}}</div>
+      <div class="col ft">{{player.gameStats.ftm}}/{{player.gameStats.fta}}</div>
+      <div class="col offreb">{{player.gameStats.oreb}}</div>
+      <div class="col defreb">{{player.gameStats.dreb}}</div>
+      <div class="col steal">{{player.gameStats.steals}}</div>
+      <div class="col block">{{player.gameStats.blocks}}</div>
+      <div class="col to">{{player.gameStats.turnovers}}</div>
+      <div class="col foul">{{player.gameStats.fouls}}</div>
+      <div class="col plus-minus">{{player.gameStats.plusminus}}</div>
+    </div>
+  {{/each}}
+  <div class="total-row">
+    <div class="col player-number"></div>
+    <div class="col player-name">TOTALS</div>
+    <div class="col min">{{left.teamStats.min}}</div>
+    <div class="col points">{{left.teamStats.points}}</div>
+    <div class="col totreb">{{left.teamStats.reb}}</div>
+    <div class="col assist">{{left.teamStats.assists}}</div>
+    <div class="col fg">{{left.teamStats.fgm}}/{{left.teamStats.fga}}</div>
+    <div class="col threept">{{left.teamStats.threeptm}}/{{left.teamStats.threepta}}</div>
+    <div class="col ft">{{left.teamStats.ftm}}/{{left.teamStats.fta}}</div>
+    <div class="col offreb">{{left.teamStats.oreb}}</div>
+    <div class="col defreb">{{left.teamStats.dreb}}</div>
+    <div class="col steal">{{left.teamStats.steals}}</div>
+    <div class="col block">{{left.teamStats.blocks}}</div>
+    <div class="col to">{{left.teamStats.turnovers}}</div>
+    <div class="col foul">{{left.teamStats.fouls}}</div>
+    <div class="col plus-minus">-</div>
+  </div>
+</div>

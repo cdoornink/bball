@@ -7,12 +7,15 @@
           {{game.status}}
         </div>
       </div>
-      <div class="col away-team">
+      <div {{bind-attr class=":col :away-team game.homeWin:lose:win"}}>
         {{game.awayTeam.organization}} {{game.awayTeam.mascot}}
       </div>
       <div class="col at">at</div>
-      <div class="col home-team">
+      <div {{bind-attr class=":col :home-team game.homeWin:win:lose"}}>
         {{game.homeTeam.organization}} {{game.homeTeam.mascot}}
+      </div>
+      <div class="col results">
+        {{game.awayScore}} - {{game.homeScore}}
       </div>
     {{/link-to}}
   {{/each}}

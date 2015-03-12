@@ -53,6 +53,7 @@ input[type=radio]:checked + label {
 }
 
 @import "layout";
+@import "components/flex-table";
 @import "components/grids";
 @import "components/modal-dialog";
 @import "components/player-card";
@@ -65,6 +66,7 @@ input[type=radio]:checked + label {
 
 @import "team";
 
-@import "game";
+@import "game-mode";
+@import "game-stats";
 
 @import "login";

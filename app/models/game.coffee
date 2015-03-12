@@ -39,11 +39,11 @@ Game = DS.Model.extend
     s = @get('status')
     h = @get('homeScore')
     a = @get('awayScore')
-    if s isnt "completed"
+    if s isnt "Final"
       w = undefined
     else
-      w = h > a
+      w = if h > a then true else false
     return w
-  ).property('homeScore', 'status')
+  ).property('homeScore', 'awayScore', 'status')
 
 `export default Game`

@@ -1,43 +1,78 @@
-{{partial "score-by-quarter"}}
+<div class="game-stats-header">
+  <div class="main-result">
+    <div class="result-team-left">
+      <div class="team-name">
+        <div class="team-organization">
+          {{homeTeam.organization}}
+        </div>
+        <div class="team-mascot">
+          {{homeTeam.mascot}}
+        </div>
+      </div>
+      <div class="team-score">
+        {{homeScore}}
+      </div>
+    </div>
+    <div class="result-team-right">
+      <div class="team-name">
+        <div class="team-organization">
+          {{awayTeam.organization}}
+        </div>
+        <div class="team-mascot">
+          {{awayTeam.mascot}}
+        </div>
+      </div>
+      <div class="team-score">
+        {{awayScore}}
+      </div>
+    </div>
+  </div>
 
-left team
-<div>
-  Pace
-  {{left.teamStats.poss}}
-  EFG
-  {{left.teamStats.efg}}
-  TOV
-  {{left.teamStats.tov}}
-  ORB
-  {{left.teamStats.orb}}
-  FTP
-  {{left.teamStats.ftp}}
-  ortg
-  {{left.teamStats.ortg}}
+  <div class="results-main-stats">
+    {{partial "score-by-quarter"}}
+
+    <div class="advanced-stats-summary flex-table">
+      <div class="col">
+        <div>Pace</div>
+        <div>{{left.teamStats.poss}}</div>
+        <div>{{left.teamStats.poss}}</div>
+      </div>
+      <div class="col">
+        <div>EFG</div>
+        <div>{{left.teamStats.efg}}</div>
+        <div>{{right.teamStats.efg}}</div>
+      </div>
+      <div class="col">
+        <div>TOV</div>
+        <div>{{left.teamStats.tov}}</div>
+        <div>{{right.teamStats.tov}}</div>
+      </div>
+      <div class="col">
+        <div>ORB</div>
+        <div>{{left.teamStats.orb}}</div>
+        <div>{{right.teamStats.orb}}</div>
+      </div>
+      <div class="col">
+        <div>FTP</div>
+        <div>{{left.teamStats.ftp}}</div>
+        <div>{{right.teamStats.ftp}}</div>
+      </div>
+      <div class="col">
+        <div>ORTG</div>
+        <div>{{left.teamStats.ortg}}</div>
+        <div>{{right.teamStats.ortg}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-row">
+    {{#link-to "game.index" model}}
+      box score
+    {{/link-to}}
+    {{#link-to "game.play-by-play" model}}
+      play-by-play
+    {{/link-to}}
+  </div>
 </div>
 
-
-right team
-<div>
-  Pace
-  {{right.teamStats.poss}}
-  EFG
-  {{right.teamStats.efg}}
-  TOV
-  {{right.teamStats.tov}}
-  ORB
-  {{right.teamStats.orb}}
-  FTP
-  {{right.teamStats.ftp}}
-  ortg
-  {{right.teamStats.ortg}}
-</div>
-
-{{#link-to "game.index" model}}
-  box score
-{{/link-to}}
-{{#link-to "game.play-by-play" model}}
-  play-by-play
-{{/link-to}}
 
 {{outlet}}
