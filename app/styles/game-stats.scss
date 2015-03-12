@@ -1,0 +1,48 @@
+.game-stats-header {
+  background: white;
+  padding: 0 20px;
+  border-bottom: 1px solid #eee;
+  overflow: hidden;
+  .main-result {
+    margin: 20px 0;
+    .result-team-left {
+      margin-right: 50px;
+    }
+    .result-team-left, .result-team-right {
+      float: left;
+      overflow: hidden;
+      .team-name {
+        margin-right: 20px;
+        float: left;
+        font-size: 20px;
+        .team-mascot {
+          font-weight: 600;
+        }
+      }
+      .team-score {
+        float: left;
+        font-size: 40px;
+        font-weight: 500;
+        color: #444;
+      }
+    }
+  }
+  .results-main-stats {
+    width: 100%;
+    overflow: hidden;
+    padding: 10px;
+  }
+  .scores {
+    float: left;
+    margin-right: 50px;
+  }
+  .advanced-stats-summary {
+    float: left;
+    width: 400px;
+    .col > div {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 400;
+    }
+  }
+}

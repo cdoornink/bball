@@ -1,0 +1,8 @@
+.flex-table {
+  display: flex;
+  display: -webkit-flex;
+  .col {
+    flex: 1 1;
+    -webkit-flex: 1 1;
+  }
+}

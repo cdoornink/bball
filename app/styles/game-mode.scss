@@ -1,0 +1,208 @@
+.game-mode {
+  position: relative;
+  .switch-sides {
+    width: 100px;
+    position: absolute;
+    top: 89px;
+    left: calc(50% - 50px);
+  }
+  .team-info {
+    width: 100%;
+    height: 71px;
+    padding-top: 5px;
+    overflow: hidden;
+    border-bottom: 1px solid #333;
+    background: #e5e5e6;
+    color: #515861;
+    .sp-replacer {
+      padding: 0;
+      border: none;
+      margin: 0 4px;
+      background: none;
+    }
+    .score {
+      height: 100%;
+      width: 100px;
+      font-size: 50px;
+      text-align: center;
+      padding-top: 2px;
+      color: #111821;
+    }
+    .possession {
+      overflow: auto;
+      font-size: 12px;
+      text-transform: uppercase;
+      .possession-light {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border: 1px solid #bbb;
+        border-radius: 50%;
+        background: #888;
+        margin-bottom: -1px;
+      }
+      .possession-light.on {
+        background: red;
+      }
+    }
+    .name {
+      font-size: 24px;
+    }
+  }
+  .stat-buttons-container {
+    background: rgba(0,0,0,.9);
+    background: #3d424c;
+    border-bottom: 1px solid #1d222c;
+
+  }
+  .stat-buttons {
+    max-width: 1000px;
+    display: flex;
+    display: -webkit-flex;
+    width: 100%;
+    .stat-button {
+      cursor: pointer;
+      flex: 1 1;
+      -webkit-flex: 1 1;
+      height: 25px;
+      border: none;
+      background: #858f93;
+      color: white;
+      margin: 4px 2px;
+    }
+  }
+  .player-court-container, .stat-buttons {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .all-players {
+    overflow: hidden;
+    width: 100%;
+    min-height: 535px;
+  }
+
+  .left-team {
+    width: 50%;
+    float: left;
+    .team-info {
+      background: url('/images/bwbg.jpg');
+      background-size: cover;
+      background-position-y: 220px;
+    }
+    .bench {
+      float: left;
+      margin-top: 7px;
+    }
+    .score {
+      float: left;
+    }
+    .next-to-score {
+      float: left;
+      margin-top: 8px;
+    }
+  }
+  .right-team {
+    width: 50%;
+    float: right;
+    .team-info {
+      background: url('/images/bwbg2.jpg');
+      background-size: cover;
+      background-position-y: 220px;
+    }
+    .bench {
+      float: right;
+      margin-top: 7px;
+    }
+    .score {
+      float: right;
+    }
+    .next-to-score {
+      float: right;
+      margin-top: 8px;
+    }
+  }
+
+  .on-court {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    display: -webkit-flex;
+  }
+  .on-court > div {
+    flex: 1 1;
+    -webkit-flex: 1 1;
+    margin: 2px;
+    -webkit-transition: -webkit-transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
+    width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
+    width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    &:hover {
+      -webkit-transform: scale3d(1.02, 1.02, 1);
+      transform: scale3d(1.02, 1.02, 1);
+    }
+  }
+
+  .bench {
+    width: 20%;
+  }
+
+  .full-court {
+    cursor: pointer;
+    position: absolute;
+    top: 84px;
+    left: 10%;
+    background: #888;
+    width: 80%;
+    padding-bottom: 45.3%;
+    height: 0;
+    background: url(/images/transparent_court.png);
+    background-size: cover;
+    .shot-dot {
+      position: absolute;
+    }
+    .shot-dot.made-shot {
+      color: blue;
+      font-size: 0px;
+      background: orange;
+      border: 2px solid black;
+      border-radius: 50%;
+      height: 14px;
+      width: 14px;
+    }
+    .shot-dot.missed-shot {
+      color: #777;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 12px;
+    }
+  }
+
+  .jump-ball-starter {
+    position: absolute;
+    top: 300px;
+    left: calc(50% - 150px);
+    width: 300px;
+    background: rgba(50,50,50,.8);
+    padding: 30px;
+    text-align: center;
+    color: white;
+    .title {
+      text-transform: uppercase;
+      font-size: 20px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .description {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .left-team {
+      float: left;
+    }
+    .right-team {
+      float: right;
+    }
+  }
+}
