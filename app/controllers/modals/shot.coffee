@@ -2,17 +2,9 @@
 
 ModalsShotController = Ember.Controller.extend
   needs: ["game"]
-  showAssistPrompt: false
-  showBlockPrompt: false
-  showReboundPrompt: false
-  showFoulPrompt: false
   actions:
     cancel: ->
       @send('closeModal')
-      @set('showReboundPrompt', false)
-      @set('showAssistPrompt', false)
-      @set('showFoulPrompt', false)
-      @set('showBlockPrompt', false)
     setType: (type) ->
       @set('model.subType', type)
       $(".shot-type-button").removeClass('selected')
@@ -21,22 +13,9 @@ ModalsShotController = Ember.Controller.extend
       $(".result-button").removeClass('selected')
       $(".result-button.#{result}").addClass('selected')
       @set('model.result', result)
-      if result is "make" or result is "and1"
-        @set('showAssistPrompt', true)
-      else
-        @set('showAssistPrompt', false)
-      if result is "miss" or result is "block"
-        @set('showReboundPrompt', true)
-      else
-        @set('showReboundPrompt', false)
-      if result is "block"
-        @set('showBlockPrompt', true)
-      else
-        @set('showBlockPrompt', false)
-      if result is "foul" or result is "and1"
-        @set('showFoulPrompt', true)
-      else
-        @set('showFoulPrompt', false)
+      @get('controllers.game').send('submitShot', @get('model'))
+      @send('closeModal')
+
     setRebounder: (ops) ->
       @set('model.rebounder', ops.player)
       $('.rebounder .player-card').removeClass('selected')
@@ -53,12 +32,5 @@ ModalsShotController = Ember.Controller.extend
       @set('model.fouler', ops.player)
       $('.fouler .player-card').removeClass('selected')
       ops.el.addClass('selected')
-    continue: ->
-      @get('controllers.game').send('submitShot', @get('model'))
-      @send('closeModal')
-      @set('showReboundPrompt', false)
-      @set('showAssistPrompt', false)
-      @set('showFoulPrompt', false)
-      @set('showBlockPrompt', false)
 
 `export default ModalsShotController`

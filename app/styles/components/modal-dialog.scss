@@ -13,7 +13,7 @@
   top: 10%;
   background-color: whitesmoke;
   padding: 10px;
-  margin: 0 auto;
+  margin: 100px auto;
   width: 500px;
   left: -webkit-calc(50% - 250px);
   left: calc(50% - 250px);
@@ -54,7 +54,7 @@
   }
   .option-row button {
     width: 90px;
-    padding: 5px;
+    padding: 10px 5px;
   }
   .confirmation-buttons {
      margin: 0px -10px 10px;
@@ -93,6 +93,9 @@
       background: $cancel;
       color: white;
     }
+  }
+  .cancel.spread {
+    width: 100%;
   }
   .shooting {
     float: right;

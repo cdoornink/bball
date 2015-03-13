@@ -49,25 +49,5 @@
       </div>
     </div>
 
-    {{#if showReboundPrompt}}
-      <div class="option-row">
-        <div class="subtitle">
-          Rebounded
-        </div>
-        <div class="subsubtitle">Defensive</div>
-        {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setRebounder"}}
-        {{else}}
-          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setRebounder"}}
-        {{/if}}
-        <div class="subsubtitle">Offensive</div>
-        {{#if controllers.game.leftPlayerSelected}}
-          {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setRebounder"}}
-        {{else}}
-          {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setRebounder"}}
-        {{/if}}
-      </div>
-    {{/if}}
-
   </div>
 {{/modal-dialog}}
