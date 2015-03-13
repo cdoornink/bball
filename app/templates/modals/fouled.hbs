@@ -1,0 +1,14 @@
+{{#modal-dialog}}
+  <div class="shot-modal">
+    <div class="title">
+      Fouled by
+    </div>
+    <div class="option-row">
+      {{#if controllers.game.leftPlayerSelected}}
+        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit"}}
+      {{else}}
+        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit"}}
+      {{/if}}
+    </div>
+  </div>
+{{/modal-dialog}}

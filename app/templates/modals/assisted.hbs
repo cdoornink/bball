@@ -1,0 +1,19 @@
+{{#modal-dialog}}
+  <div class="shot-modal">
+    <div class="title">
+      Assisted by
+    </div>
+    <div class="option-row">
+      {{#if controllers.game.leftPlayerSelected}}
+        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit" excludeSelectedPlayer=true}}
+      {{else}}
+        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit" excludeSelectedPlayer=true}}
+      {{/if}}
+    </div>
+    <div class="confirmation-buttons">
+      <div class="cancel spread">
+        <button class="cancel-button" {{action 'cancel'}}>No Assist</button>
+      </div>
+    </div>
+  </div>
+{{/modal-dialog}}

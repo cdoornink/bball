@@ -1,0 +1,21 @@
+{{#modal-dialog}}
+  <div class="shot-modal">
+    <div class="title">
+      Rebounded by
+    </div>
+    <div class="option-row">
+      {{#if controllers.game.leftPlayerSelected}}
+        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit"}}
+      {{else}}
+        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit"}}
+      {{/if}}
+    </div>
+    <div class="option-row">
+      {{#unless controllers.game.leftPlayerSelected}}
+        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit"}}
+      {{else}}
+        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit"}}
+      {{/unless}}
+    </div>
+  </div>
+{{/modal-dialog}}
