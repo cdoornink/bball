@@ -3,8 +3,12 @@
   padding: 0 20px;
   border-bottom: 1px solid #eee;
   overflow: hidden;
+  .tab-row {
+    margin-top: 10px;
+  }
   .main-result {
-    margin: 20px 0;
+    margin: 20px 0 10px;
+    overflow: auto;
     .result-team-left {
       margin-right: 50px;
     }
@@ -34,15 +38,29 @@
   }
   .scores {
     float: left;
+    margin-right: 0px;
+    .period-header {
+      background: #eee;
+      height: 17px;
+    }
+  }
+  .scores.team-names {
+    width: auto;
+    margin-right: 0;
+    .period {
+      text-align: right;
+    }
+  }
+  .scores.final-score {
+    width: 60px;
     margin-right: 50px;
+    font-weight: 600;
+    .period {
+      text-align: center;
+    }
   }
   .advanced-stats-summary {
     float: left;
     width: 400px;
-    .col > div {
-      text-align: center;
-      font-size: 13px;
-      font-weight: 400;
-    }
   }
 }

@@ -29,36 +29,57 @@
   </div>
 
   <div class="results-main-stats">
+    <div class="scores team-names">
+      <div class="period">
+        <div class="period-header"></div>
+        <div class="home-score">{{homeTeam.mascot}}</div>
+        <div class="home-score">{{awayTeam.mascot}}</div>
+      </div>
+    </div>
     {{partial "score-by-quarter"}}
+    <div class="scores final-score">
+      <div class="period">
+        <div class="period-header">F</div>
+        <div class="home-score">{{homeScore}}</div>
+        <div class="home-score">{{awayScore}}</div>
+      </div>
+    </div>
 
+    <div class="scores team-names">
+      <div class="period">
+        <div class="period-header"></div>
+        <div class="home-score">{{homeTeam.mascot}}</div>
+        <div class="home-score">{{awayTeam.mascot}}</div>
+      </div>
+    </div>
     <div class="advanced-stats-summary flex-table">
       <div class="col">
-        <div>Pace</div>
+        <div class="col-header">Pace</div>
         <div>{{left.teamStats.poss}}</div>
         <div>{{left.teamStats.poss}}</div>
       </div>
       <div class="col">
-        <div>EFG</div>
+        <div class="col-header">EFG</div>
         <div>{{left.teamStats.efg}}</div>
         <div>{{right.teamStats.efg}}</div>
       </div>
       <div class="col">
-        <div>TOV</div>
+        <div class="col-header">TOV</div>
         <div>{{left.teamStats.tov}}</div>
         <div>{{right.teamStats.tov}}</div>
       </div>
       <div class="col">
-        <div>ORB</div>
+        <div class="col-header">ORB</div>
         <div>{{left.teamStats.orb}}</div>
         <div>{{right.teamStats.orb}}</div>
       </div>
       <div class="col">
-        <div>FTP</div>
+        <div class="col-header">FTP</div>
         <div>{{left.teamStats.ftp}}</div>
         <div>{{right.teamStats.ftp}}</div>
       </div>
       <div class="col">
-        <div>ORTG</div>
+        <div class="col-header">ORTG</div>
         <div>{{left.teamStats.ortg}}</div>
         <div>{{right.teamStats.ortg}}</div>
       </div>

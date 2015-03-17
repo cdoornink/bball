@@ -41,6 +41,16 @@
   rebound by {{play.player.fullName}}
 {{/if}}
 
+{{#if play.teamRebound}}
+  {{play.team.mascot}}
+  {{#if play.offensive}}
+    offensive
+  {{else}}
+    defensive
+  {{/if}}
+  team rebound
+{{/if}}
+
 {{#if play.foul}}
   {{play.player.fullName}} called for {{play.foulType}} foul
 {{/if}}

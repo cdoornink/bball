@@ -16,6 +16,7 @@ Stat = DS.Model.extend
   result: DS.attr('string')
   timeLeft: DS.attr('number')
   value: DS.attr('number')
+  scoreDiff: DS.attr('number')
 
 `export default Stat`
   # stats: [

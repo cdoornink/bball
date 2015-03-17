@@ -6,7 +6,7 @@ ModalsBlockedController = Ember.Controller.extend
     cancel: ->
       @send('closeModal')
     submit: (ops) ->
-      @set('model.blocker', ops.player)
+      @set('model.player', ops.player)
       @get('controllers.game').send('submitBlock', @get('model'))
       @send('closeModal')
 

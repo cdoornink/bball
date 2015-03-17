@@ -13,5 +13,11 @@ Player = DS.Model.extend
   fullName: (->
     return "#{@get('firstName')} #{@get('lastName')}"
   ).property('firstName', 'lastName')
+  firstInitial: (->
+    if @get('firstName')
+      @get('firstName')[0]
+    else
+      ""
+  ).property('firstName')
 
 `export default Player`

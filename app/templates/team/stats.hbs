@@ -1,45 +1,133 @@
-
-{{model}}
-<div class='stat-lines'>
-  <div class="top-row">
-    <div class="col player-number">#</div>
-    <div class="col player-name">player</div>
-    <div class="col min">min</div>
-    <div class="col points">pts</div>
-    <div class="col totreb">reb</div>
-    <div class="col assist">ast</div>
-    <div class="col fg">fgm-a</div>
-    <div class="col threept">3pm-a</div>
-    <div class="col ft">ftm-a</div>
-    <div class="col offreb">oreb</div>
-    <div class="col defreb">dreb</div>
-    <div class="col steal">stl</div>
-    <div class="col block">blk</div>
-    <div class="col to">to</div>
-    <div class="col foul">pf</div>
-    <div class="col plusminus">+/-</div>
+<div class="flex-table">
+  <div class="col three-col">
+    <div class="col-header">player</div>
+    {{#each player in model.players}}
+    <div>{{player.firstInitial}} {{player.lastName}}</div>
+    {{/each}}
   </div>
+  <div class="col">
+    <div class="col-header">min</div>
+    {{#each player in model.players}}
+    <div>{{seconds-to-time player.gameStats.minutes}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">pts</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.points}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">reb</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.reb}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">ast</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.assists}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">fgm</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.fgm}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">fga</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.fga}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">fg%</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.fgp}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">3pm</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.threeptm}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">3pa</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.threepta}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">3p%</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.threeptp}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">ftm</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.ftm}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">fta</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.fta}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">ft%</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.ftp}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">oreb</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.oreb}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">dreb</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.dreb}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">stl</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.steals}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">blk</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.blocks}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">to</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.turnovers}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">pf</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.fouls}}</div>
+    {{/each}}
+  </div>
+  <div class="col">
+    <div class="col-header">+/-</div>
+    {{#each player in model.players}}
+    <div>{{player.gameStats.plusminus}}</div>
+    {{/each}}
+  </div>
+</div>
+<!-- <div class='stat-lines'>
 
-  {{#each player in model.players}}
-    <div class="player-row">
-      <div class="col player-number">{{player.number}}</div>
-      <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
-      <div class="col min">{{seconds-to-time player.gameStats.minutes}}</div>
-      <div class="col points">{{player.gameStats.points}}</div>
-      <div class="col totreb">{{player.gameStats.reb}}</div>
-      <div class="col assist">{{player.gameStats.assists}}</div>
-      <div class="col fg">{{player.gameStats.fgm}}/{{player.gameStats.fga}}</div>
-      <div class="col threept">{{player.gameStats.threeptm}}/{{player.gameStats.threepta}}</div>
-      <div class="col ft">{{player.gameStats.ftm}}/{{player.gameStats.fta}}</div>
-      <div class="col offreb">{{player.gameStats.oreb}}</div>
-      <div class="col defreb">{{player.gameStats.dreb}}</div>
-      <div class="col steal">{{player.gameStats.steals}}</div>
-      <div class="col block">{{player.gameStats.blocks}}</div>
-      <div class="col to">{{player.gameStats.turnovers}}</div>
-      <div class="col foul">{{player.gameStats.fouls}}</div>
-      <div class="col plus-minus">{{player.gameStats.plusminus}}</div>
-    </div>
-  {{/each}}
   <div class="total-row">
     <div class="col player-number"></div>
     <div class="col player-name">TOTALS</div>
@@ -58,4 +146,4 @@
     <div class="col foul">{{left.teamStats.fouls}}</div>
     <div class="col plus-minus">-</div>
   </div>
-</div>
+</div> -->

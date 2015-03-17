@@ -2,7 +2,11 @@
 
 StatsMixin = Ember.Mixin.create
   statLine: {points:0,ftm:0,fta:0,fgm:0,fga:0,threepta:0,threeptm:0,assists:0,fouls:0,steals:0,minutes:0,reb:0,oreb:0,dreb:0,blocks:0,turnovers:0,plusminus:0,scoreByPeriod:{}}
-
+  advancedPlayerStats: (stats) ->
+    stats.fgp = @percentage(stats.fgm, stats.fga)
+    stats.threeptp = @percentage(stats.threeptm, stats.threepta)
+    stats.ftp = @percentage(stats.ftm, stats.fta)
+    console.log stats.fgp
   advancedTeamStats: (team, opponent) ->
     l = team.get('teamStats')
     r = opponent.get('teamStats')
@@ -20,6 +24,12 @@ StatsMixin = Ember.Mixin.create
     opponent.set 'teamStats.poss', @poss(r, l)
     team.set 'teamStats.ortg', @ortg(l)
     opponent.set 'teamStats.ortg', @ortg(r)
+
+  percentage: (x,y) ->
+    if y is 0
+      "-"
+    else
+      Math.round((x / y) * 1000) / 10
 
   efg: (fgm, tpm, fga) ->
     x = (fgm + 0.5 * tpm) / fga
@@ -47,20 +57,30 @@ StatsMixin = Ember.Mixin.create
     ps = _.clone(@statLine)
     ps.scoreByPeriod = {}
     inGame = null
+    tempDiff = 0
+    plusminus = 0
+    lastStat = null
     totalMin = 0
     if sbp[player.get('id')]
       sbp[player.get('id')].forEach (stat) =>
         @parseStat(stat, ts, side, ps)
         if stat.get('type') is "subbedIn"
+          tempDiff = stat.get('scoreDiff')
           inGame = ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
         if stat.get('type') is "subbedOut"
+          plusminus += (stat.get('scoreDiff') - tempDiff)
           totalMin += inGame - ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
           inGame = null
-    if inGame
-      totalMin += inGame
-      #will need seperate logic here for in game situations
+        lastStat = stat
+      if inGame
+        homeDiff = @get('homeScore') - @get('awayScore')
+        currentDiff = if lastStat.get('player.team.id') is @get('homeTeam.id') then homeDiff else -homeDiff
+        plusminus += (currentDiff - tempDiff)
+        totalMin += inGame - ((((@get('period') - @get('periods')) * -1) * @get('periodLength')) + @get('timeLeft'))
       #will also need completely separate logic for overtime shit
     ps['minutes'] = totalMin
+    ps['plusminus'] = plusminus
+    @advancedPlayerStats(ps)
     player.set('gameStats', ps)
   parseStat: (stat, ts, side, player) ->
     t = stat.get 'type'

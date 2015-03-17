@@ -6,15 +6,28 @@
     <div class="option-row">
       {{#if controllers.game.leftPlayerSelected}}
         {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit"}}
+        <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.right}}>
+          {{controllers.game.right.mascot}} Team Rebound
+        </div>
       {{else}}
         {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit"}}
+        <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.left}}>
+          {{controllers.game.left.mascot}} Team Rebound
+        </div>
       {{/if}}
     </div>
+
     <div class="option-row">
       {{#unless controllers.game.leftPlayerSelected}}
         {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit"}}
+        <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.right}}>
+          {{controllers.game.right.mascot}} Team Rebound
+        </div>
       {{else}}
         {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit"}}
+        <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.left}}>
+          {{controllers.game.left.mascot}} Team Rebound
+        </div>
       {{/unless}}
     </div>
   </div>

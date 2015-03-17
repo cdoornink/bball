@@ -54,6 +54,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
               </style>");
 
   getStats: ->
+    # console.log @
     @get('preference').then (p) =>
       if p.get('periods') is 4
         @set('quarters', true)
@@ -64,6 +65,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       @set('periodLength', (p.get('periodLength') * 60))
       @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
     @get('stats').then (stats) =>
+      # console.log stats
       console.time("compile stats")
       console.time("compile stats w/ advanced")
 
@@ -134,7 +136,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       ts = _.clone(@statLine)
       ts.scoreByPeriod = {}
       @get('left.players').forEach (player) =>
-        @statByPlayer(sbp, player, ts, "left")
+        @statByPlayer(sbp, player, ts, "left", )
       @set('left.teamStats', ts)
 
       ts = _.clone(@statLine)
@@ -146,7 +148,6 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       if @get('status', "Final")
         @advancedTeamStats(@get('left'), @get('right'))
         console.timeEnd("compile stats w/ advanced")
-
 
   playByPlay: []
   playByPlaySubQueue: null
@@ -191,11 +192,9 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         play["make"] = true
         play["and1"] = true
         play["fouler"] = p.get('fouler')
-      if sT is "freethrow"
-        play["freethrow"] = true
       if sT is "freeThrow"
         sT = "free throw"
-      play["shotType"] = sT
+      play["shotType"] = sT or "jumper"
       if p.get('value') is 3
         play["shotType"] = "three pointer"
       if p.get('value') and (r is 'make' or r is 'and1')
@@ -209,6 +208,9 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     else if t is "rebound"
       offensive = p.get('subType') is "offensive"
       play = {left: left, rebound: true, player: p.get('player'), offensive: offensive}
+    else if t is "teamRebound"
+      offensive = p.get('subType') is "offensive"
+      play = {left: left, teamRebound: true, team: p.get('team'), offensive: offensive}
     else if t is "foul" and sT isnt "shooting"
       play = {left: left, foul: true, player: p.get('player'), foulType: sT}
     else if t is "turnover"
@@ -232,25 +234,32 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       @set 'playByPlaySubQueue', null
     @set('playByPlay', pbp)
 
-
-
+  getScoreDiff: (team) ->
+    team.get('teamStats.points') - @getOpponent(team).get('teamStats.points')
 
   getOpponent: (team) ->
     if @get('left.id') is team.get('id') then @get('right') else @get('left')
 
-  savePlayerandTeam: (player) ->
+  savePlayer: (player) ->
     @store.find('player', player.get('id')).then (player) =>
       player.save()
 
-
   saveGame: ->
     console.count('save game')
+    @submitGameScore()
     @get('model').save().then =>
       @getStats()
     @store.find('team', @get('left.id')).then (team) =>
       team.save()
     @store.find('team', @get('right.id')).then (team) ->
       team.save()
+
+  newGameMessage: ->
+    conf = {
+      message: "Drag and drop players into the starting lineup. Once you have them set, you will be ready to start the game."
+      header: "Set your lineups"
+    }
+    @send('openModal', 'modals/confirmation', conf)
 
   endGame: ->
     conf = {
@@ -261,17 +270,48 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     }
     @send('openModal', 'modals/confirmation', conf)
 
+  submitGameScore: ->
+    console.log "submitGameScore"
+    console.log "------------------------------------------------"
+    if @get('homeTeam.id') is @get('left.id')
+      home = @get('left')
+      away = @get('right')
+    else
+      home = @get('right')
+      away = @get('left')
+    @set('homeScore', home.teamStats.points)
+    @set('awayScore', away.teamStats.points)
+
+  createStat: (type, model, callback) ->
+    stat = this.store.createRecord 'stat',
+      type: type
+      period: @get('period')
+      timeLeft: @get('timeLeft')
+      scoreDiff: @getScoreDiff(model.player.get('team'))
+    stat.set('team', model.player.get('team'))
+    stat.set('opponent', @getOpponent(model.player.get('team')))
+    stat.set('player', model.player)
+    stat.set('game', @get('model'))
+    if model.subType
+      stat.set('subType', model.subType)
+    if type is "shot"
+      stat.set('value', model.value)
+      stat.set('result', model.result)
+    if model.x
+      stat.set('x', model.x)
+      stat.set('y', model.y)
+    stat.save().then =>
+      if model.player
+        @savePlayer(model.player)
+      if callback
+        callback()
+      else
+        @saveGame()
+
   actions:
 
     submitEndGame: ->
-      if @get('homeTeam.id') is @get('left.id')
-        home = @get('left')
-        away = @get('right')
-      else
-        home = @get('right')
-        away = @get('left')
-      @set('homeScore', home.teamStats.points)
-      @set('awayScore', away.teamStats.points)
+      @submitGameScore()
       @set('status', "Final")
       @set('timeLeft', 0)
       @set('period', "Final")
@@ -298,6 +338,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         number = ops.player.get('number')
         $(".on-court .player-card:contains(#{name}):contains(#{number})").addClass('selected')
 
+
 #for play by play, will have to check after a made shot if an assist was recorded next
 # on a blocked shot if a block was recorded next
 # on a fouled shot if a foul was recorded next etc.
@@ -305,23 +346,8 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     shot: (ops) ->
       @send('openModal', 'modals/shot', ops)
     submitShot: (model) ->
-      console.log model.result
-      shot = this.store.createRecord 'stat',
-        type: "shot"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-        subType: model.subType or 'jumper'
-        x: model.x
-        y: model.y
-        result: model.result
-        value: model.value
-      shot.set('team', @get('selectedPlayer.team'))
-      shot.set('opponent', @getOpponent(@get('selectedPlayer.team')))
-      shot.set('player', @get('selectedPlayer'))
-      shot.set('game', @get('model'))
-      shot.save().then =>
-        @savePlayerandTeam(@get('selectedPlayer'))
-        @saveGame()
+      model.player = @get('selectedPlayer')
+      @createStat 'shot', model
       Ember.run.later (=>
         if (model.result is 'block')
           @send('openModal', 'modals/blocked')
@@ -332,102 +358,50 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         if model.result is 'and1'
           @send('openModal', 'modals/assisted', {shooting: 1})
         if model.result is 'miss'
-          @send('openModal', 'modals/rebounded', {defensive: @getOpponent(@get('selectedPlayer.team'))})
+          @send('openModal', 'modals/rebounded', {defensive: @getOpponent(model.player.get('team'))})
       ), 100
 
     freeThrowButton: ->
       @send('openModal', 'modals/freethrow', {shooting: 2})
     submitFreeThrows: (model) ->
-      shot = this.store.createRecord 'stat',
-        type: "shot"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-        subType: 'freeThrow'
-        result: model.result1
-        value: 1
-      shot.set('team', @get('selectedPlayer.team'))
-      shot.set('opponent', @getOpponent(@get('selectedPlayer.team')))
-      shot.set('player', @get('selectedPlayer'))
-      if model.shooting is 1 and model.result1 is "miss"
-        rebound = true
-      shot.set('game', @get('model'))
-      shot.save().then =>
+      if (model.shooting is 1 and model.result1 is "miss") or
+        (model.shooting is 2 and model.result2 is "miss") or
+        (model.shooting is 3 and model.result3 is "miss")
+          rebound = true
+      model.subType = "freeThrow"
+      model.player = @get('selectedPlayer')
+      model.result = model.result1
+      model.value = 1
+      @createStat 'shot', model, =>
         if model.shooting is 1
-          @savePlayerandTeam(@get('selectedPlayer'))
+          @savePlayer(@get('selectedPlayer'))
           @saveGame()
       if model.shooting > 1
-        shot2 = this.store.createRecord 'stat',
-          type: "shot"
-          period: @get('period')
-          timeLeft: @get('timeLeft')
-          subType: 'freeThrow'
-          result: model.result2
-          value: 1
-        shot2.set('team', @get('selectedPlayer.team'))
-        shot2.set('opponent', @getOpponent(@get('selectedPlayer.team')))
-        shot2.set('player', @get('selectedPlayer'))
-        if model.shooting is 2 and model.result2 is "miss"
-          rebound = true
-        shot2.set('game', @get('model'))
-        shot2.save().then =>
+        model.result = model.result2
+        @createStat 'shot', model, =>
           if model.shooting is 2
-            @savePlayerandTeam(@get('selectedPlayer'))
+            @savePlayer(@get('selectedPlayer'))
             @saveGame()
       if model.shooting > 2
-        shot3 = this.store.createRecord 'stat',
-          type: "shot"
-          period: @get('period')
-          timeLeft: @get('timeLeft')
-          subType: 'freeThrow'
-          result: model.result3
-          value: 1
-        shot3.set('team', @get('selectedPlayer.team'))
-        shot3.set('opponent', @getOpponent(@get('selectedPlayer.team')))
-        shot3.set('player', @get('selectedPlayer'))
-        if model.shooting is 3 and model.result3 is "miss"
-          rebound = true
-        shot3.set('game', @get('model'))
-        shot3.save().then =>
-          if model.shooting is 3
-            @savePlayerandTeam(@get('selectedPlayer'))
-            @saveGame()
+        model.result = model.result3
+        @createStat 'shot', model
       if rebound
         Ember.run.later (=>
           @send('openModal', 'modals/rebounded', {defensive: @getOpponent(@get('selectedPlayer.team'))})
         ), 100
 
-
     submitAssist: (model) ->
-      assist = this.store.createRecord 'stat',
-        type: "assist"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-      assist.set('team', model.assister.get('team'))
-      assist.set('opponent', @getOpponent(model.assister.get('team')))
-      assist.set('player', model.assister)
-      assist.set('recipient', model.recipient)
-      assist.set('game', @get('model'))
-      assist.save().then =>
-        @savePlayerandTeam(model.assister)
+      model.type = "assist"
+      @createStat 'assist', model, =>
         @saveGame()
         if model.shooting
           @send('openModal', 'modals/fouled', {shooting: model.shooting})
 
-
     foulButton: ->
-      @send('openModal', 'modals/foul', {fouler: @get('selectedPlayer')})
+      @send('openModal', 'modals/foul', {player: @get('selectedPlayer')})
     submitFoul: (model) ->
-      foul = this.store.createRecord 'stat',
-        type: "foul"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-        subType: model.subType or "defensive"
-      foul.set('team', model.fouler.get('team'))
-      foul.set('opponent', @getOpponent(model.fouler.get('team')))
-      foul.set('player', model.fouler)
-      foul.set('game', @get('model'))
-      foul.save().then =>
-        @savePlayerandTeam(model.fouler)
+      model.subType = model.subType or "defensive"
+      @createStat 'foul', model, =>
         if model.subType is "offensive"
           @send('submitTurnover', {turnoverer: model.fouler})
         else
@@ -437,101 +411,90 @@ GameController = Ember.ObjectController.extend(StatsMixin,
           @send('openModal', 'modals/freethrow', {shooting: model.shooting})
         ), 100
 
-
     reboundButton: ->
-      @send('openModal', 'modals/rebound', {rebounder: @get('selectedPlayer'), subType: 'defensive'})
+      @send('openModal', 'modals/rebound', {player: @get('selectedPlayer'), subType: 'defensive'})
     submitRebound: (model) ->
-      if model.subType
-        subType = model.subType
-      else
-        if model.defensive and model.defensive.get('id') isnt model.rebounder.get('team.id')
-          subType = 'offensive'
+      if !model.subType
+        if model.defensive and model.defensive.get('id') isnt model.player.get('team.id')
+          model.subType = 'offensive'
         else
-          subType = 'defensive'
+          model.subType = 'defensive'
+      @createStat 'rebound', model, =>
+        @send('selectPlayer', {player:model.player})
+        @saveGame()
+    submitTeamRebound: (model) ->
       rebound = this.store.createRecord 'stat',
-        type: "rebound"
+        type: "teamRebound"
         period: @get('period')
         timeLeft: @get('timeLeft')
-        subType: subType
-      rebound.set('team', model.rebounder.get('team'))
-      rebound.set('opponent', @getOpponent(model.rebounder.get('team')))
-      rebound.set('player', model.rebounder)
+        scoreDiff: @getScoreDiff(model.team)
+        subType: model.subType
+      rebound.set('team', model.team)
+      rebound.set('opponent', @getOpponent(model.team))
       rebound.set('game', @get('model'))
       rebound.save().then =>
-        @send('selectPlayer', {player:model.rebounder})
-        @savePlayerandTeam(model.rebounder)
         @saveGame()
 
     blockButton: ->
-      @send('submitBlock', {blocker: @get('selectedPlayer')})
+      @send('submitBlock', {player: @get('selectedPlayer')})
     submitBlock: (model) ->
-      block = this.store.createRecord 'stat',
-        type: "block"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-      block.set('team', model.blocker.get('team'))
-      block.set('opponent', @getOpponent(model.blocker.get('team')))
-      block.set('player', model.blocker)
-      block.set('game', @get('model'))
-      block.save().then =>
-        @savePlayerandTeam(model.blocker)
-        @saveGame()
+      @createStat 'block', model
       Ember.run.later (=>
-        @send('openModal', 'modals/rebounded', {defensive: model.blocker.get('team')})
+        @send('openModal', 'modals/rebounded', {defensive: model.player.get('team')})
       ), 100
 
     drawChargeButton: ->
       @send('openModal', 'modals/charge', {})
     submitDrawnCharge: ->
-      c = this.store.createRecord 'stat',
-        type: "drawnCharge"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-      c.set('team', @get('selectedPlayer.team'))
-      c.set('opponent', @getOpponent(@get('selectedPlayer.team')))
-      c.set('player', @get('selectedPlayer'))
-      c.set('game', @get('model'))
-      c.save().then =>
-        @savePlayerandTeam(@get('selectedPlayer'))
-        @saveGame()
+      @createStat 'drawnCharge', {player: @get('selectedPlayer')}
 
     turnoverButton: ->
-      @send('openModal', 'modals/turnover', {turnoverer: @get('selectedPlayer')})
+      @send('openModal', 'modals/turnover', {player: @get('selectedPlayer')})
     submitTurnover: (model) ->
-      turnover = this.store.createRecord 'stat',
-        type: "turnover"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-      turnover.set('team', model.turnoverer.get('team'))
-      turnover.set('opponent', @getOpponent(model.turnoverer.get('team')))
-      turnover.set('player', model.turnoverer)
-      turnover.set('game', @get('model'))
-      turnover.save().then =>
-        @savePlayerandTeam(model.turnoverer)
+      @createStat 'turnover', model, =>
         if model.stealer
-          @send('submitSteal', {stealer: model.stealer})
+          @send('submitSteal', {player: model.stealer})
         else
           @saveGame()
 
     stealButton: ->
-      @send('openModal', 'modals/steal', {stealer: @get('selectedPlayer')})
+      @send('openModal', 'modals/steal', {player: @get('selectedPlayer')})
     submitSteal: (model) ->
-      steal = this.store.createRecord 'stat',
-        type: "steal"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-      steal.set('team', model.stealer.get('team'))
-      steal.set('opponent', @getOpponent(model.stealer.get('team')))
-      steal.set('player', model.stealer)
-      steal.set('game', @get('model'))
-      steal.save().then =>
-        @send('selectPlayer', {player:model.stealer})
-        @savePlayerandTeam(model.stealer)
+      @createStat 'steal', model, =>
+        @send('selectPlayer', {player:model.player})
         if model.turnoverer
-          @send('submitTurnover', {turnoverer: model.turnoverer})
+          @send('submitTurnover', {player: model.turnoverer})
         else
           @saveGame()
 
+    substitute: (player, ops) ->
+      @get('stats').then (stats) =>
+        lastStat = stats.currentState[stats.length-1]
+        if @get('status') is "created" or lastStat.get('type') is "subbedOut"
+          @send('submitSubstitute', player, ops)
+        else
+          @send('openModal', 'modals/time', {continue: => @send('submitSubstitute', player, ops)})
+    submitSubstitute: (player, ops) ->
+      if ops.target.current
+        subbedOut = ops.target.current.content
+      @createStat 'subbedIn', {player: player, subType: ops.target.slot}, =>
+        unless player.get('played')
+          @send('submitPlayed', player)
+        @saveGame()
+        if subbedOut
+          @send('submitSubbedOut', subbedOut)
+    submitSubbedOut: (player) ->
+      @createStat 'subbedOut', {player: player}
+    submitPlayed: (player) ->
+      stat = this.store.createRecord 'stat',
+        type: "played"
+      stat.set('team', player.get('team'))
+      stat.set('player', player)
+      stat.set('game', @get('model'))
+      stat.save().then =>
+        player.save()
+        player.set('played', true)
+        @saveGame()
 
     endPeriod: ->
       period = @get('period')
@@ -555,52 +518,12 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       @set('model.timeLeft', s)
       @saveGame()
 
-    substitute: (player, ops) ->
-      console.log @get('status')
-      if @get('status') is "created"
-        @send('submitSubstitute', player, ops)
-      else
-        @send('openModal', 'modals/time', {continue: => @send('submitSubstitute', player, ops)})
-
-    submitSubstitute: (player, ops) ->
-      if ops.target.current
-        subbedOut = ops.target.current.content
-      stat = this.store.createRecord 'stat',
-        type: "subbedIn"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
-        subType: ops.target.slot
-      stat.set('team', player.get('team'))
-      stat.set('player', player)
-      stat.set('game', @get('model'))
-      stat.save().then =>
-        player.save()
-        @saveGame()
-        if subbedOut
-          stat = this.store.createRecord 'stat',
-            type: "subbedOut"
-            period: @get('period')
-            timeLeft: @get('timeLeft')
-          stat.set('team', player.get('team'))
-          stat.set('player', subbedOut)
-          stat.set('game', @get('model'))
-          stat.save().then =>
-            subbedOut.save()
-            @saveGame()
-
     switchSides: ->
       left = @get('left')
       right = @get('right')
       @set('left', right)
       @set('right', left)
       @getStats()
-
-  newGameMessage: ->
-    conf = {
-      message: "Drag and drop players into the starting lineup. Once you have them set, you will be ready to start the game."
-      header: "Set your lineups"
-    }
-    @send('openModal', 'modals/confirmation', conf)
 )
 
 `export default GameController`

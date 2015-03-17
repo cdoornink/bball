@@ -10,7 +10,6 @@ ModalsStealController = Ember.Controller.extend
       $('.turnoverer .player-card').removeClass('selected')
       ops.el.addClass('selected')
     continue: ->
-      console.log @get('model')
       @get('controllers.game').send('submitSteal', @get('model'))
       @send('closeModal')
 

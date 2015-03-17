@@ -16,21 +16,4 @@ ModalsShotController = Ember.Controller.extend
       @get('controllers.game').send('submitShot', @get('model'))
       @send('closeModal')
 
-    setRebounder: (ops) ->
-      @set('model.rebounder', ops.player)
-      $('.rebounder .player-card').removeClass('selected')
-      ops.el.addClass('selected')
-    setAssister: (ops) ->
-      @set('model.assister', ops.player)
-      $('.assister .player-card').removeClass('selected')
-      ops.el.addClass('selected')
-    setBlocker: (ops) ->
-      @set('model.blocker', ops.player)
-      $('.blocker .player-card').removeClass('selected')
-      ops.el.addClass('selected')
-    setFouler: (ops) ->
-      @set('model.fouler', ops.player)
-      $('.fouler .player-card').removeClass('selected')
-      ops.el.addClass('selected')
-
 `export default ModalsShotController`

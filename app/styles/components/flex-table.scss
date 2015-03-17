@@ -4,5 +4,16 @@
   .col {
     flex: 1 1;
     -webkit-flex: 1 1;
+    text-align: center;
+    font-size: 13px;
+  }
+  .col-header {
+    background: #eee;
+    height: 17px;
+    font-weight: 700;
+  }
+  .three-col {
+    flex: 1 1 100px;
+    -webkit-flex: 1 1 100px;
   }
 }
