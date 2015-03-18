@@ -7,7 +7,7 @@ ModalsFouledController = Ember.Controller.extend
       @send('closeModal')
     submit: (ops) ->
       @set('model.player', ops.player)
-      @get('controllers.game').send('submitFoul', ops)
+      @get('controllers.game').send('submitFoul', @get('model'))
       @send('closeModal')
 
 `export default ModalsFouledController`

@@ -52,101 +52,103 @@ GameController = Ember.ObjectController.extend(StatsMixin,
                   color: #{@get('left.secondaryColor')};
                 }
               </style>");
-
+  statsUpdated: (->
+    Ember.run.debounce(@, @getStats, 300)
+  ).observes("model.stats")
   getStats: ->
-    # console.log @
-    @get('preference').then (p) =>
-      if p.get('periods') is 4
-        @set('quarters', true)
-        @set('periods', 4)
-      else
-        @set('quarters', false)
-        @set('periods', 2)
-      @set('periodLength', (p.get('periodLength') * 60))
-      @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
-    @get('stats').then (stats) =>
-      # console.log stats
-      console.time("compile stats")
-      console.time("compile stats w/ advanced")
-
-      if stats.length is 0 or stats.length is undefined
-        @newGameMessage()
-
-      #lineups
-      loc = []
-      roc = []
-      #all shots
-      rshots = []
-      lshots = []
-      #stats by player
-      sbp = {}
-
-      @set 'playByPlayScoreLeft', 0
-      @set 'playByPlayScoreRight', 0
-      @set "playByPlay", []
-
-      @set "court.el", $(".full-court")
-      @set "court.width", parseInt(@get('court.el').width())
-      @set "court.height", parseInt(@get('court.width') / 1.766)
-
-      stats.forEach (stat) =>
-        if stat.get('type') is "subbedIn"
-          if stat.get('team.id') is @get('left.id')
-            loc.push(stat)
-          #this was failing after half a game with the clippers, team.id was undefined, just for the one team, even if I switched sides
-          else if stat.get('team.id') is @get('right.id')
-            roc.push(stat)
-        if sbp[stat.get('player.id')] is undefined
-          sbp[stat.get('player.id')] = [stat]
+      @get('preference').then (p) =>
+        if p.get('periods') is 4
+          @set('quarters', true)
+          @set('periods', 4)
         else
-          sbp[stat.get('player.id')].push stat
-        @addPlayByPlay(stat)
+          @set('quarters', false)
+          @set('periods', 2)
+        @set('periodLength', (p.get('periodLength') * 60))
+        @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
+      Ember
+      @get('stats').then (stats) =>
+        # console.log stats
+        console.time("compile stats")
+        console.time("compile stats w/ advanced")
 
-      l = {}
-      loc.forEach (sub) ->
-        l[sub.get("subType")] = sub.get("player")
-      @set('leftOnCourt', l)
-      locArray = _.map l, (p) -> p.content.id
-      leftOnCourtArray = _.map l, (p) -> p
-      @set('leftOnCourtArray', leftOnCourtArray)
-      lb = []
-      @get('left.players').forEach (player) ->
-        if _.indexOf(locArray, player.id) is -1
-          lb.push player
-      @set('leftBench', lb)
-      r = {}
-      roc.forEach (sub) ->
-        r[sub.get("subType")] = sub.get("player")
-      @set('rightOnCourt', r)
-      rocArray = _.map r, (p) -> p.content.id
-      rightOnCourtArray = _.map r, (p) -> p
-      @set('rightOnCourtArray', rightOnCourtArray)
-      rb = []
-      @get('right.players').forEach (player) ->
-        if _.indexOf(rocArray, player.id) is -1
-          rb.push player
-      @set('rightBench', rb)
+        if stats.length is 0 or stats.length is undefined
+          @newGameMessage()
 
-      #scoreboard
-      unless @get('timeLeft')
-        @set('model.timeLeft', @get('preference.periodLength') * 60)
+        #lineups and all shots
+        loc = []
+        roc = []
+        rshots = []
+        lshots = []
+        #stats by player
+        sbp = {}
 
-      #player stats
-      @get('court.el').empty()
-      ts = _.clone(@statLine)
-      ts.scoreByPeriod = {}
-      @get('left.players').forEach (player) =>
-        @statByPlayer(sbp, player, ts, "left", )
-      @set('left.teamStats', ts)
+        @set 'playByPlayScoreLeft', 0
+        @set 'playByPlayScoreRight', 0
+        @set "playByPlay", []
 
-      ts = _.clone(@statLine)
-      ts.scoreByPeriod = {}
-      @get('right.players').forEach (player) =>
-        @statByPlayer(sbp, player, ts, "right")
-      @set('right.teamStats', ts)
-      console.timeEnd("compile stats")
-      if @get('status', "Final")
-        @advancedTeamStats(@get('left'), @get('right'))
+        @set "court.el", $(".full-court")
+        @set "court.width", parseInt(@get('court.el').width())
+        @set "court.height", parseInt(@get('court.width') / 1.766)
+
+        stats.forEach (stat) =>
+          if stat.get('type') is "subbedIn"
+            if stat.get('team.id') is @get('left.id')
+              loc.push(stat)
+            #this was failing after half a game with the clippers, team.id was undefined, just for the one team, even if I switched sides
+            else if stat.get('team.id') is @get('right.id')
+              roc.push(stat)
+          if sbp[stat.get('player.id')] is undefined
+            sbp[stat.get('player.id')] = [stat]
+          else
+            sbp[stat.get('player.id')].push stat
+          @addPlayByPlay(stat)
+
+        l = {}
+        loc.forEach (sub) ->
+          l[sub.get("subType")] = sub.get("player")
+        @set('leftOnCourt', l)
+        locArray = _.map l, (p) -> p.content.id
+        leftOnCourtArray = _.map l, (p) -> p
+        @set('leftOnCourtArray', leftOnCourtArray)
+        lb = []
+        @get('left.players').forEach (player) ->
+          if _.indexOf(locArray, player.id) is -1
+            lb.push player
+        @set('leftBench', lb)
+
+        r = {}
+        roc.forEach (sub) ->
+          r[sub.get("subType")] = sub.get("player")
+        @set('rightOnCourt', r)
+        rocArray = _.map r, (p) -> p.content.id
+        rightOnCourtArray = _.map r, (p) -> p
+        @set('rightOnCourtArray', rightOnCourtArray)
+        rb = []
+        @get('right.players').forEach (player) ->
+          if _.indexOf(rocArray, player.id) is -1
+            rb.push player
+        @set('rightBench', rb)
+
+        #scoreboard
+        unless @get('timeLeft')
+          @set('model.timeLeft', @get('preference.periodLength') * 60)
+
+        #player stats
+        @get('court.el').empty()
+        ts = _.clone(@statLine)
+        ts.scoreByPeriod = {}
+        @get('left.players').forEach (player) =>
+          @statByPlayer(sbp, player, ts, "left", )
+        @set('left.teamStats', ts)
+
+        ts = _.clone(@statLine)
+        ts.scoreByPeriod = {}
+        @get('right.players').forEach (player) =>
+          @statByPlayer(sbp, player, ts, "right")
+        @set('right.teamStats', ts)
+        console.timeEnd("compile stats")
+        if @get('status', "Final")
+          @advancedTeamStats(@get('left'), @get('right'))
         console.timeEnd("compile stats w/ advanced")
 
   playByPlay: []
@@ -247,8 +249,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
   saveGame: ->
     console.count('save game')
     @submitGameScore()
-    @get('model').save().then =>
-      @getStats()
+    @get('model').save()
     @store.find('team', @get('left.id')).then (team) =>
       team.save()
     @store.find('team', @get('right.id')).then (team) ->
@@ -271,8 +272,6 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     @send('openModal', 'modals/confirmation', conf)
 
   submitGameScore: ->
-    console.log "submitGameScore"
-    console.log "------------------------------------------------"
     if @get('homeTeam.id') is @get('left.id')
       home = @get('left')
       away = @get('right')
@@ -338,7 +337,6 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         number = ops.player.get('number')
         $(".on-court .player-card:contains(#{name}):contains(#{number})").addClass('selected')
 
-
 #for play by play, will have to check after a made shot if an assist was recorded next
 # on a blocked shot if a block was recorded next
 # on a fouled shot if a foul was recorded next etc.
@@ -400,6 +398,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     foulButton: ->
       @send('openModal', 'modals/foul', {player: @get('selectedPlayer')})
     submitFoul: (model) ->
+      console.log model
       model.subType = model.subType or "defensive"
       @createStat 'foul', model, =>
         if model.subType is "offensive"
@@ -436,12 +435,18 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         @saveGame()
 
     blockButton: ->
-      @send('submitBlock', {player: @get('selectedPlayer')})
+      @send('openModal', 'modals/block', {player: @get('selectedPlayer'), pushedButton: true})
     submitBlock: (model) ->
-      @createStat 'block', model
-      Ember.run.later (=>
-        @send('openModal', 'modals/rebounded', {defensive: model.player.get('team')})
-      ), 100
+      console.log model
+      @createStat 'block', model, =>
+        if model.rebounder
+          @send('submitRebound', {player: model.rebounder, defensive: model.player.get('team')})
+        else
+          unless model.pushedButton
+            Ember.run.later (=>
+              @send('openModal', 'modals/rebounded', {defensive: model.player.get('team')})
+            ), 100
+          @saveGame()
 
     drawChargeButton: ->
       @send('openModal', 'modals/charge', {})
@@ -470,7 +475,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     substitute: (player, ops) ->
       @get('stats').then (stats) =>
         lastStat = stats.currentState[stats.length-1]
-        if @get('status') is "created" or lastStat.get('type') is "subbedOut"
+        if @get('status') is "created" or lastStat.get('type') is "subbedOut" or lastStat.get('type') is "played"
           @send('submitSubstitute', player, ops)
         else
           @send('openModal', 'modals/time', {continue: => @send('submitSubstitute', player, ops)})
@@ -478,14 +483,18 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       if ops.target.current
         subbedOut = ops.target.current.content
       @createStat 'subbedIn', {player: player, subType: ops.target.slot}, =>
-        unless player.get('played')
-          @send('submitPlayed', player)
-        @saveGame()
+        unless player.get('gameStats.played')
+          Ember.run.later (=>
+            @send('submitPlayed', player)
+          ), 200
         if subbedOut
           @send('submitSubbedOut', subbedOut)
+        else
+          @saveGame()
     submitSubbedOut: (player) ->
       @createStat 'subbedOut', {player: player}
     submitPlayed: (player) ->
+      console.log "submit played"
       stat = this.store.createRecord 'stat',
         type: "played"
       stat.set('team', player.get('team'))
@@ -493,7 +502,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       stat.set('game', @get('model'))
       stat.save().then =>
         player.save()
-        player.set('played', true)
+        #this breaks as soon as you reload the page. need to save this as an actual stat when compiling
         @saveGame()
 
     endPeriod: ->

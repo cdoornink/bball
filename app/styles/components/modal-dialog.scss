@@ -28,6 +28,19 @@
     display: flex;
     display: -webkit-flex;
   }
+  .team-row {
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+    -webkit-transition: -webkit-transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
+    width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275),
+    width 0.25s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    &:hover  {
+      -webkit-transform: scale3d(1.02, 1.02, 1);
+      transform: scale3d(1.02, 1.02, 1);
+    }
+  }
   button.selected {
     background: #444;
     color: white;
@@ -55,11 +68,19 @@
   .option-row button {
     width: 90px;
     padding: 10px 5px;
+    margin-bottom: 10px;
   }
   .confirmation-buttons {
      margin: 0px -10px 10px;
      overflow: hidden;
      padding: 10px 10px;
+  }
+  .result-button.make {
+    margin-right: 10px;
+  }
+  .result-button.make, .result-button.miss{
+    width: 230px;
+    height: 60px;
   }
   .clock {
     width: 100%;
@@ -96,6 +117,11 @@
   }
   .cancel.spread {
     width: 100%;
+  }
+  button.cancel {
+    background: $cancel;
+    color: white;
+    margin-right: 20px;
   }
   .shooting {
     float: right;

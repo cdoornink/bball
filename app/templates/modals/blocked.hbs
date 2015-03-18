@@ -10,5 +10,10 @@
         {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit"}}
       {{/if}}
     </div>
+    <div class="confirmation-buttons">
+      <div class="cancel">
+        <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
+      </div>
+    </div>
   </div>
 {{/modal-dialog}}

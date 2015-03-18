@@ -6,7 +6,7 @@ ModalsBlockController = Ember.Controller.extend
     cancel: ->
       @send('closeModal')
     setRebounder: (ops) ->
-      @set('model.player', ops.player)
+      @set('model.rebounder', ops.player)
       $('.rebounder .player-card').removeClass('selected')
       ops.el.addClass('selected')
     continue: ->

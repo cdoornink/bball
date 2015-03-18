@@ -6,7 +6,7 @@ StatsMixin = Ember.Mixin.create
     stats.fgp = @percentage(stats.fgm, stats.fga)
     stats.threeptp = @percentage(stats.threeptm, stats.threepta)
     stats.ftp = @percentage(stats.ftm, stats.fta)
-    console.log stats.fgp
+    # console.log stats.fgp
   advancedTeamStats: (team, opponent) ->
     l = team.get('teamStats')
     r = opponent.get('teamStats')
@@ -65,6 +65,7 @@ StatsMixin = Ember.Mixin.create
       sbp[player.get('id')].forEach (stat) =>
         @parseStat(stat, ts, side, ps)
         if stat.get('type') is "subbedIn"
+          ps['played'] = true
           tempDiff = stat.get('scoreDiff')
           inGame = ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
         if stat.get('type') is "subbedOut"
@@ -80,6 +81,7 @@ StatsMixin = Ember.Mixin.create
       #will also need completely separate logic for overtime shit
     ps['minutes'] = totalMin
     ps['plusminus'] = plusminus
+    console.log ps
     @advancedPlayerStats(ps)
     player.set('gameStats', ps)
   parseStat: (stat, ts, side, player) ->

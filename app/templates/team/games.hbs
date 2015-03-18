@@ -18,5 +18,12 @@
         {{game.awayScore}} - {{game.homeScore}}
       </div>
     {{/link-to}}
+  {{else}}
+    This team doesn't have any games yet.
+    {{#if controllers.team.myTeam}}
+      {{#link-to "team.new-game"}}
+        <button class="add-button">New Game</button>
+      {{/link-to}}
+    {{/if}}
   {{/each}}
 </div>

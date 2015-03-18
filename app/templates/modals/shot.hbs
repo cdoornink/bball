@@ -7,7 +7,7 @@
     {{#if model.closeShot}}
       <div class="option-row three-buttons">
         <div class="subtitle">
-          Shot Type
+          Shot Type (optional)
         </div>
         <button class="shot-type-button jumper" {{action 'setType' "jumper"}}>Jumper</button>
         <button class="shot-type-button layup" {{action 'setType' "layup"}}>Layup</button>
@@ -16,22 +16,16 @@
     {{/if}}
 
     <div class="option-row five-buttons">
-      <div class="subtitle">
-        Result
-      </div>
-
       <button class="result-button make" {{action 'setResult' 'make'}}>Made</button>
       <button class="result-button miss" {{action 'setResult' 'miss'}}>Missed</button>
+      <button class="cancel-button cancel" {{action 'cancel'}}>Cancel</button>
+
       <button class="result-button block" {{action 'setResult' 'block'}}>Blocked</button>
       <button class="result-button foul" {{action 'setResult' 'foul'}}>Fouled</button>
       <button class="result-button and1" {{action 'setResult' 'and1'}}>And 1</button>
     </div>
 
-    <div class="confirmation-buttons">
-      <div class="cancel">
-        <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
-      </div>
-    </div>
+
 
   </div>
 {{/modal-dialog}}
