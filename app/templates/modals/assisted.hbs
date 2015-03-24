@@ -5,9 +5,9 @@
     </div>
     <div class="option-row">
       {{#if controllers.game.leftPlayerSelected}}
-        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit" excludeSelectedPlayer=true}}
+        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="submit" exclude=controllers.game.selectedPlayer}}
       {{else}}
-        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit" excludeSelectedPlayer=true}}
+        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="submit" exclude=controllers.game.selectedPlayer}}
       {{/if}}
     </div>
     <div class="confirmation-buttons">

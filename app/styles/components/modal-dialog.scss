@@ -41,6 +41,9 @@
       transform: scale3d(1.02, 1.02, 1);
     }
   }
+  .player-card.disabled {
+    opacity: .3;
+  }
   button.selected {
     background: #444;
     color: white;
