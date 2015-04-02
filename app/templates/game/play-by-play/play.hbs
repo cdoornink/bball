@@ -1,4 +1,4 @@
-<div {{bind-attr class=":play-row play.newPeriod:period-row"}}>
+<div class="play-row {{if play.newPeriod 'period-row'}}">
   {{#if play.newPeriod}}
     <div class="period">
       {{play.newPeriod}}
@@ -11,7 +11,7 @@
     </div>
     <div class="left-team-container">
       {{#if play.left}}
-        <div {{bind-attr class=":left-team play.score1:one-point play.score2:two-points play.score3:three-points"}}>
+        <div class="left-team {{if play.score1 'one-point'}} {{if play.score2 'two-points'}} {{if play.score3 'three-points'}}">
           {{partial "game/play-by-play/play-details"}}
         </div>
       {{/if}}
@@ -23,7 +23,7 @@
     </div>
     <div class="right-team-container">
       {{#unless play.left}}
-        <div {{bind-attr class=":right-team play.score1:one-point play.score2:two-points play.score3:three-points"}}>
+        <div class="right-team {{if play.score1 'one-point'}} {{if play.score2 'two-points'}} {{if play.score3 'three-points'}}">
           {{partial "game/play-by-play/play-details"}}
         </div>
       {{/unless}}

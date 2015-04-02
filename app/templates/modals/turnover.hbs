@@ -18,9 +18,9 @@
         Steal
       </div>
       {{#if controllers.game.leftPlayerSelected}}
-        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setStealer"}}
+        {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setStealer"}}
       {{else}}
-        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setStealer"}}
+        {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setStealer"}}
       {{/if}}
     </div>
 

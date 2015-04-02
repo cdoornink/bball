@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
 
-TeamController = Ember.ObjectController.extend
+TeamController = Ember.Controller.extend
   colorChanged: (->
     console.log "changed color"
-    return if @get('primaryColor') is undefined
+    return if @get('model.primaryColor') is undefined
     @get('model').save()
-  ).observes('primaryColor', 'secondaryColor')
+  ).observes('model.primaryColor', 'model.secondaryColor')
 
 `export default TeamController`

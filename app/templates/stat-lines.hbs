@@ -17,8 +17,8 @@
     <div class="col foul">pf</div>
     <div class="col plusminus">+/-</div>
   </div>
-  {{#if left.myTeam}}
-    {{#each player in left.players}}
+  {{#if model.left.myTeam}}
+    {{#each player in model.left.players}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
@@ -41,23 +41,23 @@
     <div class="total-row">
       <div class="col player-number"></div>
       <div class="col player-name">TOTALS</div>
-      <div class="col min">{{left.teamStats.min}}</div>
-      <div class="col points">{{left.teamStats.points}}</div>
-      <div class="col totreb">{{left.teamStats.reb}}</div>
-      <div class="col assist">{{left.teamStats.assists}}</div>
-      <div class="col fg">{{left.teamStats.fgm}}/{{left.teamStats.fga}}</div>
-      <div class="col threept">{{left.teamStats.threeptm}}/{{left.teamStats.threepta}}</div>
-      <div class="col ft">{{left.teamStats.ftm}}/{{left.teamStats.fta}}</div>
-      <div class="col offreb">{{left.teamStats.oreb}}</div>
-      <div class="col defreb">{{left.teamStats.dreb}}</div>
-      <div class="col steal">{{left.teamStats.steals}}</div>
-      <div class="col block">{{left.teamStats.blocks}}</div>
-      <div class="col to">{{left.teamStats.turnovers}}</div>
-      <div class="col foul">{{left.teamStats.fouls}}</div>
+      <div class="col min">{{model.left.teamStats.min}}</div>
+      <div class="col points">{{model.left.teamStats.points}}</div>
+      <div class="col totreb">{{model.left.teamStats.reb}}</div>
+      <div class="col assist">{{model.left.teamStats.assists}}</div>
+      <div class="col fg">{{model.left.teamStats.fgm}}/{{model.left.teamStats.fga}}</div>
+      <div class="col threept">{{model.left.teamStats.threeptm}}/{{model.left.teamStats.threepta}}</div>
+      <div class="col ft">{{model.left.teamStats.ftm}}/{{model.left.teamStats.fta}}</div>
+      <div class="col offreb">{{model.left.teamStats.oreb}}</div>
+      <div class="col defreb">{{model.left.teamStats.dreb}}</div>
+      <div class="col steal">{{model.left.teamStats.steals}}</div>
+      <div class="col block">{{model.left.teamStats.blocks}}</div>
+      <div class="col to">{{model.left.teamStats.turnovers}}</div>
+      <div class="col foul">{{model.left.teamStats.fouls}}</div>
       <div class="col plus-minus">-</div>
     </div>
   {{else}}
-    {{#each player in right.players}}
+    {{#each player in model.right.players}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
@@ -80,19 +80,19 @@
     <div class="total-row">
       <div class="col player-number"></div>
       <div class="col player-name">TOTALS</div>
-      <div class="col min">{{right.teamStats.min}}</div>
-      <div class="col points">{{right.teamStats.points}}</div>
-      <div class="col totreb">{{right.teamStats.reb}}</div>
-      <div class="col assist">{{right.teamStats.assists}}</div>
-      <div class="col fg">{{right.teamStats.fgm}}/{{right.teamStats.fga}}</div>
-      <div class="col threept">{{right.teamStats.threeptm}}/{{right.teamStats.threepta}}</div>
-      <div class="col ft">{{right.teamStats.ftm}}/{{right.teamStats.fta}}</div>
-      <div class="col offreb">{{right.teamStats.oreb}}</div>
-      <div class="col defreb">{{right.teamStats.dreb}}</div>
-      <div class="col steal">{{right.teamStats.steals}}</div>
-      <div class="col block">{{right.teamStats.blocks}}</div>
-      <div class="col to">{{right.teamStats.turnovers}}</div>
-      <div class="col foul">{{right.teamStats.fouls}}</div>
+      <div class="col min">{{model.right.teamStats.min}}</div>
+      <div class="col points">{{model.right.teamStats.points}}</div>
+      <div class="col totreb">{{model.right.teamStats.reb}}</div>
+      <div class="col assist">{{model.right.teamStats.assists}}</div>
+      <div class="col fg">{{model.right.teamStats.fgm}}/{{model.right.teamStats.fga}}</div>
+      <div class="col threept">{{model.right.teamStats.threeptm}}/{{model.right.teamStats.threepta}}</div>
+      <div class="col ft">{{model.right.teamStats.ftm}}/{{model.right.teamStats.fta}}</div>
+      <div class="col offreb">{{model.right.teamStats.oreb}}</div>
+      <div class="col defreb">{{model.right.teamStats.dreb}}</div>
+      <div class="col steal">{{model.right.teamStats.steals}}</div>
+      <div class="col block">{{model.right.teamStats.blocks}}</div>
+      <div class="col to">{{model.right.teamStats.turnovers}}</div>
+      <div class="col foul">{{model.right.teamStats.fouls}}</div>
       <div class="col plus-minus">-</div>
     </div>
   {{/if}}
@@ -115,8 +115,8 @@
     <div class="col foul">pf</div>
     <div class="col plusminus">+/-</div>
   </div>
-  {{#if left.myTeam}}
-    {{#each player in right.players}}
+  {{#if model.left.myTeam}}
+    {{#each player in model.right.players}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
@@ -139,23 +139,23 @@
     <div class="total-row">
       <div class="col player-number"></div>
       <div class="col player-name">TOTALS</div>
-      <div class="col min">{{right.teamStats.min}}</div>
-      <div class="col points">{{right.teamStats.points}}</div>
-      <div class="col totreb">{{right.teamStats.reb}}</div>
-      <div class="col assist">{{right.teamStats.assists}}</div>
-      <div class="col fg">{{right.teamStats.fgm}}/{{right.teamStats.fga}}</div>
-      <div class="col threept">{{right.teamStats.threeptm}}/{{right.teamStats.threepta}}</div>
-      <div class="col ft">{{right.teamStats.ftm}}/{{right.teamStats.fta}}</div>
-      <div class="col offreb">{{right.teamStats.oreb}}</div>
-      <div class="col defreb">{{right.teamStats.dreb}}</div>
-      <div class="col steal">{{right.teamStats.steals}}</div>
-      <div class="col block">{{right.teamStats.blocks}}</div>
-      <div class="col to">{{right.teamStats.turnovers}}</div>
-      <div class="col foul">{{right.teamStats.fouls}}</div>
+      <div class="col min">{{model.right.teamStats.min}}</div>
+      <div class="col points">{{model.right.teamStats.points}}</div>
+      <div class="col totreb">{{model.right.teamStats.reb}}</div>
+      <div class="col assist">{{model.right.teamStats.assists}}</div>
+      <div class="col fg">{{model.right.teamStats.fgm}}/{{model.right.teamStats.fga}}</div>
+      <div class="col threept">{{model.right.teamStats.threeptm}}/{{model.right.teamStats.threepta}}</div>
+      <div class="col ft">{{model.right.teamStats.ftm}}/{{model.right.teamStats.fta}}</div>
+      <div class="col offreb">{{model.right.teamStats.oreb}}</div>
+      <div class="col defreb">{{model.right.teamStats.dreb}}</div>
+      <div class="col steal">{{model.right.teamStats.steals}}</div>
+      <div class="col block">{{model.right.teamStats.blocks}}</div>
+      <div class="col to">{{model.right.teamStats.turnovers}}</div>
+      <div class="col foul">{{model.right.teamStats.fouls}}</div>
       <div class="col plus-minus">-</div>
     </div>
   {{else}}
-    {{#each player in left.players}}
+    {{#each player in model.left.players}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
@@ -178,19 +178,19 @@
     <div class="total-row">
       <div class="col player-number"></div>
       <div class="col player-name">TOTALS</div>
-      <div class="col min">{{left.teamStats.min}}</div>
-      <div class="col points">{{left.teamStats.points}}</div>
-      <div class="col totreb">{{left.teamStats.reb}}</div>
-      <div class="col assist">{{left.teamStats.assists}}</div>
-      <div class="col fg">{{left.teamStats.fgm}}/{{left.teamStats.fga}}</div>
-      <div class="col threept">{{left.teamStats.threeptm}}/{{left.teamStats.threepta}}</div>
-      <div class="col ft">{{left.teamStats.ftm}}/{{left.teamStats.fta}}</div>
-      <div class="col offreb">{{left.teamStats.oreb}}</div>
-      <div class="col defreb">{{left.teamStats.dreb}}</div>
-      <div class="col steal">{{left.teamStats.steals}}</div>
-      <div class="col block">{{left.teamStats.blocks}}</div>
-      <div class="col to">{{left.teamStats.turnovers}}</div>
-      <div class="col foul">{{left.teamStats.fouls}}</div>
+      <div class="col min">{{model.left.teamStats.min}}</div>
+      <div class="col points">{{model.left.teamStats.points}}</div>
+      <div class="col totreb">{{model.left.teamStats.reb}}</div>
+      <div class="col assist">{{model.left.teamStats.assists}}</div>
+      <div class="col fg">{{model.left.teamStats.fgm}}/{{model.left.teamStats.fga}}</div>
+      <div class="col threept">{{model.left.teamStats.threeptm}}/{{model.left.teamStats.threepta}}</div>
+      <div class="col ft">{{model.left.teamStats.ftm}}/{{model.left.teamStats.fta}}</div>
+      <div class="col offreb">{{model.left.teamStats.oreb}}</div>
+      <div class="col defreb">{{model.left.teamStats.dreb}}</div>
+      <div class="col steal">{{model.left.teamStats.steals}}</div>
+      <div class="col block">{{model.left.teamStats.blocks}}</div>
+      <div class="col to">{{model.left.teamStats.turnovers}}</div>
+      <div class="col foul">{{model.left.teamStats.fouls}}</div>
       <div class="col plus-minus">-</div>
     </div>
   {{/if}}

@@ -1,12 +1,12 @@
 <div class="team-page-header">
-  <h2 class="page-title">{{organization}} {{mascot}}</h2>
+  <h2 class="page-title">{{model.organization}} {{model.mascot}}</h2>
   <div class="color-picker">
     Team Colors:
-    {{spectrum-color-picker color=primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
-    {{spectrum-color-picker color=secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+    {{spectrum-color-picker color=model.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+    {{spectrum-color-picker color=model.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
   </div>
 
-  {{#if myTeam}}
+  {{#if model.myTeam}}
   <div class="new-game-button">
     {{#link-to "team.new-game"}}
       <button class="add-button">New Game</button>

@@ -3,27 +3,27 @@
     <div class="result-team-left">
       <div class="team-name">
         <div class="team-organization">
-          {{homeTeam.organization}}
+          {{model.homeTeam.organization}}
         </div>
         <div class="team-mascot">
-          {{homeTeam.mascot}}
+          {{model.homeTeam.mascot}}
         </div>
       </div>
       <div class="team-score">
-        {{homeScore}}
+        {{model.homeScore}}
       </div>
     </div>
     <div class="result-team-right">
       <div class="team-name">
         <div class="team-organization">
-          {{awayTeam.organization}}
+          {{model.awayTeam.organization}}
         </div>
         <div class="team-mascot">
-          {{awayTeam.mascot}}
+          {{model.awayTeam.mascot}}
         </div>
       </div>
       <div class="team-score">
-        {{awayScore}}
+        {{model.awayScore}}
       </div>
     </div>
   </div>
@@ -32,56 +32,56 @@
     <div class="scores team-names">
       <div class="period">
         <div class="period-header"></div>
-        <div class="home-score">{{homeTeam.mascot}}</div>
-        <div class="home-score">{{awayTeam.mascot}}</div>
+        <div class="home-score">{{model.homeTeam.mascot}}</div>
+        <div class="home-score">{{model.awayTeam.mascot}}</div>
       </div>
     </div>
     {{partial "score-by-quarter"}}
     <div class="scores final-score">
       <div class="period">
         <div class="period-header">F</div>
-        <div class="home-score">{{homeScore}}</div>
-        <div class="home-score">{{awayScore}}</div>
+        <div class="home-score">{{model.homeScore}}</div>
+        <div class="home-score">{{model.awayScore}}</div>
       </div>
     </div>
 
     <div class="scores team-names">
       <div class="period">
         <div class="period-header"></div>
-        <div class="home-score">{{homeTeam.mascot}}</div>
-        <div class="home-score">{{awayTeam.mascot}}</div>
+        <div class="home-score">{{model.homeTeam.mascot}}</div>
+        <div class="home-score">{{model.awayTeam.mascot}}</div>
       </div>
     </div>
     <div class="advanced-stats-summary flex-table">
       <div class="col">
         <div class="col-header">Pace</div>
-        <div>{{left.teamStats.poss}}</div>
-        <div>{{left.teamStats.poss}}</div>
+        <div>{{model.left.teamStats.poss}}</div>
+        <div>{{model.right.teamStats.poss}}</div>
       </div>
       <div class="col">
         <div class="col-header">EFG</div>
-        <div>{{left.teamStats.efg}}</div>
-        <div>{{right.teamStats.efg}}</div>
+        <div>{{model.left.teamStats.efg}}</div>
+        <div>{{model.right.teamStats.efg}}</div>
       </div>
       <div class="col">
         <div class="col-header">TOV</div>
-        <div>{{left.teamStats.tov}}</div>
-        <div>{{right.teamStats.tov}}</div>
+        <div>{{model.left.teamStats.tov}}</div>
+        <div>{{model.right.teamStats.tov}}</div>
       </div>
       <div class="col">
         <div class="col-header">ORB</div>
-        <div>{{left.teamStats.orb}}</div>
-        <div>{{right.teamStats.orb}}</div>
+        <div>{{model.left.teamStats.orb}}</div>
+        <div>{{model.right.teamStats.orb}}</div>
       </div>
       <div class="col">
         <div class="col-header">FTP</div>
-        <div>{{left.teamStats.ftp}}</div>
-        <div>{{right.teamStats.ftp}}</div>
+        <div>{{model.left.teamStats.ftp}}</div>
+        <div>{{model.right.teamStats.ftp}}</div>
       </div>
       <div class="col">
         <div class="col-header">ORTG</div>
-        <div>{{left.teamStats.ortg}}</div>
-        <div>{{right.teamStats.ortg}}</div>
+        <div>{{model.left.teamStats.ortg}}</div>
+        <div>{{model.right.teamStats.ortg}}</div>
       </div>
     </div>
   </div>

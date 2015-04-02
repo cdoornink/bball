@@ -18,9 +18,9 @@
         Turnover
       </div>
       {{#if controllers.game.leftPlayerSelected}}
-        {{modal-card-row colors=controllers.game.right team=controllers.game.rightOnCourt action="setTurnoverer"}}
+        {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setTurnoverer"}}
       {{else}}
-        {{modal-card-row colors=controllers.game.left team=controllers.game.leftOnCourt action="setTurnoverer"}}
+        {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setTurnoverer"}}
       {{/if}}
     </div>
 

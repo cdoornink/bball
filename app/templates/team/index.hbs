@@ -1,5 +1,5 @@
 <div class="team-roster">
-  {{#each player in controllers.team.players}}
+  {{#each player in model.players}}
     <div class="roster-player">
       <div class="col number">{{player.number}}</div>
       <div class="col name">{{player.firstName}} {{player.lastName}}</div>
@@ -9,7 +9,7 @@
     </div>
   {{/each}}
 
-  {{#if controllers.team.editable}}
+  {{#if model.editable}}
   <h3 class="add-item">+ Add a Player</h3>
   <form class="add-player-form">
     {{input class="first-field" value=player.firstName placeholder="First Name"}}

@@ -1,5 +1,5 @@
 <div class="team-games">
-  {{#each game in controllers.team.games}}
+  {{#each game in model.games}}
     {{#link-to 'game' game}}
       <div class="col date">
         {{game.date}}
@@ -7,11 +7,11 @@
           {{game.status}}
         </div>
       </div>
-      <div {{bind-attr class=":col :away-team game.homeWin:lose:win"}}>
+      <div class="col away-team {{if game.homeWin 'lose' 'win'}}">
         {{game.awayTeam.organization}} {{game.awayTeam.mascot}}
       </div>
       <div class="col at">at</div>
-      <div {{bind-attr class=":col :home-team game.homeWin:win:lose"}}>
+      <div class="col home-team {{if game.homeWin 'win' 'lose'}}">
         {{game.homeTeam.organization}} {{game.homeTeam.mascot}}
       </div>
       <div class="col results">
@@ -20,7 +20,7 @@
     {{/link-to}}
   {{else}}
     This team doesn't have any games yet.
-    {{#if controllers.team.myTeam}}
+    {{#if controllers.team.model.myTeam}}
       {{#link-to "team.new-game"}}
         <button class="add-button">New Game</button>
       {{/link-to}}

@@ -1,36 +1,19 @@
-<h2>{{controllers.team.mascot}} vs {{selectedOpponent.mascot}}</h2>
+
 
 <form class="new-game-form">
   <div class="form-step step-one">
+    <h2>{{model.mascot}} vs {{selectedOpponent.mascot}}</h2>
+  </div>
+  <div class="form-step step-two">
     <h3>Step 1: General Game Information</h3>
     {{date-picker date=game.date valueFormat='YYYY-MM-DD'}}
     {{! input value=game.location placeholder="Location"}}
-    {{radio-button name="court" id="court1" selectionBinding="game.courtSelect" value="home"}}
+    {{radio-button name="court" id="court1" selection="game.courtSelect" value="home"}}
     <label for="court1">Home</label>
-    {{radio-button name="court" id="court2" selectionBinding="game.courtSelect" value="away"}}
+    {{radio-button name="court" id="court2" selection="game.courtSelect" value="away"}}
     <label for="court2">Away</label>
   </div>
-  <div class="form-step step-two">
-    <h3>Step 2: Select Game Preferences</h3>
-    <div class="preference-grid">
-      {{#each pref in defaultPreferences}}
-        <div {{bind-attr class=":preference-grid-item pref.id"}} {{action 'selectPreferences' pref}}>
-          <div class="pref-name">
-            {{pref.name}}
-          </div>
-          <div class="pref">
-            <span class="pref-number">{{pref.periods}}</span> periods
-          </div>
-           <div class="pref">
-             <span class="pref-number">{{pref.periodLength}}</span> minutes each
-           </div>
-           <div class="pref">
-             <span class="pref-number">{{pref.personalFouls}}</span> personal fouls
-           </div>
-        </div>
-      {{/each}}
-    </div>
-  </div>
+
   <div class="form-step step-three">
     <h3>Step 3: Select Opponent</h3>
 
@@ -44,8 +27,8 @@
         {{input value=opp.season placeholder="Season (Ex. '14-'15)"}}
         <button {{action "createOpponent"}}>Create</button>
       </form>
-      {{#each team in controllers.team.opponents}}
-        <div {{bind-attr class=":opponent-grid-item team.id"}} {{action 'selectOpponent' team}}>
+      {{#each team in model.opponents}}
+        <div class="opponent-grid-item {{team.id}}" {{action 'selectOpponent' team}}>
           <div class="opponent-name">
             {{team.organization}} {{team.mascot}}
           </div>

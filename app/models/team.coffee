@@ -14,6 +14,7 @@ Team = DS.Model.extend
   owners: DS.hasMany('user', {async: true, inverse: 'teams'})
   opponents: DS.hasMany('team', {async: true})
   games: DS.hasMany('game', {async: true, inverse: 'teams'})
+  preference: DS.belongsTo('gamePreference', async: true)
   # stats: DS.hasMany('stat', {async: true, inverse: 'team'})
   compiledStats: DS.hasMany('stat', {async: true, inverse: 'team'})
   opponentStats: DS.hasMany('stat', {async: true, inverse: 'opponent'})

@@ -3,27 +3,21 @@
 TeamNewGameController = Ember.Controller.extend
   needs: ["team"]
   selectedOpponent: null
-  selectedPreferences: null
-  selectedPeriod: 4
-  selectedPeriodLength: 8
-  selectedFouls: 5
-  periodOptions: [2,4]
-  periodLengthOptions: [4,5,6,7,8,9,10,11,12,15,20,24]
-  foulOptions: [4,5,6,7,8,9,10]
   init: ->
     this.set('game', Ember.Object.create())
-    this.set('pref', Ember.Object.create())
     this.set('opp', Ember.Object.create())
     this.set('player', Ember.Object.create())
   actions:
     createOpponent: ->
       team = this.get('model')
+      prefs = team.get('preference')
       newTeam = this.store.createRecord 'team',
         organization: this.get('opp.organization')
         mascot: this.get('opp.mascot')
         season: this.get('opp.season')
         location: this.get('opp.location')
         active: true
+      newTeam.set('preference', prefs)
       newTeam.get('opponents').then (teams) =>
         teams.addObject(team)
         newTeam.save().then =>
@@ -35,29 +29,12 @@ TeamNewGameController = Ember.Controller.extend
       $(".opponent-grid-item").removeClass('selected')
       $(".opponent-grid-item.#{team.id}").addClass('selected')
 
-    selectPreferences: (pref) ->
-      @set('selectedPreferences', pref)
-      $(".preference-grid-item").removeClass('selected')
-      $(".preference-grid-item.#{pref.id}").addClass('selected')
-
-    createPreference: ->
-      user = @session.get('user')
-      newPref = this.store.createRecord 'gamePreference',
-        name: this.get('pref.name')
-        periodLength: this.get('selectedPeriodLength')
-        periods: this.get('selectedPeriod')
-        personalFouls: this.get('selectedFouls')
-      newPref.set('user', user)
-      newPref.save().then ->
-        user.save()
-      @set('selectedPreferences', newPref)
-
     createGame: ->
       team1 = this.get('model')
       team2 = this.get('selectedOpponent')
-      prefs = this.get('selectedPreferences')
-      if !team2 or !prefs
-        alert "no prefs or opponent set!"
+      prefs = team1.get('preference')
+      if !team2
+        alert "no opponent set!"
         return
       newGame = this.store.createRecord 'game',
         date: this.get('game.date')

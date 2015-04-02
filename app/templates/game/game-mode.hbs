@@ -2,10 +2,10 @@
   <div class="scoreboard">
     <div class="clock">
       <div class="period" {{action "endPeriod"}}>
-        {{number-to-period period}}
+        {{number-to-period model.period}}
       </div>
       <div class="timer" {{action "changeTime"}}>
-        {{seconds-to-time timeLeft}}
+        {{seconds-to-time model.timeLeft}}
       </div>
     </div>
     {{partial "score-by-quarter"}}
@@ -14,16 +14,16 @@
     <div class="team-info-triangle"></div>
     <div class="team-info">
       <div class="score">
-        {{left.teamStats.points}}
+        {{model.left.teamStats.points}}
       </div>
       <div class="next-to-score">
         <div class="possession">
-          Poss <div {{bind-attr class=":possession-light leftPossession:on:off"}}></div>
-          {{spectrum-color-picker color=left.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
-          {{spectrum-color-picker color=left.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+          Poss <div class="possession-light {{if leftPossession 'on' 'off'}}"></div>
+          {{spectrum-color-picker color=model.left.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+          {{spectrum-color-picker color=model.left.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
         </div>
         <div class="name">
-          {{left.mascot}}
+          {{model.left.mascot}}
         </div>
       </div>
     </div>
@@ -31,16 +31,16 @@
   <div class='right-team-top right-team'>
     <div class="team-info">
       <div class="score">
-        {{right.teamStats.points}}
+        {{model.right.teamStats.points}}
       </div>
       <div class="next-to-score">
         <div class="possession">
-          <div {{bind-attr class=":possession-light leftPossession:off:on"}}></div> Poss
-          {{spectrum-color-picker color=right.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
-          {{spectrum-color-picker color=right.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+          <div class="possession-light {{if leftPossession 'off' 'on'}}"></div> Poss
+          {{spectrum-color-picker color=model.right.primaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
+          {{spectrum-color-picker color=model.right.secondaryColor moveFiresChange=true clickoutFiresChange=true showButtons=false}}
         </div>
         <div class="name">
-          {{right.mascot}}
+          {{model.right.mascot}}
         </div>
       </div>
     </div>
@@ -120,15 +120,15 @@
     {{/each}}
   </div>
   {{partial "stat-lines"}}
-  {{#if notStarted}}
+  {{#if model.notStarted}}
     <div class="jump-ball-starter">
       <div class="title">Jump Ball</div>
       <div class="description">Click on the team that gains possession of the jump to start the game</div>
-      <button class="left-team jump-ball-button" {{action 'jumpBall' right}}>{{left.mascot}}</button>
-      <button class="right-team jump-ball-button" {{action 'jumpBall' left}}>{{right.mascot}}</button>
+      <button class="left-team jump-ball-button" {{action 'jumpBall' right}}>{{model.left.mascot}}</button>
+      <button class="right-team jump-ball-button" {{action 'jumpBall' left}}>{{model.right.mascot}}</button>
     </div>
   {{/if}}
-  {{#if inProgress}}
+  {{#if model.inProgress}}
     {{#unless selectedPlayer}}
       <div class="jump-ball-starter">
         <div class="title">Select a Player</div>

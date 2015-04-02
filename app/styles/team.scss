@@ -111,18 +111,32 @@
     width: 100%;
     background: white;
   }
-  .form-step.step-one {
+  .form-step.step-two {
     input[type="text"] {
       outline: none;
       font-size: 14px;
       padding: 5px 5px;
       border: none;
       width: 200px;
-      background: rgb(229, 229, 230);
+      background: whitesmoke;
       margin: 5px 10px;
     }
-  }
-  .form-step.step-two {
+    input[type=radio] + label {
+      cursor: pointer;
+      display: inline-block;
+      padding: 5px 15px;
+      background: #d5d5d6;
+      margin: 0px 10px 0 0;
+      font-size: 14px;
+      border-radius: 3px;
+      &:hover {
+        background: #c5c5c6;
+      }
+    }
+    input[type=radio]:checked + label {
+      background: $ok;
+      color: white;
+    }
     background: rgb(229, 229, 230);
   }
   .form-step.step-three {

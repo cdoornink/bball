@@ -1,9 +1,9 @@
 <div class="home-page non-game">
 
-  {{#if teams}}
+  {{#if model.teams}}
     <h2>My Teams</h2>
     <div class="team-grid">
-      {{#each team in teams}}
+      {{#each team in model.teams}}
         {{#link-to 'team' team}}
           <div class="team-name">
             {{team.organization}} {{team.mascot}}
@@ -36,6 +36,27 @@
         Secondary Team Color:
       </div>
       {{spectrum-color-picker color=team.secondaryColor moveFiresChange=true}}
+    </div>
+    <div class="pref-pick">
+      <div class="color-pick"><div class="color-pick-title">Select Game Preferences</div></div>
+      <div class="preference-grid">
+        {{#each pref in defaultPreferences}}
+          <div class="preference-grid-item {{pref.id}}" {{action 'selectPreferences' pref}}>
+            <div class="pref-name">
+              {{pref.name}}
+            </div>
+            <div class="pref">
+              <span class="pref-number">{{pref.periods}}</span> periods
+            </div>
+             <div class="pref">
+               <span class="pref-number">{{pref.periodLength}}</span> minutes each
+             </div>
+             <div class="pref">
+               <span class="pref-number">{{pref.personalFouls}}</span> personal fouls
+             </div>
+          </div>
+        {{/each}}
+      </div>
     </div>
     <button class="add-button" {{action "createTeam"}}>Add</button>
   </form>

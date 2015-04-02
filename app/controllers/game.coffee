@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 `import StatsMixin from '../mixins/stats'`
 
-GameController = Ember.ObjectController.extend(StatsMixin,
+GameController = Ember.Controller.extend(StatsMixin,
   leftOnCourt: {}
   leftOnCourtArray: []
   leftBench: []
@@ -23,40 +23,38 @@ GameController = Ember.ObjectController.extend(StatsMixin,
   totalLength: 2880
   court: {}
   rightColorChanged: (->
-    return if @get('right.primaryColor') is undefined
-    $('.right-primary').css('background', @get('right.primaryColor'))
+    return if @get('model.right.primaryColor') is undefined
     @addTeamColorStyle()
-    @get('right').save()
-  ).observes('right.primaryColor', 'right.secondaryColor')
+    @get('model.right').save()
+  ).observes('model.right.primaryColor', 'model.right.secondaryColor')
   leftColorChanged: (->
-    return if @get('left.primaryColor') is undefined
-    $('.left-primary').css('background', @get('left.primaryColor'))
+    return if @get('model.left.primaryColor') is undefined
     @addTeamColorStyle()
-    @get('left').save()
-  ).observes('left.primaryColor', 'left.secondaryColor')
+    @get('model.left').save()
+  ).observes('model.left.primaryColor', 'model.left.secondaryColor')
   addTeamColorStyle: ->
     if $('html > head > style').length
       $('html > head > style').last().remove();
     $('html > head')
       .append("<style>
                 .right-primary, .right-team .player-card {
-                  background: #{@get('right.primaryColor')};
+                  background: #{@get('model.right.primaryColor')};
                 }
                 .right-secondary, .right-team .player-card {
-                  color: #{@get('right.secondaryColor')};
+                  color: #{@get('model.right.secondaryColor')};
                 }
                 .left-primary, .left-team .player-card {
-                  background: #{@get('left.primaryColor')};
+                  background: #{@get('model.left.primaryColor')};
                 }
                 .left-secondary, .left-team .player-card {
-                  color: #{@get('left.secondaryColor')};
+                  color: #{@get('model.left.secondaryColor')};
                 }
               </style>");
   statsUpdated: (->
     Ember.run.debounce(@, @getStats, 300)
   ).observes("model.stats")
   getStats: ->
-      @get('preference').then (p) =>
+      @get('model.preference').then (p) =>
         if p.get('periods') is 4
           @set('quarters', true)
           @set('periods', 4)
@@ -65,8 +63,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
           @set('periods', 2)
         @set('periodLength', (p.get('periodLength') * 60))
         @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
-      Ember
-      @get('stats').then (stats) =>
+      @get('model.stats').then (stats) =>
         # console.log stats
         console.time("compile stats")
         console.time("compile stats w/ advanced")
@@ -92,10 +89,10 @@ GameController = Ember.ObjectController.extend(StatsMixin,
 
         stats.forEach (stat) =>
           if stat.get('type') is "subbedIn"
-            if stat.get('team.id') is @get('left.id')
+            if stat.get('team.id') is @get('model.left.id')
               loc.push(stat)
             #this was failing after half a game with the clippers, team.id was undefined, just for the one team, even if I switched sides
-            else if stat.get('team.id') is @get('right.id')
+            else if stat.get('team.id') is @get('model.right.id')
               roc.push(stat)
           if sbp[stat.get('player.id')] is undefined
             sbp[stat.get('player.id')] = [stat]
@@ -111,7 +108,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         leftOnCourtArray = _.map l, (p) -> p
         @set('leftOnCourtArray', leftOnCourtArray)
         lb = []
-        @get('left.players').forEach (player) ->
+        @get('model.left.players').forEach (player) ->
           if _.indexOf(locArray, player.id) is -1
             lb.push player
         @set('leftBench', lb)
@@ -124,31 +121,31 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         rightOnCourtArray = _.map r, (p) -> p
         @set('rightOnCourtArray', rightOnCourtArray)
         rb = []
-        @get('right.players').forEach (player) ->
+        @get('model.right.players').forEach (player) ->
           if _.indexOf(rocArray, player.id) is -1
             rb.push player
         @set('rightBench', rb)
 
         #scoreboard
-        unless @get('timeLeft')
-          @set('model.timeLeft', @get('preference.periodLength') * 60)
+        unless @get('model.timeLeft')
+          @set('model.timeLeft', @get('model.preference.periodLength') * 60)
 
         #player stats
         @get('court.el').empty()
         ts = _.clone(@statLine)
         ts.scoreByPeriod = {}
-        @get('left.players').forEach (player) =>
+        @get('model.left.players').forEach (player) =>
           @statByPlayer(sbp, player, ts, "left", )
-        @set('left.teamStats', ts)
+        @set('model.left.teamStats', ts)
 
         ts = _.clone(@statLine)
         ts.scoreByPeriod = {}
-        @get('right.players').forEach (player) =>
+        @get('model.right.players').forEach (player) =>
           @statByPlayer(sbp, player, ts, "right")
-        @set('right.teamStats', ts)
+        @set('model.right.teamStats', ts)
         console.timeEnd("compile stats")
-        if @get('status', "Final")
-          @advancedTeamStats(@get('left'), @get('right'))
+        if @get('model.status', "Final")
+          @advancedTeamStats(@get('model.left'), @get('model.right'))
         console.timeEnd("compile stats w/ advanced")
 
   playByPlay: []
@@ -162,7 +159,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     sT = p.get('subType')
     r = p.get('result')
     play = null
-    left = p.get('team.id') is @get('left.id')
+    left = p.get('team.id') is @get('model.left.id')
     period = p.get('period')
     if period is 1
       period = "first"
@@ -240,7 +237,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     team.get('teamStats.points') - @getOpponent(team).get('teamStats.points')
 
   getOpponent: (team) ->
-    if @get('left.id') is team.get('id') then @get('right') else @get('left')
+    if @get('model.left.id') is team.get('id') then @get('model.right') else @get('model.left')
 
   savePlayer: (player) ->
     @store.find('player', player.get('id')).then (player) =>
@@ -250,9 +247,9 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     console.count('save game')
     @submitGameScore()
     @get('model').save()
-    @store.find('team', @get('left.id')).then (team) =>
+    @store.find('team', @get('model.left.id')).then (team) =>
       team.save()
-    @store.find('team', @get('right.id')).then (team) ->
+    @store.find('team', @get('model.right.id')).then (team) ->
       team.save()
 
   newGameMessage: ->
@@ -272,20 +269,20 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     @send('openModal', 'modals/confirmation', conf)
 
   submitGameScore: ->
-    if @get('homeTeam.id') is @get('left.id')
-      home = @get('left')
-      away = @get('right')
+    if @get('model.homeTeam.id') is @get('model.left.id')
+      home = @get('model.left')
+      away = @get('model.right')
     else
-      home = @get('right')
-      away = @get('left')
-    @set('homeScore', home.teamStats.points)
-    @set('awayScore', away.teamStats.points)
+      home = @get('model.right')
+      away = @get('model.left')
+    @set('model.homeScore', home.teamStats.points)
+    @set('model.awayScore', away.teamStats.points)
 
   createStat: (type, model, callback) ->
     stat = this.store.createRecord 'stat',
       type: type
-      period: @get('period')
-      timeLeft: @get('timeLeft')
+      period: @get('model.period')
+      timeLeft: @get('model.timeLeft')
       scoreDiff: @getScoreDiff(model.player.get('team'))
     stat.set('team', model.player.get('team'))
     stat.set('opponent', @getOpponent(model.player.get('team')))
@@ -311,9 +308,9 @@ GameController = Ember.ObjectController.extend(StatsMixin,
 
     submitEndGame: ->
       @submitGameScore()
-      @set('status', "Final")
-      @set('timeLeft', 0)
-      @set('period', "Final")
+      @set('model.status', "Final")
+      @set('model.timeLeft', 0)
+      @set('model.period', "Final")
       @saveGame()
 
     jumpBall: (team) ->
@@ -323,7 +320,7 @@ GameController = Ember.ObjectController.extend(StatsMixin,
 
     selectPlayer: (ops) ->
       @set('selectedPlayer', ops.player)
-      if ops.player.get('team.id') is @get('left.id')
+      if ops.player.get('team.id') is @get('model.left.id')
         @set('leftPlayerSelected', true)
         @set('rightPlayerSelected', false)
       else
@@ -424,8 +421,8 @@ GameController = Ember.ObjectController.extend(StatsMixin,
     submitTeamRebound: (model) ->
       rebound = this.store.createRecord 'stat',
         type: "teamRebound"
-        period: @get('period')
-        timeLeft: @get('timeLeft')
+        period: @get('model.period')
+        timeLeft: @get('model.timeLeft')
         scoreDiff: @getScoreDiff(model.team)
         subType: model.subType
       rebound.set('team', model.team)
@@ -506,19 +503,19 @@ GameController = Ember.ObjectController.extend(StatsMixin,
         @saveGame()
 
     endPeriod: ->
-      period = @get('period')
-      @get('preference').then (p) =>
+      period = @get('model.period')
+      @get('model.preference').then (p) =>
         if period is p.get('periods')
-          r = @get('right.teamStats.points')
-          l = @get('left.teamStats.points')
+          r = @get('model.right.teamStats.points')
+          l = @get('model.left.teamStats.points')
           if r is l
-            @set('period', "OT")
-            @set('timeLeft', 300)
+            @set('model.period', "OT")
+            @set('model.timeLeft', 300)
           else
             @endGame()
         else
-          @set('period', (period + 1))
-          @set('timeLeft', p.get('periodLength')*60)
+          @set('model.period', (period + 1))
+          @set('model.timeLeft', p.get('periodLength')*60)
         @saveGame()
 
     changeTime: ->
@@ -528,10 +525,10 @@ GameController = Ember.ObjectController.extend(StatsMixin,
       @saveGame()
 
     switchSides: ->
-      left = @get('left')
-      right = @get('right')
-      @set('left', right)
-      @set('right', left)
+      left = @get('model.left')
+      right = @get('model.right')
+      @set('model.left', right)
+      @set('model.right', left)
       @getStats()
 )
 
