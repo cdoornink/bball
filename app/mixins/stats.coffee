@@ -2,10 +2,24 @@
 
 StatsMixin = Ember.Mixin.create
   statLine: {points:0,ftm:0,fta:0,fgm:0,fga:0,threepta:0,threeptm:0,assists:0,fouls:0,steals:0,minutes:0,reb:0,oreb:0,dreb:0,blocks:0,turnovers:0,plusminus:0,scoreByPeriod:{}}
-  advancedPlayerStats: (stats) ->
+  inGameAdvancedPlayerStats: (stats) ->
     stats.fgp = @percentage(stats.fgm, stats.fga)
     stats.threeptp = @percentage(stats.threeptm, stats.threepta)
     stats.ftp = @percentage(stats.ftm, stats.fta)
+  advancedPlayerStats: (player) ->
+    stats = player.get('gameStats')
+    player.set 'gameStats.eff', @eff(stats)
+    player.set 'gameStats.tsp', @tsp(stats)
+    player.set 'gameStats.threePAp', @threePAp(stats) #three point attempt %
+    player.set 'gameStats.ftAp', @ftAp(stats) #free throw attempt %
+    player.set 'gameStats.oRebp', @oRebp(stats) #offensive rebound %
+    player.set 'gameStats.dRebp', @dRebp(stats) #defensive rebound %
+    player.set 'gameStats.tRebp', @tRebp(stats) #total rebound %
+    player.set 'gameStats.assistp', @assistp(stats) #assist %
+    player.set 'gameStats.stealp', @stealp(stats) #steal %
+    player.set 'gameStats.blockp', @blockp(stats) #block %
+    player.set 'gameStats.turnoverp', @turnoverp(stats) #assist %
+    player.set 'gameStats.usagep', @usagep(stats) #assist %
     # console.log stats.fgp
   advancedTeamStats: (team, opponent) ->
     l = team.get('teamStats')
@@ -24,6 +38,9 @@ StatsMixin = Ember.Mixin.create
     opponent.set 'teamStats.poss', @poss(r, l)
     team.set 'teamStats.ortg', @ortg(l)
     opponent.set 'teamStats.ortg', @ortg(r)
+
+  lineMultiplier: (stats, multiplier) ->
+    _.mapObject stats, (value, stat) -> Math.round((value * multiplier)*10) / 10
 
   percentage: (x,y) ->
     if y is 0
@@ -53,6 +70,37 @@ StatsMixin = Ember.Mixin.create
     x = (tm.points / tm.poss) * 100
     Math.round(x*10) / 10
 
+  teamMP: ->
+    5 * (@get("model.preference.periods") * @get("model.preference.periodLength") * @get("model.games.content.length"))
+
+  eff: (stats) ->
+    Math.round((stats.points + stats.reb + stats.assists + stats.steals + stats.blocks - (stats.fga - stats.fgm) - (stats.fta - stats.ftm) - stats.turnovers) / ((stats.minutes / 60) / 36) * 10) / 10
+  tsp: (stats) ->
+    Math.round((stats.points / (2 * (stats.fga + (.44 * stats.fta)))) * 1000) / 10
+  threePAp: (stats) ->
+    @percentage(stats.threepta, stats.fga)
+  ftAp: (stats) ->
+    @percentage(stats.fta, stats.fga)
+  oRebp: (stats) ->
+    Math.round(100 * (stats.oreb * (@teamMP() / 5)) / ((stats.minutes / 60) * (@get('model.teamStats.oreb') + @get('opponent.teamStats.dreb'))) * 10) / 10
+  dRebp: (stats) ->
+    Math.round(100 * (stats.dreb * (@teamMP() / 5)) / ((stats.minutes / 60) * (@get('model.teamStats.dreb') + @get('opponent.teamStats.oreb'))) * 10) / 10
+  tRebp: (stats) ->
+    Math.round(100 * (stats.reb * (@teamMP() / 5)) / ((stats.minutes / 60) * (@get('model.teamStats.reb') + @get('opponent.teamStats.reb'))) * 10) / 10
+  assistp: (stats) ->
+    Math.round(100 * stats.assists / ((((stats.minutes / 60) / (@teamMP() / 5)) * @get('model.teamStats.fgm')) - stats.fgm) * 10) / 10
+  stealp: (stats) ->
+    Math.round(100 * (stats.steals * (@teamMP() / 5)) / ((stats.minutes / 60) * @get('model.teamStats.poss')) * 10) / 10
+  blockp: (stats) ->
+    Math.round(100 * (stats.blocks * (@teamMP() / 5)) / ((stats.minutes / 60) * (@get('opponent.teamStats.fga') - @get('opponent.teamStats.threepta'))) * 10) / 10
+  turnoverp: (stats) ->
+    Math.round(100 * stats.turnovers / (stats.fga + 0.44 * stats.fta + stats.turnovers) * 10) / 10
+  usagep: (stats) ->
+    Math.round(100 * ((stats.fga + 0.44 * stats.fta + stats.turnovers) * (@teamMP() / 5)) / ((stats.minutes / 60) * (@get('model.teamStats.fga') + 0.44 * @get('model.teamStats.fta') + @get('model.teamStats.turnovers'))) * 10) / 10
+
+  compareGameId: (stat, lastStat) ->
+    stat.get('game.id') isnt lastStat.get('game.id')
+
   statByPlayer: (sbp, player, ts, side) ->
     ps = _.clone(@statLine)
     ps.scoreByPeriod = {}
@@ -63,6 +111,13 @@ StatsMixin = Ember.Mixin.create
     totalMin = 0
     if sbp[player.get('id')]
       sbp[player.get('id')].forEach (stat) =>
+        if lastStat
+          newGame = @compareGameId(stat, lastStat)
+          if newGame and inGame
+            homeDiff = lastStat.get('game.homeScore') - lastStat.get('game.awayScore')
+            currentDiff = if lastStat.get('player.team.id') is lastStat.get('game.homeTeam.id') then homeDiff else -homeDiff
+            plusminus += (currentDiff - tempDiff)
+            totalMin += inGame - ((((lastStat.get('game.period') - @get('periods')) * -1) * @get('periodLength')) + lastStat.get('game.timeLeft'))
         @parseStat(stat, ts, side, ps)
         if stat.get('type') is "subbedIn"
           ps['played'] = true
@@ -72,17 +127,18 @@ StatsMixin = Ember.Mixin.create
           plusminus += (stat.get('scoreDiff') - tempDiff)
           totalMin += inGame - ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
           inGame = null
+
         lastStat = stat
       if inGame
-        homeDiff = @get('homeScore') - @get('awayScore')
-        currentDiff = if lastStat.get('player.team.id') is @get('homeTeam.id') then homeDiff else -homeDiff
+        homeDiff = lastStat.get('game.homeScore') - lastStat.get('game.awayScore')
+        currentDiff = if lastStat.get('player.team.id') is lastStat.get('game.homeTeam.id') then homeDiff else -homeDiff
         plusminus += (currentDiff - tempDiff)
-        totalMin += inGame - ((((@get('period') - @get('periods')) * -1) * @get('periodLength')) + @get('timeLeft'))
-      #will also need completely separate logic for overtime shit
+        totalMin += inGame - ((((lastStat.get('game.period') - @get('periods')) * -1) * @get('periodLength')) + lastStat.get('game.timeLeft'))
+        #will also need completely separate logic for overtime shit
     ps['minutes'] = totalMin
     ps['plusminus'] = plusminus
-    # console.log ps
-    @advancedPlayerStats(ps)
+    console.log ps
+    @inGameAdvancedPlayerStats(ps)
     player.set('gameStats', ps)
   parseStat: (stat, ts, side, player) ->
     t = stat.get 'type'

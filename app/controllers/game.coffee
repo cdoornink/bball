@@ -310,7 +310,6 @@ GameController = Ember.Controller.extend(StatsMixin,
       @submitGameScore()
       @set('model.status', "Final")
       @set('model.timeLeft', 0)
-      @set('model.period', "Final")
       @saveGame()
 
     jumpBall: (team) ->
