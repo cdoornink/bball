@@ -24,6 +24,12 @@ StatsMixin = Ember.Mixin.create
   advancedTeamStats: (team, opponent) ->
     l = team.get('teamStats')
     r = opponent.get('teamStats')
+    team.set 'teamStats.fgp', @percentage(l.fgm, l.fga)
+    team.set 'teamStats.threeptp', @percentage(l.threeptm, l.threepta)
+    team.set 'teamStats.ftpercentage', @percentage(l.ftm, l.fta)
+    opponent.set 'teamStats.fgp', @percentage(r.fgm, r.fga)
+    opponent.set 'teamStats.threeptp', @percentage(r.threeptm, r.threepta)
+    opponent.set 'teamStats.ftpercentage', @percentage(r.ftm, r.fta)
     # 4 factors
     team.set 'teamStats.efg', @efg(l.fgm, l.threeptm, l.fga)
     opponent.set 'teamStats.efg', @efg(r.fgm, r.threeptm, r.fga)
@@ -41,6 +47,9 @@ StatsMixin = Ember.Mixin.create
 
   lineMultiplier: (stats, multiplier) ->
     _.mapObject stats, (value, stat) -> Math.round((value * multiplier)*10) / 10
+
+  lineDiffs: (stats, diffStats) ->
+    _.mapObject stats, (value, stat) -> Math.round((value - diffStats[stat])*10) / 10
 
   percentage: (x,y) ->
     if y is 0

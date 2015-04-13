@@ -1,18 +1,20 @@
-{{#link-to "game.play-by-play.index" model}}
-  1st Period
-{{/link-to}}
-{{#link-to "game.play-by-play.2" model}}
-  2nd Period
-{{/link-to}}
-{{#link-to "game.play-by-play.3" model}}
-  3rd Period
-{{/link-to}}
-{{#link-to "game.play-by-play.4" model}}
-  4th Period
-{{/link-to}}
-{{#link-to "game.play-by-play.ot" model}}
-  Overtime
-{{/link-to}}
+<div class="subtabs">
+  {{#link-to "game.play-by-play.index" model}}
+    1st Period
+  {{/link-to}}
+  {{#link-to "game.play-by-play.2" model}}
+    2nd Period
+  {{/link-to}}
+  {{#link-to "game.play-by-play.3" model}}
+    3rd Period
+  {{/link-to}}
+  {{#link-to "game.play-by-play.4" model}}
+    4th Period
+  {{/link-to}}
+  {{#link-to "game.play-by-play.ot" model}}
+    Overtime
+  {{/link-to}}
+</div>
 
 <div class="play-by-play-container">
   {{outlet}}

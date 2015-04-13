@@ -50,8 +50,10 @@ TeamStatsController = Ember.Controller.extend(StatsMixin,
           @advancedPlayerStats(player)
           console.log player
         #team and opponent per game stats
-        @set('model.teamPerGame', @lineMultiplier(@get('model.teamStats'), (1 / @get('model.games.content.length'))))
-        @set('opponent.teamPerGame', @lineMultiplier(@get('opponent.teamStats'), (1 / @get('model.games.content.length'))))
+        @set('model.teamStats.perGame', @lineMultiplier(@get('model.teamStats'), (1 / @get('model.games.content.length'))))
+        @set('opponent.teamStats.perGame', @lineMultiplier(@get('opponent.teamStats'), (1 / @get('model.games.content.length'))))
+        @set('model.teamStats.diffs', @lineDiffs(@get('model.teamStats'), @get('opponent.teamStats')))
+        @set('model.teamStats.perGame.diffs', @lineDiffs(@get('model.teamStats.perGame'), @get('opponent.teamStats.perGame')))
         console.log @get('opponent.teamStats')
         console.log @get('model.teamStats')
 )

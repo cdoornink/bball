@@ -50,6 +50,15 @@
 
 .non-game {
   padding: 20px 40px;
+  .subtabs {
+    margin: -10px 0 20px -30px;
+  }
+}
+
+.coming-soon {
+  width: 300px;
+  text-align: center;
+  margin: 100px auto;
 }
 
 .create-team-form {
