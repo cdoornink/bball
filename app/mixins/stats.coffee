@@ -131,12 +131,12 @@ StatsMixin = Ember.Mixin.create
         if stat.get('type') is "subbedIn"
           ps['played'] = true
           tempDiff = stat.get('scoreDiff')
-          inGame = ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
+          inGame = ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + (stat.get('timeLeft') || @get('periodLength')))
         if stat.get('type') is "subbedOut"
           plusminus += (stat.get('scoreDiff') - tempDiff)
-          totalMin += inGame - ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + stat.get('timeLeft'))
+          totalMin += inGame - ((((stat.get('period') - @get('periods')) * -1) * @get('periodLength')) + (stat.get('timeLeft') || @get('periodLength')))
           inGame = null
-
+        # This part of the two above equations: (stat.get('timeLeft') || @get('periodLength')) is a Hack. If minutes are looking weird, try taking this out. It was to fix a bug where the timeLEft wasn't getting saved to the database for the first subbedIn instances of a game. Trying to fix it at the source instead of here.
         lastStat = stat
       if inGame
         homeDiff = lastStat.get('game.homeScore') - lastStat.get('game.awayScore')

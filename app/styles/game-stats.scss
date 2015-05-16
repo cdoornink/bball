@@ -4,10 +4,12 @@
   border-bottom: 1px solid #eee;
   overflow: hidden;
   .tab-row {
+    overflow: hidden;
     margin-top: 10px;
   }
   .main-result {
-    margin: 20px 0 10px;
+    float: left;
+    margin: 20px 50px 10px 0;
     overflow: auto;
     .result-team-left {
       margin-right: 50px;
@@ -32,9 +34,10 @@
     }
   }
   .results-main-stats {
-    width: 100%;
     overflow: hidden;
     padding: 10px;
+    float: left;
+    margin: 15px;
   }
   .scores {
     float: left;
@@ -64,3 +67,4 @@
     width: 400px;
   }
 }
+

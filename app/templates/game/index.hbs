@@ -1,1 +1,35 @@
-{{partial "stat-lines"}}
+<div class="game-overview-page">
+  <div class="game-flow-chart">
+    {{chartist-chart ratio="ct-octave" options=controllers.game.chartOptions data=controllers.game.chartData}}
+  </div>
+
+  <div class="advanced-stats-summary flex-table">
+    <div class="col">
+      <div class="col-header">{{model.homeTeam.mascot}}</div>
+      <div>{{model.homeTeam.teamStats.poss}}</div>
+      <div>{{model.homeTeam.teamStats.efg}}</div>
+      <div>{{model.homeTeam.teamStats.tov}}</div>
+      <div>{{model.homeTeam.teamStats.orb}}</div>
+      <div>{{model.homeTeam.teamStats.ftp}}</div>
+      <div>{{model.homeTeam.teamStats.ortg}}</div>
+    </div>
+    <div class="col">
+      <div class="col-header"></div>
+      <div>Pace</div>
+      <div>EFG</div>
+      <div>TOV</div>
+      <div>ORB</div>
+      <div>FTP</div>
+      <div>ORTG</div>
+    </div>
+    <div class="col">
+      <div class="col-header">{{model.awayTeam.mascot}}</div>
+      <div>{{model.awayTeam.teamStats.poss}}</div>
+      <div>{{model.awayTeam.teamStats.efg}}</div>
+      <div>{{model.awayTeam.teamStats.tov}}</div>
+      <div>{{model.awayTeam.teamStats.orb}}</div>
+      <div>{{model.awayTeam.teamStats.ftp}}</div>
+      <div>{{model.awayTeam.teamStats.ortg}}</div>
+    </div>
+  </div>
+</div>

@@ -16,7 +16,8 @@ Router.map ->
   @route 'player'
 
   @route 'game', {path: "game/:id"}, ->
-    @route 'index', {path: '/box-score'}
+    @route 'index', {path: '/'}
+    @route 'box-score', {path: '/box-score'}
     @route 'play-by-play', {path: "/play-by-play"}, ->
       @route 'index', {path: '/1'}
       @route '2'

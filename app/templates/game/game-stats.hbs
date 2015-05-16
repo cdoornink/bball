@@ -44,49 +44,13 @@
         <div class="home-score">{{model.awayScore}}</div>
       </div>
     </div>
-
-    <div class="scores team-names">
-      <div class="period">
-        <div class="period-header"></div>
-        <div class="home-score">{{model.homeTeam.mascot}}</div>
-        <div class="home-score">{{model.awayTeam.mascot}}</div>
-      </div>
-    </div>
-    <div class="advanced-stats-summary flex-table">
-      <div class="col">
-        <div class="col-header">Pace</div>
-        <div>{{model.homeTeam.teamStats.poss}}</div>
-        <div>{{model.awayTeam.teamStats.poss}}</div>
-      </div>
-      <div class="col">
-        <div class="col-header">EFG</div>
-        <div>{{model.homeTeam.teamStats.efg}}</div>
-        <div>{{model.awayTeam.teamStats.efg}}</div>
-      </div>
-      <div class="col">
-        <div class="col-header">TOV</div>
-        <div>{{model.homeTeam.teamStats.tov}}</div>
-        <div>{{model.awayTeam.teamStats.tov}}</div>
-      </div>
-      <div class="col">
-        <div class="col-header">ORB</div>
-        <div>{{model.homeTeam.teamStats.orb}}</div>
-        <div>{{model.awayTeam.teamStats.orb}}</div>
-      </div>
-      <div class="col">
-        <div class="col-header">FTP</div>
-        <div>{{model.homeTeam.teamStats.ftp}}</div>
-        <div>{{model.awayTeam.teamStats.ftp}}</div>
-      </div>
-      <div class="col">
-        <div class="col-header">ORTG</div>
-        <div>{{model.homeTeam.teamStats.ortg}}</div>
-        <div>{{model.awayTeam.teamStats.ortg}}</div>
-      </div>
-    </div>
   </div>
+
   <div class="tab-row">
     {{#link-to "game.index" model}}
+      overview
+    {{/link-to}}
+    {{#link-to "game.box-score" model}}
       box score
     {{/link-to}}
     {{#link-to "game.play-by-play" model}}

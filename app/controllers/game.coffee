@@ -54,6 +54,7 @@ GameController = Ember.Controller.extend(StatsMixin,
     Ember.run.debounce(@, @getStats, 300)
   ).observes("model.stats")
   getStats: ->
+      @resetChartData()
       @get('model.preference').then (p) =>
         if p.get('periods') is 4
           @set('quarters', true)
@@ -63,6 +64,7 @@ GameController = Ember.Controller.extend(StatsMixin,
           @set('periods', 2)
         @set('periodLength', (p.get('periodLength') * 60))
         @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
+
       @get('model.stats').then (stats) =>
         # console.log stats
         console.time("compile stats")
@@ -197,12 +199,13 @@ GameController = Ember.Controller.extend(StatsMixin,
       if p.get('value') is 3
         play["shotType"] = "three pointer"
       if p.get('value') and (r is 'make' or r is 'and1')
-        scoreAtMoment = @get('playByPlayScoreLeft')
         if left
           @set('playByPlayScoreLeft', @get('playByPlayScoreLeft') + p.get('value'))
         else
           @set('playByPlayScoreRight', @get('playByPlayScoreRight') + p.get('value'))
         play["scoreAtMoment"] = "#{@get('playByPlayScoreLeft')} - #{@get('playByPlayScoreRight')}"
+        if @get('model.status', "Final")
+          this.addChartPoint(@get('playByPlayScoreLeft'), @get('playByPlayScoreRight'))
         play["score#{p.get('value')}"] = true
     else if t is "rebound"
       offensive = p.get('subType') is "offensive"
@@ -232,6 +235,49 @@ GameController = Ember.Controller.extend(StatsMixin,
 
       @set 'playByPlaySubQueue', null
     @set('playByPlay', pbp)
+
+
+  addChartPoint: (l,r) ->
+    chartData = @get('chartData')
+    if chartData.labels[1] == '2nd'
+      chartData =
+        labels: ['1st', ''],
+        series: [
+          [0, (l-r)]
+        ]
+    else
+      chartData.labels.push('')
+      chartData.series[0].push(l-r)
+    # Add in quarter labels, and high and low numbers
+    this.set('chartData', chartData);
+
+  resetChartData: ->
+    c =
+      labels: ['1st','2nd','3rd','4th'],
+      series: [
+        [0,0,0,0]
+      ]
+    @set 'chartData', c
+
+  chartData:
+    labels: ['1st','2nd','3rd','4th'],
+    series: [
+      [0,0,0,0]
+    ]
+  chartOptions: {
+      fullWidth: true,
+      chartPadding: {left: 15, right: 40, top: 0, bottom: 0},
+      low: -10,
+      high: 10,
+      showPoint: false,
+      axisX: {
+        showGrid: false,
+        showLabels: false
+      },
+      axisY: {
+        scaleMinSpace: 40
+      }
+    }
 
   getScoreDiff: (team) ->
     team.get('teamStats.points') - @getOpponent(team).get('teamStats.points')
@@ -469,9 +515,9 @@ GameController = Ember.Controller.extend(StatsMixin,
           @saveGame()
 
     substitute: (player, ops) ->
-      @get('stats').then (stats) =>
+      @get('model.stats').then (stats) =>
         lastStat = stats.currentState[stats.length-1]
-        if @get('status') is "created" or lastStat.get('type') is "subbedOut" or lastStat.get('type') is "played"
+        if @get('model.status') is "created" or lastStat.get('type') is "subbedOut" or lastStat.get('type') is "played"
           @send('submitSubstitute', player, ops)
         else
           @send('openModal', 'modals/time', {continue: => @send('submitSubstitute', player, ops)})
@@ -498,7 +544,6 @@ GameController = Ember.Controller.extend(StatsMixin,
       stat.set('game', @get('model'))
       stat.save().then =>
         player.save()
-        #this breaks as soon as you reload the page. need to save this as an actual stat when compiling
         @saveGame()
 
     endPeriod: ->
