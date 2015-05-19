@@ -89,7 +89,7 @@ GameController = Ember.Controller.extend(StatsMixin,
         @set "court.width", parseInt(@get('court.el').width())
         @set "court.height", parseInt(@get('court.width') / 1.766)
 
-        stats.forEach (stat) =>
+        stats.forEach (stat, i) =>
           if stat.get('type') is "subbedIn"
             if stat.get('team.id') is @get('model.left.id')
               loc.push(stat)
@@ -100,7 +100,7 @@ GameController = Ember.Controller.extend(StatsMixin,
             sbp[stat.get('player.id')] = [stat]
           else
             sbp[stat.get('player.id')].push stat
-          @addPlayByPlay(stat)
+          @addPlayByPlay(stat, stats.toArray()[i+1])
 
         l = {}
         loc.forEach (sub) ->
@@ -155,7 +155,8 @@ GameController = Ember.Controller.extend(StatsMixin,
   playByPlayScoreLeft: 0
   playByPlayScoreRight: 0
   lastTimeLeft: null
-  addPlayByPlay: (p) ->
+  addPlayByPlay: (p, next) ->
+    recipient = if next then next.get('player') else undefined
     pbp = @get('playByPlay')
     t = p.get('type')
     sT = p.get('subType')
@@ -181,7 +182,7 @@ GameController = Ember.Controller.extend(StatsMixin,
       play = {left: left, sub: true, in: @get('playByPlaySubQueue'), out: p.get('player')}
       @set 'playByPlaySubQueue', null
     else if t is "shot"
-      play = {left: left, shot: true, player: p.get('player'), recipient: p.get('recipient')}
+      play = {left: left, shot: true, player: p.get('player'), recipient: recipient}
       if r is "make"
         play["make"] = true
       if r is "foul"
@@ -216,7 +217,7 @@ GameController = Ember.Controller.extend(StatsMixin,
     else if t is "foul" and sT isnt "shooting"
       play = {left: left, foul: true, player: p.get('player'), foulType: sT}
     else if t is "turnover"
-      play = {left: left, turnover: true, player: p.get('player'), recipient: p.get('recipient')}
+      play = {left: left, turnover: true, player: p.get('player'), recipient: recipient}
 
     if play
       tL = p.get('timeLeft')
