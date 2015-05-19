@@ -1,35 +1,80 @@
 <div class="game-overview-page">
+
   <div class="game-flow-chart">
+    <h2>Game Flow</h2>
     {{chartist-chart ratio="ct-octave" options=controllers.game.chartOptions data=controllers.game.chartData}}
   </div>
 
-  <div class="advanced-stats-summary flex-table">
-    <div class="col">
-      <div class="col-header">{{model.homeTeam.mascot}}</div>
-      <div>{{model.homeTeam.teamStats.poss}}</div>
-      <div>{{model.homeTeam.teamStats.efg}}</div>
-      <div>{{model.homeTeam.teamStats.tov}}</div>
-      <div>{{model.homeTeam.teamStats.orb}}</div>
-      <div>{{model.homeTeam.teamStats.ftp}}</div>
-      <div>{{model.homeTeam.teamStats.ortg}}</div>
-    </div>
-    <div class="col">
-      <div class="col-header"></div>
-      <div>Pace</div>
-      <div>EFG</div>
-      <div>TOV</div>
-      <div>ORB</div>
-      <div>FTP</div>
-      <div>ORTG</div>
-    </div>
-    <div class="col">
-      <div class="col-header">{{model.awayTeam.mascot}}</div>
-      <div>{{model.awayTeam.teamStats.poss}}</div>
-      <div>{{model.awayTeam.teamStats.efg}}</div>
-      <div>{{model.awayTeam.teamStats.tov}}</div>
-      <div>{{model.awayTeam.teamStats.orb}}</div>
-      <div>{{model.awayTeam.teamStats.ftp}}</div>
-      <div>{{model.awayTeam.teamStats.ortg}}</div>
+
+  <div class="advanced-stats-summary">
+    <h2>Team Stats</h2>
+    <div class="flex-table">
+      <div class="col">
+        <div class="col-header">{{model.homeTeam.mascot}}</div>
+        <div>{{model.homeTeam.teamStats.points}}</div>
+        <div>{{model.homeTeam.teamStats.fgp}}</div>
+        <div>{{model.homeTeam.teamStats.threeptp}}</div>
+        <div>{{model.homeTeam.teamStats.ftpercentage}}</div>
+        <div>{{model.homeTeam.teamStats.oreb}}</div>
+        <div>{{model.homeTeam.teamStats.dreb}}</div>
+        <div>{{model.homeTeam.teamStats.reb}}</div>
+        <div>{{model.homeTeam.teamStats.assists}}</div>
+        <div>{{model.homeTeam.teamStats.steals}}</div>
+        <div>{{model.homeTeam.teamStats.blocks}}</div>
+        <div>{{model.homeTeam.teamStats.turnovers}}</div>
+        <div>{{model.homeTeam.teamStats.fouls}}</div>
+        <div>-------</div>
+        <div>{{model.homeTeam.teamStats.poss}}</div>
+        <div>{{model.homeTeam.teamStats.efg}}</div>
+        <div>{{model.homeTeam.teamStats.tov}}</div>
+        <div>{{model.homeTeam.teamStats.orb}}</div>
+        <div>{{model.homeTeam.teamStats.ftp}}</div>
+        <div>{{model.homeTeam.teamStats.ortg}}</div>
+      </div>
+      <div class="col">
+        <div class="col-header"></div>
+        <div>Score</div>
+        <div>FG%</div>
+        <div>3PT%</div>
+        <div>FT%</div>
+        <div>OREB</div>
+        <div>DREB</div>
+        <div>TREB</div>
+        <div>AST</div>
+        <div>STL</div>
+        <div>BLK</div>
+        <div>TO</div>
+        <div>PF</div>
+        <div>Advanced</div>
+        <div>Pace</div>
+        <div>EFG</div>
+        <div>TOV</div>
+        <div>ORB</div>
+        <div>FTP</div>
+        <div>ORTG</div>
+      </div>
+      <div class="col">
+        <div class="col-header">{{model.awayTeam.mascot}}</div>
+        <div>{{model.awayTeam.teamStats.points}}</div>
+        <div>{{model.awayTeam.teamStats.fgp}}</div>
+        <div>{{model.awayTeam.teamStats.threeptp}}</div>
+        <div>{{model.awayTeam.teamStats.ftpercentage}}</div>
+        <div>{{model.awayTeam.teamStats.oreb}}</div>
+        <div>{{model.awayTeam.teamStats.dreb}}</div>
+        <div>{{model.awayTeam.teamStats.reb}}</div>
+        <div>{{model.awayTeam.teamStats.assists}}</div>
+        <div>{{model.awayTeam.teamStats.steals}}</div>
+        <div>{{model.awayTeam.teamStats.blocks}}</div>
+        <div>{{model.awayTeam.teamStats.turnovers}}</div>
+        <div>{{model.awayTeam.teamStats.fouls}}</div>
+        <div>-------</div>
+        <div>{{model.awayTeam.teamStats.poss}}</div>
+        <div>{{model.awayTeam.teamStats.efg}}</div>
+        <div>{{model.awayTeam.teamStats.tov}}</div>
+        <div>{{model.awayTeam.teamStats.orb}}</div>
+        <div>{{model.awayTeam.teamStats.ftp}}</div>
+        <div>{{model.awayTeam.teamStats.ortg}}</div>
+      </div>
     </div>
   </div>
 </div>

@@ -205,7 +205,7 @@ GameController = Ember.Controller.extend(StatsMixin,
           @set('playByPlayScoreRight', @get('playByPlayScoreRight') + p.get('value'))
         play["scoreAtMoment"] = "#{@get('playByPlayScoreLeft')} - #{@get('playByPlayScoreRight')}"
         if @get('model.status', "Final")
-          this.addChartPoint(@get('playByPlayScoreLeft'), @get('playByPlayScoreRight'))
+          this.addChartPoint(@get('playByPlayScoreLeft'), @get('playByPlayScoreRight'), p.get('period'))
         play["score#{p.get('value')}"] = true
     else if t is "rebound"
       offensive = p.get('subType') is "offensive"
@@ -236,8 +236,7 @@ GameController = Ember.Controller.extend(StatsMixin,
       @set 'playByPlaySubQueue', null
     @set('playByPlay', pbp)
 
-
-  addChartPoint: (l,r) ->
+  addChartPoint: (l,r,p) ->
     chartData = @get('chartData')
     if chartData.labels[1] == '2nd'
       chartData =
@@ -246,10 +245,30 @@ GameController = Ember.Controller.extend(StatsMixin,
           [0, (l-r)]
         ]
     else
-      chartData.labels.push('')
       chartData.series[0].push(l-r)
-    # Add in quarter labels, and high and low numbers
+      if p is @currentPeriod
+        chartData.labels.push('')
+      else
+        chartData.labels.push(@numberToPeriod(p))
+        @currentPeriod = p
+    # Add in quarter labels
     this.set('chartData', chartData);
+    currentMargin = if -(l-r) > 0 then  -l-r else l-r;
+    if (currentMargin > @largestMargin)
+      @largestMargin = currentMargin
+      this.set('chartOptions.high', @largestMargin)
+      this.set('chartOptions.low', -@largestMargin)
+  largestMargin: 0
+  currentPeriod: 1
+
+  numberToPeriod: (n) ->
+    if n is 1 then p = '1st'
+    else if n is 2 then p = '2nd'
+    else if n is 3 then p = '3rd'
+    else if n is 4 then p = '4th'
+    else if n is ot then p = 'OT'
+    else p = n
+    p
 
   resetChartData: ->
     c =
