@@ -1,4 +1,6 @@
-<div class="modal-overlay" {{action "clickOverlay"}}> </div>
+{{#unless hideOverlay}}
+  <div class="modal-overlay" {{action "clickOverlay"}}> </div>
+{{/unless}}
 <div class="modal-dialog">
   {{yield}}
 </div>

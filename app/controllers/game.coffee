@@ -9,10 +9,12 @@ GameController = Ember.Controller.extend(StatsMixin,
   rightOnCourtArray: []
   rightBench: []
   minutesLeft: (->
-    Math.floor(@get('timeLeft') % 3600 / 60)
+    timeLeft = @get('timeLeft') or @periodLength
+    Math.floor(timeLeft % 3600 / 60)
   ).property("model.timeLeft")
   secondsLeft: (->
-    Math.floor(@get('timeLeft') % 3600 % 60)
+    timeLeft = @get('timeLeft') or @periodLength
+    Math.floor(timeLeft % 3600 % 60)
   ).property("model.timeLeft")
   selectedPlayer: null
   leftPlayerSelected: false
@@ -50,9 +52,8 @@ GameController = Ember.Controller.extend(StatsMixin,
                   color: #{@get('model.left.secondaryColor')};
                 }
               </style>");
-  statsUpdated: (->
+  statsUpdated: Ember.observer 'model.stats', ->
     Ember.run.debounce(@, @getStats, 300)
-  ).observes("model.stats")
   getStats: ->
       @resetChartData()
       @get('model.preference').then (p) =>
@@ -66,7 +67,6 @@ GameController = Ember.Controller.extend(StatsMixin,
         @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
 
       @get('model.stats').then (stats) =>
-        # console.log stats
         console.time("compile stats")
         console.time("compile stats w/ advanced")
 
@@ -182,18 +182,21 @@ GameController = Ember.Controller.extend(StatsMixin,
       play = {left: left, sub: true, in: @get('playByPlaySubQueue'), out: p.get('player')}
       @set 'playByPlaySubQueue', null
     else if t is "shot"
-      play = {left: left, shot: true, player: p.get('player'), recipient: recipient}
+      play = {left: left, shot: true, player: p.get('player')}
       if r is "make"
         play["make"] = true
+        if next and next.get('type') is 'assist' then play['recipient'] = recipient
       if r is "foul"
         play["shootingFoul"] = true
         play["fouler"] = p.get('fouler')
       if r is "block"
         play["block"] = true
+        if next and next.get('type') is 'block' then play['recipient'] = recipient
       if r is "and1"
         play["make"] = true
         play["and1"] = true
         play["fouler"] = p.get('fouler')
+        if next and next.get('type') is 'assist' then play['recipient'] = recipient
       if sT is "freeThrow"
         sT = "free throw"
       play["shotType"] = sT or "jumper"
@@ -217,7 +220,8 @@ GameController = Ember.Controller.extend(StatsMixin,
     else if t is "foul" and sT isnt "shooting"
       play = {left: left, foul: true, player: p.get('player'), foulType: sT}
     else if t is "turnover"
-      play = {left: left, turnover: true, player: p.get('player'), recipient: recipient}
+      play = {left: left, turnover: true, player: p.get('player')}
+      if next and next.get('type') is 'steal' then play['recipient'] = recipient
 
     if play
       tL = p.get('timeLeft')
@@ -422,7 +426,7 @@ GameController = Ember.Controller.extend(StatsMixin,
       ), 100
 
     freeThrowButton: ->
-      @send('openModal', 'modals/freethrow', {shooting: 2})
+      @send('openModal', 'modals/freethrow', {shooting: 2, refresh: true})
     submitFreeThrows: (model) ->
       if (model.shooting is 1 and model.result1 is "miss") or
         (model.shooting is 2 and model.result2 is "miss") or
@@ -469,7 +473,7 @@ GameController = Ember.Controller.extend(StatsMixin,
           @saveGame()
       if model.shooting
         Ember.run.later (=>
-          @send('openModal', 'modals/freethrow', {shooting: model.shooting})
+          @send('openModal', 'modals/freethrow', {shooting: model.shooting, refresh: true})
         ), 100
 
     reboundButton: ->

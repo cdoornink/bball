@@ -146,7 +146,6 @@ StatsMixin = Ember.Mixin.create
         #will also need completely separate logic for overtime shit
     ps['minutes'] = totalMin
     ps['plusminus'] = plusminus
-    console.log ps
     @inGameAdvancedPlayerStats(ps)
     player.set('gameStats', ps)
   parseStat: (stat, ts, side, player) ->

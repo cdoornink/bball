@@ -2,14 +2,34 @@
 
 ModalsFreethrowController = Ember.Controller.extend
   needs: ["game"]
+  shooter: null
   shooting2: false
   shooting3: false
-  setShootingButtons: (->
+  refresher: Ember.observer 'model.refresh', ->
+    # NEED TO SAVE THE SHOOTER IN CASE A SUBSTITUTE MOVE THE CURRENT PLAYER OUT OF SCOPE
+    # might not have to do this actually, never mind. this might be finished...
+    if @get('model.refresh') is false
+      @setShootingButtons()
+      if @get('model.result1')
+        Ember.run.later (=>
+          $(".result1-button.#{@get('model.result1')}").addClass('selected')
+        ), 100
+
+      if @get('model.result2')
+        Ember.run.later (=>
+          $(".result2-button.#{@get('model.result2')}").addClass('selected')
+        ), 100
+    @set('model.refresh', false)
+  setShootingButtons: ->
     num = @get('model.shooting')
-    if num is 1 then el = 'one' else if num is 2 then el = "two" else if num is 3 then el = 'three'
-    $(".shooting-button").removeClass('selected')
-    $(".shooting-button.#{el}").addClass('selected')
-  ).observes('model.shooting')
+    console.log num
+    if num is 1 then el = 'one' else if num is 2 then el = "two" else if num is 3 then el = 'three' else el = 'two'
+    Ember.run.later (->
+      $(".shooting-button").removeClass('selected')
+      $(".shooting-button.#{el}").addClass('selected')
+    ), 100
+  init: ->
+    console.log('linit!!!')
   actions:
     cancel: ->
       @send('closeModal')
