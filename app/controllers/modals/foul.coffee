@@ -9,7 +9,6 @@ ModalsFoulController = Ember.Controller.extend
       @set('model.subType', t)
       $(".type-button").removeClass('selected')
       $(".type-button.#{t}").addClass('selected')
-    continue: ->
       @get('controllers.game').send('submitFoul', @get('model'))
       @send('closeModal')
 

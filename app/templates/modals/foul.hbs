@@ -4,22 +4,17 @@
       Foul - {{controllers.game.selectedPlayer.lastName}}
     </div>
 
+    <div class="option-row">
+      <button class="type-button defensive" {{action 'setType' 'defensive'}}>Defensive</button>
+      <button class="type-button offensive" {{action 'setType' 'offensive'}}>Offensive</button>
+      <button class="type-button loose-ball" {{action 'setType' 'loose ball'}}>Loose Ball</button>
+      <button class="type-button technical" {{action 'setType' 'technical'}}>Technical</button>
+    </div>
+
     <div class="confirmation-buttons">
       <div class="cancel">
         <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
       </div>
-      <div class="continue">
-        <button class="continue-button" {{action 'continue'}}>Submit</button>
-      </div>
-    </div>
-
-    <div class="option-row">
-      <div class="subtitle">
-        Type
-      </div>
-      <button class="type-button defensive" {{action 'setType' 'defensive'}}>Defensive</button>
-      <button class="type-button offensive" {{action 'setType' 'offensive'}}>Offensive</button>
-      <button class="type-button technical" {{action 'setType' 'technical'}}>Technical</button>
     </div>
 
   </div>
