@@ -571,6 +571,14 @@ GameController = Ember.Controller.extend(StatsMixin,
         @saveGame()
 
     endPeriod: ->
+      conf = {
+        header: "End of Period?"
+        continue: =>
+          @send('submitEndPeriod')
+      }
+      @send('openModal', 'modals/confirmation', conf)
+      @send('openModal', 'modals')
+    submitEndPeriod: ->
       period = @get('model.period')
       @get('model.preference').then (p) =>
         if period is p.get('periods')

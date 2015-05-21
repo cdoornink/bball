@@ -1,5 +1,7 @@
 {{#modal-dialog clickOverlay="cancel"}}
-  {{model.header}}
+  <div class="title">
+    {{model.header}}
+  </div>
   {{model.message}}
   {{#if model.continue}}
     <div class="confirmation-buttons">
@@ -7,7 +9,7 @@
         <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
       </div>
       <div class="continue">
-        <button class="continue-button" {{action 'continue'}}>End Game</button>
+        <button class="continue-button" {{action 'continue'}}>Continue</button>
       </div>
     </div>
   {{/if}}
