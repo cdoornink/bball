@@ -224,6 +224,9 @@ GameController = Ember.Controller.extend(StatsMixin,
       if next and next.get('type') is 'steal' then play['recipient'] = recipient
 
     if play
+      play['mainModel'] = p;
+      if play.recipient
+        play['recipientModel'] = next;
       tL = p.get('timeLeft')
       unless tL is @get('lastTimeLeft')
         play["timeLeft"] = tL
@@ -403,10 +406,6 @@ GameController = Ember.Controller.extend(StatsMixin,
         number = ops.player.get('number')
         $(".on-court .player-card:contains(#{name}):contains(#{number})").addClass('selected')
 
-#for play by play, will have to check after a made shot if an assist was recorded next
-# on a blocked shot if a block was recorded next
-# on a fouled shot if a foul was recorded next etc.
-# if a block is there without a corresponding blocked shot, print it out just as a block in the play by play
     shot: (ops) ->
       @send('openModal', 'modals/shot', ops)
     submitShot: (model) ->
