@@ -1,0 +1,54 @@
+{{#modal-dialog clickOverlay="cancel"}}
+  <div class="title">
+    Edit {{model.type}}
+  </div>
+
+  <div class="edit-row">
+    Player: {{view 'select' selection=model.player.lastName}}
+  </div>
+
+  {{#if rebound}}
+  <div class="option-row">
+    <button class="type-button defensive" {{action 'setType' 'defensive'}}>Defensive</button>
+    <button class="type-button offensive" {{action 'setType' 'offensive'}}>Offensive</button>
+  </div>
+  {{/if}}
+
+  {{#if shot}}
+    <div class="option-row five-buttons">
+      <button class="type-button make" {{action 'setResult' 'make'}}>Made</button>
+      <button class="type-button miss" {{action 'setResult' 'miss'}}>Missed</button>
+      {{#unless freeThrow}}
+        <button class="type-button block" {{action 'setResult' 'block'}}>Blocked</button>
+        <button class="type-button foul" {{action 'setResult' 'foul'}}>Fouled</button>
+        <button class="type-button and1" {{action 'setResult' 'and1'}}>And 1</button>
+      {{/unless}}
+    </div>
+
+    {{#unless freeThrow}}
+      <div class="option-row">
+        <button class="value-button two" {{action 'setValue' 2}}>2</button>
+        <button class="value-button three" {{action 'setValue' 3}}>3</button>
+      </div>
+    {{/unless}}
+  {{/if}}
+
+  {{#if foul}}
+    <button class="type-button defensive" {{action 'setType' 'defensive'}}>Defensive</button>
+    <button class="type-button offensive" {{action 'setType' 'offensive'}}>Offensive</button>
+    <button class="type-button loose-ball" {{action 'setType' 'loose ball'}}>Loose Ball</button>
+    <button class="type-button technical" {{action 'setType' 'technical'}}>Technical</button>
+  {{/if}}
+
+  <div class="confirmation-buttons">
+    <div class="cancel">
+      <button class="cancel-button" {{action 'cancel'}}>Cancel</button>
+    </div>
+    <div class="continue">
+      <button class="continue-button" {{action 'continue'}}>Continue</button>
+    </div>
+    <div class="delete">
+      <button class="delete-button" {{action 'deleteStat'}}>Delete Stat</button>
+    </div>
+  </div>
+{{/modal-dialog}}
