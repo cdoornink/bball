@@ -18,8 +18,8 @@ TeamIndexController = Ember.Controller.extend
         timestamp: new Date() })
       team.get('players').then (players) =>
         players.addObject(newPlayer)
-        team.save().then =>
-          newPlayer.save()
+        newPlayer.save().then =>
+          team.save()
           @set('player', Ember.Object.create())
           $('.add-player-form .first-field').focus()
 

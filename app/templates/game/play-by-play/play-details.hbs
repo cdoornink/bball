@@ -6,51 +6,62 @@
 
 {{#if play.shot}}
   {{#if play.make}}
-    {{play.player.fullName}} makes {{play.shotType}}
+    <span class="main-model" {{action 'editStat' play.mainModel}}>
+      {{play.player.fullName}} makes {{play.shotType}}
+    </span>
     {{#if play.recipient}}
-      ( {{play.recipient.fullName}} assists )
+      <span class="recipient-model" {{action 'editStat' play.recipientModel}}>
+        ( {{play.recipient.fullName}} assists )
+      </span>
     {{/if}}
   {{else if play.shootingFoul}}
-    {{play.player.fullName}} fouled
-    {{#if play.fouler}}
-      by {{play.fouler.fullName}}
-    {{/if}}
+    <span class="main-model" {{action 'editStat' play.mainModel}}>
+      {{play.player.fullName}} fouled while shooting
+    </span>
   {{else if play.block}}
-    {{play.player.fullName}} shot blocked
+    <span class="main-model" {{action 'editStat' play.mainModel}}>
+      {{play.player.fullName}} shot blocked
+    </span>
     {{#if play.recipient}}
       by {{play.recipient.fullName}}
     {{/if}}
   {{else}}
-    {{play.player.fullName}} misses {{play.shotType}}
+    <span class="main-model" {{action 'editStat' play.mainModel}}>
+      {{play.player.fullName}} misses {{play.shotType}}
+    </span>
   {{/if}}
   {{#if play.and1}}
-    ( and one
-    {{#if play.fouler}}
-      , fouled by {{play.fouler.fullName}}
-    {{/if}}
-    )
+    (and one)
   {{/if}}
 {{/if}}
 
 {{#if play.rebound}}
-  {{#if play.offensive}}
-    Offensive
-  {{else}}
-    Defensive
-  {{/if}}
-  rebound by {{play.player.fullName}}
+  <span class="main-model" {{action 'editStat' play.mainModel}}>
+    {{#if play.offensive}}
+      Offensive
+    {{else}}
+      Defensive
+    {{/if}}
+    rebound by {{play.player.fullName}}
+  </span>
 {{/if}}
 
 {{#if play.teamRebound}}
-  {{play.team.mascot}} team rebound
+  <span class="main-model" {{action 'editStat' play.mainModel}}>
+    {{play.team.mascot}} team rebound
+  </span>
 {{/if}}
 
 {{#if play.foul}}
-  {{play.player.fullName}} called for {{play.foulType}} foul
+  <span class="main-model" {{action 'editStat' play.mainModel}}>
+    {{play.player.fullName}} called for {{play.foulType}} foul
+  </span>
 {{/if}}
 
 {{#if play.turnover}}
-  {{play.player.fullName}} turnover
+  <span class="main-model" {{action 'editStat' play.mainModel}}>
+    {{play.player.fullName}} turnover
+  </span>
   {{#if play.recipient}}
     ( stolen by {{play.recipient.fullName}} )
   {{/if}}

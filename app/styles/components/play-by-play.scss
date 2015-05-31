@@ -62,4 +62,12 @@
   .substitution-text {
     color: #777;
   }
+  .main-model:hover {
+    background: #a1c1a5;
+    cursor: pointer;
+  }
+  .recipient-model:hover {
+    background: #b1d1c5;
+    cursor: pointer;
+  }
 }

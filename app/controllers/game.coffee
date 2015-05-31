@@ -352,6 +352,7 @@ GameController = Ember.Controller.extend(StatsMixin,
     @set('model.awayScore', away.teamStats.points)
 
   createStat: (type, model, callback) ->
+    console.log(type, model.result)
     stat = this.store.createRecord 'stat',
       type: type
       period: @get('model.period')
@@ -405,6 +406,18 @@ GameController = Ember.Controller.extend(StatsMixin,
         name = ops.player.get('lastName')
         number = ops.player.get('number')
         $(".on-court .player-card:contains(#{name}):contains(#{number})").addClass('selected')
+
+    editStat: (stat) ->
+      console.log 'edit stat', stat
+      @send('openModal', 'modals/editor', stat)
+    submitEditStat: (stat) ->
+      console.log('edit this stat')
+      stat.save()
+    submitDeleteStat: (stat) ->
+      debugger
+      stat.destroyRecord()
+      #when time or score is changed, need to have a chain reaction of edits to all following stats to adjust
+      #also figure out here if the relationships are deleted automagically or if I need to delete those too.
 
     shot: (ops) ->
       @send('openModal', 'modals/shot', ops)
