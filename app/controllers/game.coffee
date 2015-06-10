@@ -417,7 +417,7 @@ GameController = Ember.Controller.extend(StatsMixin,
       debugger
       stat.destroyRecord()
       #when time or score is changed, need to have a chain reaction of edits to all following stats to adjust
-      #also figure out here if the relationships are deleted automagically or if I need to delete those too.
+      #also figure out here if the relationships are deleted automagically or if I need to delete those too. They are deleted.. whoohoooooO!
 
     shot: (ops) ->
       @send('openModal', 'modals/shot', ops)

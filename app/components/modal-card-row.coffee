@@ -5,8 +5,8 @@ ModalCardRowComponent = Ember.Component.extend
   classNameBindings: ["colors"]
   didInsertElement: ->
     @.$('.player-card')
-      .css("background", @colors.get('primaryColor'))
-      .css("color", @colors.get('secondaryColor'))
+      .css("background", @get('colors.primaryColor'))
+      .css("color", @get('colors.secondaryColor'))
   actions:
     setPlayer: (params) ->
       @sendAction('action', params)
