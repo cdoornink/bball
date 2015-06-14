@@ -558,9 +558,9 @@ GameController = Ember.Controller.extend(StatsMixin,
         else
           @send('openModal', 'modals/time', {continue: => @send('submitSubstitute', player, ops)})
     submitSubstitute: (player, ops) ->
-      if ops.target.current
-        subbedOut = ops.target.current.content
-      @createStat 'subbedIn', {player: player, subType: ops.target.slot}, =>
+      if ops.target.attrs.current and ops.target.attrs.current.value
+        subbedOut = ops.target.attrs.current.value.content
+      @createStat 'subbedIn', {player: player, subType: ops.target.attrs.slot}, =>
         unless player.get('gameStats.played')
           Ember.run.later (=>
             @send('submitPlayed', player)

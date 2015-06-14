@@ -21,11 +21,19 @@ Game = DS.Model.extend
   ).property('preference')
   stats: DS.hasMany('stat', async: true)
   left: (->
-    @get('teams').toArray()[0]
-  ).property('teams')
+    homeTeam = @get('homeTeam')
+    for team in @get('teams').toArray()
+      if team.id is homeTeam.get('id')
+        left = team
+    left
+  ).property('teams', 'homeTeam')
   right: (->
-    @get('teams').toArray()[1]
-  ).property('teams')
+   awayTeam = @get('awayTeam')
+   for team in @get('teams').toArray()
+     if team.id is awayTeam.get('id')
+       right = team
+   right
+  ).property('teams', 'awayTeam')
   notStarted: (->
     @get('status') is "created"
   ).property('status')
