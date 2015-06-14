@@ -79,7 +79,7 @@
           {{/draggable-object-target}}
         </div>
         <div class="bench">
-          {{#each player in leftBench}}
+          {{#each leftBench key="@guid" as |player|}}
             {{#draggable-object content=player}}
               {{player-card player=player}}
             {{/draggable-object}}
@@ -105,7 +105,7 @@
           {{/draggable-object-target}}
         </div>
         <div class="bench">
-          {{#each player in rightBench}}
+          {{#each rightBench key="@guid" as |player|}}
             {{#draggable-object content=player}}
               {{player-card player=player}}
             {{/draggable-object}}
@@ -115,7 +115,7 @@
     </div>
   </div>
   <div class="play-by-play-container">
-    {{#each play in playByPlay.recent}}
+    {{#each playByPlay.recent key="@guid" as |play|}}
       {{partial "game/play-by-play/play"}}
     {{/each}}
   </div>

@@ -283,277 +283,257 @@
 <div class="flex-table">
   <div class="col three-col">
     <div class="col-header">player</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.firstInitial}} {{player.lastName}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">min</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{seconds-to-time player.gameStats.minutes}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">pts</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.points}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">reb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.reb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ast</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.assists}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fgm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.fgm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fga</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.fga}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fg%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.fgp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3pm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.threeptm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3pa</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.threepta}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3p%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.threeptp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ftm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.ftm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fta</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.fta}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ft%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.ftp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">oreb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.oreb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">dreb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.dreb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">stl</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.steals}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">blk</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.blocks}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">to</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.turnovers}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">pf</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.fouls}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">+/-</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.plusminus}}</div>
     {{/each}}
   </div>
 </div>
-<!-- <div class='stat-lines'>
 
-  <div class="total-row">
-    <div class="col player-number"></div>
-    <div class="col player-name">TOTALS</div>
-    <div class="col min">{{left.teamStats.min}}</div>
-    <div class="col points">{{left.teamStats.points}}</div>
-    <div class="col totreb">{{left.teamStats.reb}}</div>
-    <div class="col assist">{{left.teamStats.assists}}</div>
-    <div class="col fg">{{left.teamStats.fgm}}/{{left.teamStats.fga}}</div>
-    <div class="col threept">{{left.teamStats.threeptm}}/{{left.teamStats.threepta}}</div>
-    <div class="col ft">{{left.teamStats.ftm}}/{{left.teamStats.fta}}</div>
-    <div class="col offreb">{{left.teamStats.oreb}}</div>
-    <div class="col defreb">{{left.teamStats.dreb}}</div>
-    <div class="col steal">{{left.teamStats.steals}}</div>
-    <div class="col block">{{left.teamStats.blocks}}</div>
-    <div class="col to">{{left.teamStats.turnovers}}</div>
-    <div class="col foul">{{left.teamStats.fouls}}</div>
-    <div class="col plus-minus">-</div>
-  </div>
-</div> -->
 <h2>PER GAME</h2>
 <div class="flex-table">
   <div class="col three-col">
     <div class="col-header">player</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.firstInitial}} {{player.lastName}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">min</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{seconds-to-time player.perGameStats.minutes}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">pts</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.points}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">reb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.reb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ast</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.assists}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fgm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.fgm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fga</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.fga}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fg%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.fgp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3pm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.threeptm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3pa</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.threepta}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3p%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.threeptp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ftm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.ftm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fta</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.fta}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ft%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.ftp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">oreb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.oreb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">dreb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.dreb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">stl</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.steals}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">blk</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.blocks}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">to</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.turnovers}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">pf</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.fouls}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">+/-</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perGameStats.plusminus}}</div>
     {{/each}}
   </div>
@@ -563,127 +543,127 @@
 <div class="flex-table">
   <div class="col three-col">
     <div class="col-header">player</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.firstInitial}} {{player.lastName}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">min</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{seconds-to-time player.perMinuteStats.minutes}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">pts</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.points}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">reb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.reb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ast</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.assists}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fgm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.fgm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fga</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.fga}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fg%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.fgp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3pm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.threeptm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3pa</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.threepta}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3p%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.threeptp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ftm</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.ftm}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">fta</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.fta}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ft%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.ftp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">oreb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.oreb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">dreb</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.dreb}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">stl</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.steals}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">blk</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.blocks}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">to</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.turnovers}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">pf</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.fouls}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">+/-</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.perMinuteStats.plusminus}}</div>
     {{/each}}
   </div>
@@ -693,91 +673,91 @@
 <div class="flex-table">
   <div class="col three-col">
     <div class="col-header">player</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.firstInitial}} {{player.lastName}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">min</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{seconds-to-time player.gameStats.minutes}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">eff</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.eff}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ts%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.tsp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">3ptr</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.threePAp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ftr</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.ftAp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">oReb%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.oRebp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">dReb%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.dRebp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">tReb%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.tRebp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ast%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.assistp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">stl%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.stealp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">blk%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.blockp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">tov%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.turnoverp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">ft%</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.ftp}}</div>
     {{/each}}
   </div>
   <div class="col">
     <div class="col-header">+/-</div>
-    {{#each player in model.players}}
+    {{#each model.players key="@guid" as |player|}}
     <div>{{player.gameStats.plusminus}}</div>
     {{/each}}
   </div>

@@ -3,7 +3,7 @@
   {{#if model.teams}}
     <h2>My Teams</h2>
     <div class="team-grid">
-      {{#each team in model.teams}}
+      {{#each model.teams key="@guid" as |team|}}
         {{#link-to 'team' team}}
           <div class="team-name">
             {{team.organization}} {{team.mascot}}
@@ -40,7 +40,7 @@
     <div class="pref-pick">
       <div class="color-pick"><div class="color-pick-title">Select Game Preferences</div></div>
       <div class="preference-grid">
-        {{#each pref in defaultPreferences}}
+        {{#each defaultPreferences key="@guid" as |pref|}}
           <div class="preference-grid-item {{pref.id}}" {{action 'selectPreferences' pref}}>
             <div class="pref-name">
               {{pref.name}}

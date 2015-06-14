@@ -1,5 +1,5 @@
 <div class="team-games">
-  {{#each game in model.games}}
+  {{#each model.games key="@guid" as |game|}}
     {{#link-to 'game' game}}
       <div class="col date">
         {{game.date}}

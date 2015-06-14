@@ -1,5 +1,5 @@
 <div class="team-roster">
-  {{#each player in model.players}}
+  {{#each model.players key="@guid" as |player|}}
     <div class="roster-player">
       <div class="col number">{{player.number}}</div>
       <div class="col name">{{player.firstName}} {{player.lastName}}</div>

@@ -1,3 +1,3 @@
-{{#each play in controllers.game.playByPlay.fourth}}
+{{#each controllers.game.playByPlay.fourth key="@guid" as |play|}}
   {{partial "game/play-by-play/play"}}
 {{/each}}

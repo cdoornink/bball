@@ -27,7 +27,7 @@
         {{input value=opp.season placeholder="Season (Ex. '14-'15)"}}
         <button {{action "createOpponent"}}>Create</button>
       </form>
-      {{#each team in model.opponents}}
+      {{#each model.opponents key="@guid" as |team|}}
         <div class="opponent-grid-item {{team.id}}" {{action 'selectOpponent' team}}>
           <div class="opponent-name">
             {{team.organization}} {{team.mascot}}
@@ -44,28 +44,3 @@
   </div>
   <button class="add-button" {{action "createGame"}}>Create Game</button>
 </form>
-
-
-
-<!-- <h2>Create New Preferences (not separate from default yet... BUG):</h2>
-<ul>
-  <li>
-    {{input value=pref.name placeholder="Name this set of preferences"}}
-  </li>
-  <li>
-    Number of periods: {{view "select" content=periodOptions selection=selectedPeriod prompt="Periods"}}
-  </li>
-  <li>
-    Period length: {{view "select" content=periodLengthOptions selection=selectedPeriodLength prompt="Period Length"}}
-  </li>
-  <li>
-    Number of personal fouls alloted: {{view "select" content=foulOptions selection=selectedFouls prompt="Fouls"}}
-  </li>
-  <li>
-    <button {{action "createPreference"}}>Create Preferences</button>
-  </li>
-</ul> -->
-
-
-
-

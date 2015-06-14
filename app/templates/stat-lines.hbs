@@ -18,7 +18,7 @@
     <div class="col plusminus">+/-</div>
   </div>
   {{#if model.left.myTeam}}
-    {{#each player in model.left.players}}
+    {{#each model.left.players key="@guid" as |player|}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
@@ -57,7 +57,7 @@
       <div class="col plus-minus">-</div>
     </div>
   {{else}}
-    {{#each player in model.right.players}}
+    {{#each model.right.players key="@guid" as |player|}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
@@ -116,7 +116,7 @@
     <div class="col plusminus">+/-</div>
   </div>
   {{#if model.left.myTeam}}
-    {{#each player in model.right.players}}
+    {{#each model.right.players key="@guid" as |player|}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
@@ -155,7 +155,7 @@
       <div class="col plus-minus">-</div>
     </div>
   {{else}}
-    {{#each player in model.left.players}}
+    {{#each model.left.players key="@guid" as |player|}}
       <div class="player-row">
         <div class="col player-number">{{player.number}}</div>
         <div class="col player-name">{{player.firstName}} {{player.lastName}}</div>
