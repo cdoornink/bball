@@ -429,7 +429,10 @@ GameController = Ember.Controller.extend(StatsMixin,
         $(".on-court .player-card:contains(#{name}):contains(#{number})").addClass('selected')
 
     editStat: (stat) ->
-      console.log 'edit stat', stat
+      if stat.get('team.id') is @get('model.left.id')
+        @set('allPlayers', @get('model.left.players').toArray())
+      else
+        @set('allPlayers', @get('model.right.players').toArray())
       @send('openModal', 'modals/editor', stat)
     submitEditStat: (stat) ->
       scoreChange = this.scoreChangedWithEdit(stat)
@@ -437,10 +440,11 @@ GameController = Ember.Controller.extend(StatsMixin,
         modifyDiffs = this.get('model.stats').toArray().slice(_.indexOf(this.get('model.stats').toArray(), stat)+1)
         this.send('updateStatDiffs', modifyDiffs, stat, scoreChange)
       stat.save().then =>
-        if stat.get('result') is 'miss' and modifyDiffs[0].get('type') is 'assist'
-          modifyDiffs[0].destroyRecord()
-        if stat.get('result') is 'make' and modifyDiffs[0].get('type') is 'block'
-          modifyDiffs[0].destroyRecord()
+        if scoreChange and modifyDiffs.length
+          if stat.get('result') is 'miss' and modifyDiffs[0].get('type') is 'assist'
+            modifyDiffs[0].destroyRecord()
+          if stat.get('result') is 'make' and modifyDiffs[0].get('type') is 'block'
+            modifyDiffs[0].destroyRecord()
         @saveGame()
     submitDeleteStat: (stat) ->
       stat.rollback()
