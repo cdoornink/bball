@@ -1,0 +1,5 @@
+<select onchange={{action 'changed'}}>
+  {{#each options key="@guid" as |item index|}}
+    <option value="{{item.id}}" selected={{is-equal item currentValue}}>{{item.fullName}}</option>
+  {{/each}}
+</select>

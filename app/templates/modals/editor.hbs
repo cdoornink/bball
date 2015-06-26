@@ -2,9 +2,9 @@
   <div class="title">
     Edit {{model.type}}
   </div>
-
+  {{model.player.fullName}}
   <div class="edit-row">
-    Player: {{view 'select' selection=model.player.lastName}}
+    Player: {{my-select options=controllers.game.allPlayers currentValue=model.player}}
   </div>
 
   {{#if rebound}}

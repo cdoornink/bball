@@ -24,6 +24,8 @@ ModalsEditorController = Ember.Controller.extend
   actions:
     cancel: ->
       @send('closeModal')
+    setPlayer: () ->
+      console.log "set player"
     setType: (t) ->
       @set('model.subType', t)
       $(".type-button").removeClass('selected')
@@ -39,7 +41,9 @@ ModalsEditorController = Ember.Controller.extend
       $(".value-button.#{tstring}").addClass('selected')
     continue: ->
       @get('controllers.game').send('submitEditStat', @get('model'))
+      @send('closeModal')
     deleteStat: ->
       @get('controllers.game').send('submitDeleteStat', @get('model'))
+      @send('closeModal')
 
 `export default ModalsEditorController`

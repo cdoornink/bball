@@ -6,6 +6,7 @@ GameController = Ember.Controller.extend(StatsMixin,
   leftOnCourtArray: []
   leftBench: []
   rightOnCourt: {}
+  allPlayers: []
   rightOnCourtArray: []
   rightBench: []
   minutesLeft: (->
@@ -52,103 +53,107 @@ GameController = Ember.Controller.extend(StatsMixin,
                   color: #{@get('model.left.secondaryColor')};
                 }
               </style>");
-  statsUpdated: Ember.observer 'model.stats', ->
+  statsUpdated: Ember.observer 'model.stats', 'model.isDirty', ->
     Ember.run.debounce(@, @getStats, 300)
   getStats: ->
-      @resetChartData()
-      @get('model.preference').then (p) =>
-        if p.get('periods') is 4
-          @set('quarters', true)
-          @set('periods', 4)
+    @resetChartData()
+    @get('model.preference').then (p) =>
+      if p.get('periods') is 4
+        @set('quarters', true)
+        @set('periods', 4)
+      else
+        @set('quarters', false)
+        @set('periods', 2)
+      @set('periodLength', (p.get('periodLength') * 60))
+      @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
+
+    @get('model.stats').then (stats) =>
+      console.time("compile stats")
+      console.time("compile stats w/ advanced")
+
+      if stats.length is 0 or stats.length is undefined
+        @newGameMessage()
+
+      #lineups and all shots
+      loc = []
+      roc = []
+      rshots = []
+      lshots = []
+      #stats by player
+      sbp = {}
+
+      @set 'playByPlayScoreLeft', 0
+      @set 'playByPlayScoreRight', 0
+      @set "playByPlay", []
+
+      @set "court.el", $(".full-court")
+      @set "court.width", parseInt(@get('court.el').width())
+      @set "court.height", parseInt(@get('court.width') / 1.766)
+
+      stats.forEach (stat, i) =>
+        if stat.get('type') is "subbedIn"
+          if stat.get('team.id') is @get('model.left.id')
+            loc.push(stat)
+          #this was failing after half a game with the clippers, team.id was undefined, just for the one team, even if I switched sides
+          else if stat.get('team.id') is @get('model.right.id')
+            roc.push(stat)
+        if sbp[stat.get('player.id')] is undefined
+          sbp[stat.get('player.id')] = [stat]
         else
-          @set('quarters', false)
-          @set('periods', 2)
-        @set('periodLength', (p.get('periodLength') * 60))
-        @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
+          sbp[stat.get('player.id')].push stat
+        @addPlayByPlay(stat, stats.toArray()[i+1])
 
-      @get('model.stats').then (stats) =>
-        console.time("compile stats")
-        console.time("compile stats w/ advanced")
+      l = {}
+      loc.forEach (sub) ->
+        l[sub.get("subType")] = sub.get("player")
+      @set('leftOnCourt', l)
+      locArray = _.map l, (p) -> p.content.id
+      leftOnCourtArray = _.map l, (p) -> p
+      @set('leftOnCourtArray', leftOnCourtArray)
+      lb = []
+      @get('model.left.players').forEach (player) ->
+        if _.indexOf(locArray, player.id) is -1
+          lb.push player
+      @set('leftBench', lb)
 
-        if stats.length is 0 or stats.length is undefined
-          @newGameMessage()
+      r = {}
+      roc.forEach (sub) ->
+        r[sub.get("subType")] = sub.get("player")
+      @set('rightOnCourt', r)
+      rocArray = _.map r, (p) -> p.content.id
+      rightOnCourtArray = _.map r, (p) -> p
+      @set('rightOnCourtArray', rightOnCourtArray)
+      rb = []
+      @get('model.right.players').forEach (player) ->
+        if _.indexOf(rocArray, player.id) is -1
+          rb.push player
+      @set('rightBench', rb)
 
-        #lineups and all shots
-        loc = []
-        roc = []
-        rshots = []
-        lshots = []
-        #stats by player
-        sbp = {}
+      allPlayers = _.union(@get('model.left.players').toArray(), @get('model.right.players').toArray())
+      @set('allPlayers', allPlayers)
+      console.log allPlayers
 
-        @set 'playByPlayScoreLeft', 0
-        @set 'playByPlayScoreRight', 0
-        @set "playByPlay", []
+      #scoreboard
+      unless @get('model.timeLeft')
+        @set('model.timeLeft', @get('model.preference.periodLength') * 60)
 
-        @set "court.el", $(".full-court")
-        @set "court.width", parseInt(@get('court.el').width())
-        @set "court.height", parseInt(@get('court.width') / 1.766)
+      #player stats
+      @get('court.el').empty()
+      ts = _.clone(@statLine)
+      ts.scoreByPeriod = {}
+      @get('model.left.players').forEach (player) =>
+        @statByPlayer(sbp, player, ts, "left", )
+      @set('model.left.teamStats', ts)
 
-        stats.forEach (stat, i) =>
-          if stat.get('type') is "subbedIn"
-            if stat.get('team.id') is @get('model.left.id')
-              loc.push(stat)
-            #this was failing after half a game with the clippers, team.id was undefined, just for the one team, even if I switched sides
-            else if stat.get('team.id') is @get('model.right.id')
-              roc.push(stat)
-          if sbp[stat.get('player.id')] is undefined
-            sbp[stat.get('player.id')] = [stat]
-          else
-            sbp[stat.get('player.id')].push stat
-          @addPlayByPlay(stat, stats.toArray()[i+1])
-
-        l = {}
-        loc.forEach (sub) ->
-          l[sub.get("subType")] = sub.get("player")
-        @set('leftOnCourt', l)
-        locArray = _.map l, (p) -> p.content.id
-        leftOnCourtArray = _.map l, (p) -> p
-        @set('leftOnCourtArray', leftOnCourtArray)
-        lb = []
-        @get('model.left.players').forEach (player) ->
-          if _.indexOf(locArray, player.id) is -1
-            lb.push player
-        @set('leftBench', lb)
-
-        r = {}
-        roc.forEach (sub) ->
-          r[sub.get("subType")] = sub.get("player")
-        @set('rightOnCourt', r)
-        rocArray = _.map r, (p) -> p.content.id
-        rightOnCourtArray = _.map r, (p) -> p
-        @set('rightOnCourtArray', rightOnCourtArray)
-        rb = []
-        @get('model.right.players').forEach (player) ->
-          if _.indexOf(rocArray, player.id) is -1
-            rb.push player
-        @set('rightBench', rb)
-
-        #scoreboard
-        unless @get('model.timeLeft')
-          @set('model.timeLeft', @get('model.preference.periodLength') * 60)
-
-        #player stats
-        @get('court.el').empty()
-        ts = _.clone(@statLine)
-        ts.scoreByPeriod = {}
-        @get('model.left.players').forEach (player) =>
-          @statByPlayer(sbp, player, ts, "left", )
-        @set('model.left.teamStats', ts)
-
-        ts = _.clone(@statLine)
-        ts.scoreByPeriod = {}
-        @get('model.right.players').forEach (player) =>
-          @statByPlayer(sbp, player, ts, "right")
-        @set('model.right.teamStats', ts)
-        console.timeEnd("compile stats")
-        if @get('model.status', "Final")
-          @advancedTeamStats(@get('model.left'), @get('model.right'))
-        console.timeEnd("compile stats w/ advanced")
+      ts = _.clone(@statLine)
+      ts.scoreByPeriod = {}
+      @get('model.right.players').forEach (player) =>
+        @statByPlayer(sbp, player, ts, "right")
+      @set('model.right.teamStats', ts)
+      console.timeEnd("compile stats")
+      if @get('model.status', "Final")
+        @advancedTeamStats(@get('model.left'), @get('model.right'))
+      console.timeEnd("compile stats w/ advanced")
 
   playByPlay: []
   playByPlaySubQueue: null
@@ -378,6 +383,22 @@ GameController = Ember.Controller.extend(StatsMixin,
       else
         @saveGame()
 
+  scoreChangedWithEdit: (stat) ->
+    resultChanged = stat._attributes.result
+    valueChanged = stat._attributes.value
+    if valueChanged is 2 then oldValue = 3
+    if valueChanged is 3 then oldValue = 2
+    if resultChanged
+      if resultChanged is 'make'
+        change = stat.get('value')
+      if resultChanged is 'miss'
+        change = if valueChanged then -oldValue else -stat.get('value')
+    else if valueChanged
+      change = if valueChanged is 2 then -1 else +1
+    else
+      change = 0
+    change
+
   actions:
 
     submitEndGame: ->
@@ -411,13 +432,31 @@ GameController = Ember.Controller.extend(StatsMixin,
       console.log 'edit stat', stat
       @send('openModal', 'modals/editor', stat)
     submitEditStat: (stat) ->
-      console.log('edit this stat')
-      stat.save()
+      scoreChange = this.scoreChangedWithEdit(stat)
+      if scoreChange
+        modifyDiffs = this.get('model.stats').toArray().slice(_.indexOf(this.get('model.stats').toArray(), stat)+1)
+        this.send('updateStatDiffs', modifyDiffs, stat, scoreChange)
+      stat.save().then =>
+        if stat.get('result') is 'miss' and modifyDiffs[0].get('type') is 'assist'
+          modifyDiffs[0].destroyRecord()
+        if stat.get('result') is 'make' and modifyDiffs[0].get('type') is 'block'
+          modifyDiffs[0].destroyRecord()
+        @saveGame()
     submitDeleteStat: (stat) ->
-      debugger
+      stat.rollback()
+      followingStats = this.get('model.stats').toArray().slice(_.indexOf(this.get('model.stats').toArray(), stat)+1)
+      if stat.get('result') is 'make'
+        scoreChange = -stat.get('value')
+        this.send('updateStatDiffs', followingStats, stat, scoreChange)
+      if followingStats.length and (followingStats[0].get('type') is 'assist' or followingStats[0].get('type') is 'block')
+        followingStats[0].destroyRecord()
       stat.destroyRecord()
-      #when time or score is changed, need to have a chain reaction of edits to all following stats to adjust
-      #also figure out here if the relationships are deleted automagically or if I need to delete those too. They are deleted.. whoohoooooO!
+    updateStatDiffs: (stats, triggerStat, diff) ->
+      for stat in stats
+        if stat.get('scoreDiff')
+          statDiff = if stat.get('team.id') is triggerStat.get('team.id') then stat.get('scoreDiff') + diff else stat.get('scoreDiff') - diff
+          stat.set('scoreDiff', statDiff)
+          stat.save()
 
     shot: (ops) ->
       @send('openModal', 'modals/shot', ops)
