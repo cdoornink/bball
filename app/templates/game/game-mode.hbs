@@ -13,6 +13,7 @@
   <div class='left-team-top left-team'>
     <div class="team-info-triangle"></div>
     <div class="team-info">
+      {{point-adjuster team=model.left adjustment=model.left.pointsAdjustment adjustScore="adjustScore"}}
       <div class="score">
         {{model.left.teamStats.points}}
       </div>
@@ -30,6 +31,7 @@
   </div>
   <div class='right-team-top right-team'>
     <div class="team-info">
+      {{point-adjuster team=model.right adjustment=model.right.pointsAdjustment adjustScore="adjustScore"}}
       <div class="score">
         {{model.right.teamStats.points}}
       </div>

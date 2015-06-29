@@ -68,8 +68,6 @@ GameController = Ember.Controller.extend(StatsMixin,
       @set('totalLength', (p.get('periods') * (p.get('periodLength') * 60)))
 
     @get('model.stats').then (stats) =>
-      console.time("compile stats")
-      console.time("compile stats w/ advanced")
 
       if stats.length is 0 or stats.length is undefined
         @newGameMessage()
@@ -129,9 +127,8 @@ GameController = Ember.Controller.extend(StatsMixin,
           rb.push player
       @set('rightBench', rb)
 
-      allPlayers = _.union(@get('model.left.players').toArray(), @get('model.right.players').toArray())
-      @set('allPlayers', allPlayers)
-      console.log allPlayers
+      # allPlayers = _.union(@get('model.left.players').toArray(), @get('model.right.players').toArray())
+      # @set('allPlayers', allPlayers)
 
       #scoreboard
       unless @get('model.timeLeft')
@@ -150,10 +147,12 @@ GameController = Ember.Controller.extend(StatsMixin,
       @get('model.right.players').forEach (player) =>
         @statByPlayer(sbp, player, ts, "right")
       @set('model.right.teamStats', ts)
-      console.timeEnd("compile stats")
+
+      @adjustGameScore()
+
       if @get('model.status', "Final")
         @advancedTeamStats(@get('model.left'), @get('model.right'))
-      console.timeEnd("compile stats w/ advanced")
+
 
   playByPlay: []
   playByPlaySubQueue: null
@@ -347,14 +346,25 @@ GameController = Ember.Controller.extend(StatsMixin,
     @send('openModal', 'modals/confirmation', conf)
 
   submitGameScore: ->
+    [home, away] = this.directionToHomeAway()
+    @set('model.homeScore', home.teamStats.points)
+    @set('model.awayScore', away.teamStats.points)
+
+  adjustGameScore: ->
+    [home, away] = this.directionToHomeAway()
+    home.set('pointsAdjustment', @get('model.homePointsAdjustment') or 0)
+    home.set('teamStats.points', home.teamStats.points + (@get('model.homePointsAdjustment') or 0))
+    away.set('pointsAdjustment', @get('model.awayPointsAdjustment') or 0)
+    away.set('teamStats.points', away.teamStats.points + (@get('model.awayPointsAdjustment') or 0))
+
+  directionToHomeAway: ->
     if @get('model.homeTeam.id') is @get('model.left.id')
       home = @get('model.left')
       away = @get('model.right')
     else
       home = @get('model.right')
       away = @get('model.left')
-    @set('model.homeScore', home.teamStats.points)
-    @set('model.awayScore', away.teamStats.points)
+    return [home, away]
 
   createStat: (type, model, callback) ->
     console.log(type, model.result)
@@ -461,6 +471,15 @@ GameController = Ember.Controller.extend(StatsMixin,
           statDiff = if stat.get('team.id') is triggerStat.get('team.id') then stat.get('scoreDiff') + diff else stat.get('scoreDiff') - diff
           stat.set('scoreDiff', statDiff)
           stat.save()
+
+    adjustScore: (team, adjustment) ->
+      team.set('pointsAdjustment', team.get('pointsAdjustment') + adjustment)
+      [home, away] = this.directionToHomeAway()
+      if team.id is home.id
+        @set('model.homePointsAdjustment', team.get('pointsAdjustment'))
+      else
+        @set('model.awayPointsAdjustment', team.get('pointsAdjustment'))
+      @saveGame()
 
     shot: (ops) ->
       @send('openModal', 'modals/shot', ops)
@@ -643,6 +662,7 @@ GameController = Ember.Controller.extend(StatsMixin,
             @set('model.period', "OT")
             @set('model.timeLeft', 300)
           else
+            #TODO give option for OT in end game screen
             @endGame()
         else
           @set('model.period', (period + 1))

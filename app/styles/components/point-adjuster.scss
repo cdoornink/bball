@@ -1,0 +1,14 @@
+.point-adjuster {
+  text-align: center;
+  .difference {
+    visibility: hidden;
+    font-size: 12px;
+  }
+  .difference.active {
+    visibility: visible;
+  }
+  .plus-button, .minus-button {
+    cursor: pointer;
+    font-weight: 600;
+  }
+}
