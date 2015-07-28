@@ -7,7 +7,7 @@ TeamStatsController = Ember.Controller.extend(StatsMixin,
   periods: 4
   periodLength: 720
   totalLength: 2880
-  perNumber: 2120
+  perNumber: 36
   getStats: ->
     sbp = {}
     @get('model.preference').then (p) =>
