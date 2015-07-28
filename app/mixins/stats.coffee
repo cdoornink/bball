@@ -20,7 +20,8 @@ StatsMixin = Ember.Mixin.create
     player.set 'gameStats.blockp', @blockp(stats) #block %
     player.set 'gameStats.turnoverp', @turnoverp(stats) #assist %
     player.set 'gameStats.usagep', @usagep(stats) #assist %
-    # console.log stats.fgp
+    @removeNaNs(player)
+
   advancedTeamStats: (team, opponent) ->
     l = team.get('teamStats')
     r = opponent.get('teamStats')
@@ -46,10 +47,14 @@ StatsMixin = Ember.Mixin.create
     opponent.set 'teamStats.ortg', @ortg(r)
 
   lineMultiplier: (stats, multiplier) ->
-    _.mapObject stats, (value, stat) -> Math.round((value * multiplier)*10) / 10
+    _.mapObject stats, (value, stat) ->
+      r = Math.round((value * multiplier)*10) / 10
+      if isNaN(r) then return '-' else return r
 
   lineDiffs: (stats, diffStats) ->
-    _.mapObject stats, (value, stat) -> Math.round((value - diffStats[stat])*10) / 10
+    _.mapObject stats, (value, stat) ->
+      r = Math.round((value - diffStats[stat])*10) / 10
+      if isNaN(r) then return '-' else return r
 
   percentage: (x,y) ->
     if y is 0
@@ -106,6 +111,14 @@ StatsMixin = Ember.Mixin.create
     Math.round(100 * stats.turnovers / (stats.fga + 0.44 * stats.fta + stats.turnovers) * 10) / 10
   usagep: (stats) ->
     Math.round(100 * ((stats.fga + 0.44 * stats.fta + stats.turnovers) * (@teamMP() / 5)) / ((stats.minutes / 60) * (@get('model.teamStats.fga') + 0.44 * @get('model.teamStats.fta') + @get('model.teamStats.turnovers'))) * 10) / 10
+
+  removeNaNs: (player) ->
+    ps = player.get('gameStats')
+    for i of ps
+      console.log i
+      if isNaN(ps[i])
+        console.log 'happening', i
+        player.set('gameStats.'+i, "-")
 
   compareGameId: (stat, lastStat) ->
     stat.get('game.id') isnt lastStat.get('game.id')
