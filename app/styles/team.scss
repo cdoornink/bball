@@ -111,7 +111,7 @@
     width: 100%;
     background: white;
   }
-  .form-step.step-two {
+  .form-step.step-one {
     input[type="text"] {
       outline: none;
       font-size: 14px;
@@ -138,6 +138,27 @@
       color: white;
     }
     background: rgb(229, 229, 230);
+  }
+  .form-step.step-two {
+    background: rgb(129, 129, 130);
+    color: rgb(233, 243, 247);
+    input[type=radio] + label {
+      cursor: pointer;
+      display: inline-block;
+      padding: 5px 15px;
+      background: #d5d5d6;
+      margin: 0px 10px 0 0;
+      font-size: 14px;
+      border-radius: 3px;
+      color: black;
+      &:hover {
+        background: #c5c5c6;
+      }
+    }
+    input[type=radio]:checked + label {
+      background: $ok;
+      color: white;
+    }
   }
   .form-step.step-three {
     background: rgb(61, 66, 76);

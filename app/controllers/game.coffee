@@ -9,6 +9,7 @@ GameController = Ember.Controller.extend(StatsMixin,
   allPlayers: []
   rightOnCourtArray: []
   rightBench: []
+  dragDropMessage: false
   minutesLeft: (->
     timeLeft = @get('timeLeft') or @periodLength
     Math.floor(timeLeft % 3600 / 60)
@@ -17,6 +18,13 @@ GameController = Ember.Controller.extend(StatsMixin,
     timeLeft = @get('timeLeft') or @periodLength
     Math.floor(timeLeft % 3600 % 60)
   ).property("model.timeLeft")
+  ownersTeam: Ember.computed "model.homeTeam.id", "model.awayTeam.id", 'session.user', ->
+    return if this.session.user is undefined
+    ownersTeams = this.session.user.get('teams').toArray().map (team) -> team.id
+    if _.indexOf(ownersTeams, @get('model.homeTeam.id')) isnt -1
+      return @get('model.homeTeam')
+    if _.indexOf(ownersTeams, @get('model.awayTeam.id')) isnt -1
+      return @get('model.awayTeam')
   selectedPlayer: null
   leftPlayerSelected: false
   rightPlayerSelected: false
@@ -70,7 +78,10 @@ GameController = Ember.Controller.extend(StatsMixin,
     @get('model.stats').then (stats) =>
 
       if stats.length is 0 or stats.length is undefined
-        @newGameMessage()
+        # @newGameMessage()
+        @set('dragDropMessage', true)
+      else
+        @set('dragDropMessage', false)
 
       #lineups and all shots
       loc = []
@@ -330,11 +341,11 @@ GameController = Ember.Controller.extend(StatsMixin,
       team.save()
 
   newGameMessage: ->
-    conf = {
-      message: "Drag and drop players into the starting lineup. Once you have them set, you will be ready to start the game."
-      header: "Set your lineups"
-    }
-    @send('openModal', 'modals/confirmation', conf)
+    # conf = {
+    #   message: "Drag and drop players into the starting lineup. Once you have them set, you will be ready to start the game."
+    #   header: "Set your lineups"
+    # }
+    # @send('openModal', 'modals/confirmation', conf)
 
   endGame: ->
     conf = {
@@ -367,6 +378,7 @@ GameController = Ember.Controller.extend(StatsMixin,
     return [home, away]
 
   createStat: (type, model, callback) ->
+    return if model.player.get('team.id') is @get('model.ignoredTeam.id')
     console.log(type, model.result)
     stat = this.store.createRecord 'stat',
       type: type
@@ -488,11 +500,17 @@ GameController = Ember.Controller.extend(StatsMixin,
       @createStat 'shot', model
       Ember.run.later (=>
         if (model.result is 'block')
-          @send('openModal', 'modals/blocked')
+          if @get('model.ignoredTeam.id')
+            @send('openModal', 'modals/rebounded', {defensive: @getOpponent(model.player.get('team'))})
+          else
+            @send('openModal', 'modals/blocked')
         if (model.result is 'make')
           @send('openModal', 'modals/assisted')
         if (model.result is 'foul')
-          @send('openModal', 'modals/fouled', {shooting: model.value})
+          if @get('model.ignoredTeam.id')
+            @send('openModal', 'modals/freethrow', {shooting: model.value, refresh: true})
+          else
+            @send('openModal', 'modals/fouled', {shooting: model.value})
         if model.result is 'and1'
           @send('openModal', 'modals/assisted', {shooting: 1})
         if model.result is 'miss'
@@ -533,7 +551,10 @@ GameController = Ember.Controller.extend(StatsMixin,
       @createStat 'assist', model, =>
         @saveGame()
         if model.shooting
-          @send('openModal', 'modals/fouled', {shooting: model.shooting})
+          if @get('model.ignoredTeam.id')
+            @send('openModal', 'modals/freethrow', {shooting: model.shooting, refresh: true})
+          else
+            @send('openModal', 'modals/fouled', {shooting: model.shooting})
 
     foulButton: ->
       @send('openModal', 'modals/foul', {player: @get('selectedPlayer')})
@@ -562,6 +583,7 @@ GameController = Ember.Controller.extend(StatsMixin,
         @send('selectPlayer', {player:model.player})
         @saveGame()
     submitTeamRebound: (model) ->
+      return if model.team.id is @get('model.ignoredTeam.id')
       rebound = this.store.createRecord 'stat',
         type: "teamRebound"
         period: @get('model.period')
@@ -615,7 +637,7 @@ GameController = Ember.Controller.extend(StatsMixin,
     substitute: (player, ops) ->
       @get('model.stats').then (stats) =>
         lastStat = stats.currentState[stats.length-1]
-        if @get('model.status') is "created" or lastStat.get('type') is "subbedOut" or lastStat.get('type') is "played"
+        if lastStat is undefined or lastStat.get('type') is "subbedOut" or lastStat.get('type') is "played"
           @send('submitSubstitute', player, ops)
         else
           @send('openModal', 'modals/time', {continue: => @send('submitSubstitute', player, ops)})

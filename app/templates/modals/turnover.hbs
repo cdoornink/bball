@@ -12,17 +12,18 @@
         <button class="continue-button" {{action 'continue'}}>Submit</button>
       </div>
     </div>
-
-    <div class="option-row">
-      <div class="subtitle">
-        Steal
+    {{#unless controllers.game.model.ignoredTeam}}
+      <div class="option-row">
+        <div class="subtitle">
+          Steal
+        </div>
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setStealer"}}
+        {{else}}
+          {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setStealer"}}
+        {{/if}}
       </div>
-      {{#if controllers.game.leftPlayerSelected}}
-        {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setStealer"}}
-      {{else}}
-        {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setStealer"}}
-      {{/if}}
-    </div>
+    {{/unless}}
 
   </div>
 {{/modal-dialog}}

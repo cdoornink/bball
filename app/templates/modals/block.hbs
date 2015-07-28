@@ -14,20 +14,31 @@
     </div>
 
     <div class="rebounder">
-      <div class="subtitle">
-        Rebound
-      </div>
-      <div class="subsubtitle">Offensive</div>
-      {{#if controllers.game.rightPlayerSelected}}
-        {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setRebounder"}}
+      {{#if controllers.game.model.ignoredTeam}}
+        <div class="subtitle">
+          Rebounded?
+        </div>
+        {{#if controllers.game.rightPlayerSelected}}
+          {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setRebounder"}}
+        {{else}}
+          {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setRebounder"}}
+        {{/if}}
       {{else}}
-        {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setRebounder"}}
-      {{/if}}
-      <div class="subsubtitle">Defensive</div>
-      {{#if controllers.game.rightPlayerSelected}}
-        {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setRebounder"}}
-      {{else}}
-        {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setRebounder"}}
+        <div class="subtitle">
+          Rebound
+        </div>
+        <div class="subsubtitle">Offensive</div>
+        {{#if controllers.game.rightPlayerSelected}}
+          {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setRebounder"}}
+        {{else}}
+          {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setRebounder"}}
+        {{/if}}
+        <div class="subsubtitle">Defensive</div>
+        {{#if controllers.game.rightPlayerSelected}}
+          {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="setRebounder"}}
+        {{else}}
+          {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="setRebounder"}}
+        {{/if}}
       {{/if}}
     </div>
 

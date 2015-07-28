@@ -1,17 +1,24 @@
 
 
 <form class="new-game-form">
-  <div class="form-step step-one">
+  <div class="form-step step-zero">
     <h2>{{model.mascot}} vs {{selectedOpponent.mascot}}</h2>
   </div>
-  <div class="form-step step-two">
+  <div class="form-step step-one">
     <h3>Step 1: General Game Information</h3>
     {{date-picker date=game.date valueFormat='YYYY-MM-DD'}}
     {{! input value=game.location placeholder="Location"}}
-    {{radio-button name="court" id="court1" selection="game.courtSelect" value="home"}}
+    {{radio-button name="court" id="court1" selection=game.courtSelect value="home"}}
     <label for="court1">Home</label>
-    {{radio-button name="court" id="court2" selection="game.courtSelect" value="away"}}
+    {{radio-button name="court" id="court2" selection=game.courtSelect value="away"}}
     <label for="court2">Away</label>
+  </div>
+  <div class="form-step step-two">
+    <h3>Step 2: One Team Mode vs Two Team Mode</h3>
+    {{radio-button name="oneTeamMode" id="oneTeam" selection=game.oneTeamMode value="true"}}
+    <label for="oneTeam">Keep stats for <b>ONLY MY</b> team</label>
+    {{radio-button name="oneTeamMode" id="twoTeams" selection=game.oneTeamMode value="false"}}
+    <label for="twoTeams">Keep stats for <b>BOTH</b> teams</label>
   </div>
 
   <div class="form-step step-three">

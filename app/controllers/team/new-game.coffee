@@ -3,6 +3,8 @@
 TeamNewGameController = Ember.Controller.extend
   needs: ["team"]
   selectedOpponent: null
+  courtSelect: null
+  oneTeamMode: false
   init: ->
     this.set('game', Ember.Object.create())
     this.set('opp', Ember.Object.create())
@@ -53,6 +55,8 @@ TeamNewGameController = Ember.Controller.extend
           away = team1
         newGame.set('homeTeam', home)
         newGame.set('awayTeam', away)
+        if @get('game.oneTeamMode') is "true"
+          newGame.set('ignoredTeam', team2)
         newGame.save().then =>
           team1.save()
           team2.save()

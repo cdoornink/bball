@@ -10,6 +10,7 @@ Game = DS.Model.extend
   awayTeam: DS.belongsTo('team', async: true)
   awayScore: DS.attr('number')
   awayPointsAdjustment: DS.attr('number')
+  ignoredTeam: DS.belongsTo('team', async: true)
   status: DS.attr('string')
   period: DS.attr('number')
   timeLeft: DS.attr('number')

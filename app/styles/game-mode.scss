@@ -3,8 +3,11 @@
   .switch-sides {
     width: 100px;
     position: absolute;
-    top: 89px;
+    top: 90px;
     left: calc(50% - 50px);
+    font-size: 12px;
+    background-color: black;
+    color: white;
   }
   .team-info {
     width: 100%;
@@ -186,7 +189,32 @@
       line-height: 12px;
     }
   }
-
+  .one-team-mode-starter {
+    position: absolute;
+    top: 300px;
+    left: calc(50% - 150px);
+    width: 300px;
+    background: rgba(50,50,50,.8);
+    padding: 30px;
+    text-align: center;
+    color: white;
+    .title {
+      text-transform: uppercase;
+      font-size: 20px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .description {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .one-team {
+      float: left;
+    }
+    .two-teams {
+      float: right;
+    }
+  }
   .jump-ball-starter {
     position: absolute;
     top: 300px;
@@ -211,6 +239,21 @@
     }
     .right-team {
       float: right;
+    }
+  }
+  .tutorial-message {
+    position: absolute;
+    top: 250px;
+    left: calc(50% - 200px);
+    width: 400px;
+    background: #772222;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    color: white;
+    .title {
+      font-size: 18px;
+      font-weight: 500;
     }
   }
 }

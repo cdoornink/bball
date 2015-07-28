@@ -130,12 +130,18 @@
       <button class="right-team jump-ball-button" {{action 'jumpBall' left}}>{{model.right.mascot}}</button>
     </div>
   {{/if}}
-  {{#if model.inProgress}}
-    {{#unless selectedPlayer}}
-      <div class="jump-ball-starter">
-        <div class="title">Select a Player</div>
-        <div class="description">Click on a player above, then record a shot by clicking on the court where they shot from, or another stat from the list at the top of the court.</div>
-      </div>
-    {{/unless}}
+  {{#if dragDropMessage}}
+    <div class="tutorial-message">
+      <div class="message">Drag and drop players from the sides to the slots above to set your starting lineups.</div>
+    </div>
+  {{else}}
+    {{#if model.inProgress}}
+      {{#unless selectedPlayer}}
+        <div class="tutorial-message">
+          <div class="title">Select a Player</div>
+          <div class="message">Click on a player above, then record a shot by clicking on the court where they shot from, or another stat from the list at the top of the court.</div>
+        </div>
+      {{/unless}}
+    {{/if}}
   {{/if}}
 </div>

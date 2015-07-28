@@ -28,8 +28,6 @@ ModalsFreethrowController = Ember.Controller.extend
       $(".shooting-button").removeClass('selected')
       $(".shooting-button.#{el}").addClass('selected')
     ), 100
-  init: ->
-    console.log('linit!!!')
   actions:
     cancel: ->
       @send('closeModal')

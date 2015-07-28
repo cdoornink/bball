@@ -1,34 +1,62 @@
 {{#modal-dialog}}
-  <div class="shot-modal">
-    <div class="title">
-      Rebounded by
-    </div>
-    <div class="option-row">
-      {{#if controllers.game.leftPlayerSelected}}
-        {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="submit"}}
-        <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.model.right}}>
-          {{controllers.game.model.right.mascot}} Team Rebound
-        </div>
-      {{else}}
-        {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="submit"}}
-        <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.model.left}}>
-          {{controllers.game.model.left.mascot}} Team Rebound
-        </div>
-      {{/if}}
+  {{#if controllers.game.model.ignoredTeam}}
+    <div class="shot-modal">
+      <div class="title">
+        Offensive Rebound?
+      </div>
+      <div class="option-row">
+        {{#if controllers.game.leftPlayerSelected}}
+          <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.model.right}}>
+            Nope, {{controllers.game.model.right.mascot}} Rebound
+          </div>
+          {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="submit"}}
+          <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.model.left}}>
+            {{controllers.game.model.left.mascot}} Team Rebound
+          </div>
+        {{else}}
+          <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.model.left}}>
+            {{controllers.game.model.left.mascot}} Rebound
+          </div>
+          {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="submit"}}
+          <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.model.right}}>
+            {{controllers.game.model.right.mascot}} Team Rebound
+          </div>
+        {{/if}}
+      </div>
     </div>
 
-    <div class="option-row">
-      {{#unless controllers.game.leftPlayerSelected}}
-        {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="submit"}}
-        <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.model.right}}>
-          {{controllers.game.model.right.mascot}} Team Rebound
-        </div>
-      {{else}}
-        {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="submit"}}
-        <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.model.left}}>
-          {{controllers.game.model.left.mascot}} Team Rebound
-        </div>
-      {{/unless}}
+  {{else}}
+    <div class="shot-modal">
+      <div class="title">
+        Rebounded by
+      </div>
+      <div class="option-row">
+        {{#if controllers.game.leftPlayerSelected}}
+          {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="submit"}}
+          <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.model.right}}>
+            {{controllers.game.model.right.mascot}} Team Rebound
+          </div>
+        {{else}}
+          {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="submit"}}
+          <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.model.left}}>
+            {{controllers.game.model.left.mascot}} Team Rebound
+          </div>
+        {{/if}}
+      </div>
+
+      <div class="option-row">
+        {{#unless controllers.game.leftPlayerSelected}}
+          {{modal-card-row colors=controllers.game.model.right team=controllers.game.rightOnCourt action="submit"}}
+          <div class="team-row right-primary right-secondary" {{action "submitTeam" controllers.game.model.right}}>
+            {{controllers.game.model.right.mascot}} Team Rebound
+          </div>
+        {{else}}
+          {{modal-card-row colors=controllers.game.model.left team=controllers.game.leftOnCourt action="submit"}}
+          <div class="team-row left-primary left-secondary" {{action "submitTeam" controllers.game.model.left}}>
+            {{controllers.game.model.left.mascot}} Team Rebound
+          </div>
+        {{/unless}}
+      </div>
     </div>
-  </div>
+  {{/if}}
 {{/modal-dialog}}
