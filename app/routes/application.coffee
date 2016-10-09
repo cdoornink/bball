@@ -1,7 +1,19 @@
 `import Ember from 'ember'`
+`import ENV from '../config/environment';`
+
+beforeUnloadFunction = (event) ->
+  event.returnValue = "You are currently offline. Reloading right now will cause all your recent data to be lost."
 
 ApplicationRoute = Ember.Route.extend
   freeThrowsQueued: false
+  setupController: (controller, model) ->
+    @_super(controller, model)
+    connectedRef = new Firebase(ENV.firebaseURL + ".info/connected")
+    connectedRef.on "value", (snap) ->
+      if (snap.val() is true)
+        window.removeEventListener "beforeunload", beforeUnloadFunction
+      else
+        window.addEventListener "beforeunload", beforeUnloadFunction
   actions:
     logout: ->
       @session.logout()

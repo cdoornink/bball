@@ -6,6 +6,7 @@ Router = Ember.Router.extend
 
 Router.map ->
   @route 'login'
+  @route 'register'
   @route 'team', {path: "team/:id"}, ->
     @route 'new-game'
     @route 'stats', ->

@@ -4,9 +4,11 @@
 <div class="login-logo"></div>
 
 <form class="login-form">
-  <div class="error-message">
-    {{login.error}}
-  </div>
+  {{#if login.error}}
+    <div class="error-message">
+      {{login.error}}
+    </div>
+  {{/if}}
   <div class="username-field">
     {{input value=login.email placeholder="Username"}}
   </div>
@@ -15,7 +17,7 @@
   </div>
   <button {{action "login"}}>Sign in</button>
   <div class="register-link">
-    Not registered? {{#link-to "login"}}Sign up for free.{{/link-to}}
+    Not registered? {{#link-to "register"}}Sign up for free.{{/link-to}}
   </div>
 </form>
 

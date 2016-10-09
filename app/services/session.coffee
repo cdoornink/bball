@@ -8,7 +8,6 @@ SessionService = Ember.Service.extend
 
   init: ->
     ref.onAuth ((authData) ->
-      # console.log authData
       unless authData
         @set "authed", false
         @set "authData", null
@@ -21,14 +20,11 @@ SessionService = Ember.Service.extend
     ).bind(this)
 
   login: (email, password, successCallback, errorCallback) ->
-    # console.log email
-#       console.log "login..."
     ref.authWithPassword
       email    : email
       password : password
     , (error, authData) ->
       if error
-        # console.log error, "fjidso"
         errorCallback(error.message)
       else
         successCallback(authData) #put this uid into localstorage to use on site load
@@ -37,15 +33,15 @@ SessionService = Ember.Service.extend
     ref.unauth()
     location.reload()
 
-  createUser: (email, password) ->
+  createUser: (email, password, successCallback, errorCallback) ->
     ref.createUser
       email    : email
       password : password
-    , (error) ->
+    , (error, authData) =>
       unless error
-        console.log("User created successfully")
+        successCallback(authData)
       else
-        console.log("Error creating user:", error)
+        errorCallback(error.message)
 
   afterAuthentication: (userId) ->
     _this = this;
