@@ -1,0 +1,36 @@
+<div class="login-page">
+
+
+<div class="login-logo"></div>
+
+<form class="login-form">
+  {{#if register.error}}
+    <div class="error-message">
+      {{register.error}}
+    </div>
+  {{/if}}
+  <div class="username-field">
+    {{input value=register.email placeholder="Username"}}
+  </div>
+  <div class="password-field">
+    {{input value=register.password type="password" placeholder="Password"}}
+  </div>
+  <div class="password-field">
+    {{input value=register.passwordConfirm type="password" placeholder="Confirm Password"}}
+  </div>
+  <button {{action "register"}}>Create Account</button>
+  <div class="register-link">
+    Already a member? {{#link-to "login"}}Sign in{{/link-to}}
+  </div>
+</form>
+
+
+
+{{#if register.spinny}}
+  <div class="spinny">
+    <div class="plus-loader"></div>
+    <div>Registering your account...</div>
+  </div>
+{{/if}}
+
+</div>
